@@ -514,6 +514,146 @@
       "notes": "Crypto data and trending narratives",
       "enabled": true,
       "chainAffinity": "multi"
+    },
+    {
+      "handle": "CryptoHayes",
+      "displayName": "Arthur Hayes",
+      "category": "meme_whale",
+      "tier": "meme_whale",
+      "chainAffinity": "multi",
+      "followerCount": 380000,
+      "notes": "BitMEX founder, macro trader, influential meme calls",
+      "enabled": true
+    },
+    {
+      "handle": "DeFi_Made_Here",
+      "displayName": "DeFi Made Here",
+      "category": "community",
+      "tier": "community",
+      "chainAffinity": "multi",
+      "followerCount": 42000,
+      "notes": "DeFi and meme ecosystem coverage",
+      "enabled": true
+    },
+    {
+      "handle": "degenspartan",
+      "displayName": "Degen Spartan",
+      "category": "meme_whale",
+      "tier": "meme_whale",
+      "chainAffinity": "eth",
+      "followerCount": 175000,
+      "notes": "ETH/multi-chain degen trader, meme whale",
+      "enabled": true
+    },
+    {
+      "handle": "CryptoCobain",
+      "displayName": "Crypto Cobain",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "chainAffinity": "multi",
+      "followerCount": 320000,
+      "notes": "Macro trader, occasional meme plays with large following",
+      "enabled": true
+    },
+    {
+      "handle": "AltcoinPsycho",
+      "displayName": "Altcoin Psycho",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "chainAffinity": "multi",
+      "followerCount": 280000,
+      "notes": "Altcoin trader, meme coin coverage",
+      "enabled": true
+    },
+    {
+      "handle": "BlurCrypto",
+      "displayName": "Blur",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "chainAffinity": "sol",
+      "followerCount": 92000,
+      "notes": "Solana ecosystem trader, early meme positioning",
+      "enabled": true
+    },
+    {
+      "handle": "TraderXO",
+      "displayName": "TraderXO",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "chainAffinity": "multi",
+      "followerCount": 145000,
+      "notes": "Multi-chain trader, meme alpha",
+      "enabled": true
+    },
+    {
+      "handle": "CryptoMessiah",
+      "displayName": "Crypto Messiah",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "chainAffinity": "multi",
+      "followerCount": 210000,
+      "notes": "Crypto analyst with large Chinese following, multi-chain",
+      "enabled": true
+    },
+    {
+      "handle": "WuBlockchain",
+      "displayName": "Wu Blockchain",
+      "category": "community",
+      "tier": "community",
+      "chainAffinity": "multi",
+      "followerCount": 530000,
+      "notes": "Major Chinese crypto news source, Binance ecosystem coverage",
+      "enabled": true
+    },
+    {
+      "handle": "Colin_Wu",
+      "displayName": "Colin Wu",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "chainAffinity": "multi",
+      "followerCount": 420000,
+      "notes": "Wu Blockchain founder, Chinese crypto journalist, major influence",
+      "enabled": true
+    },
+    {
+      "handle": "BTCdayu",
+      "displayName": "BTC大宇",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "chainAffinity": "multi",
+      "followerCount": 180000,
+      "notes": "Major Chinese crypto KOL, proven track record",
+      "enabled": true
+    },
+    {
+      "handle": "bitouq",
+      "displayName": "比特币秋山君",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "chainAffinity": "multi",
+      "followerCount": 95000,
+      "notes": "Chinese crypto analyst, memecoin coverage",
+      "enabled": true
+    },
+    {
+      "handle": "8btcci",
+      "displayName": "8BTC",
+      "category": "community",
+      "tier": "community",
+      "chainAffinity": "multi",
+      "followerCount": 320000,
+      "notes": "Major Chinese crypto media platform",
+      "enabled": true
+    },
+    {
+      "handle": "CryptoWendyO",
+      "displayName": "Crypto Wendy O",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "chainAffinity": "multi",
+      "followerCount": 225000,
+      "notes": "Crypto analyst, bilingual CN/EN, Binance ecosystem",
+      "enabled": true
     }
   ]
 }
