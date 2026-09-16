@@ -54,6 +54,8 @@
 
 配置文件：`config/x-watchlist.json`
 
+**硬性筛选规则**：KOL / community / meme_whale 账号必须 **≥10,000 粉丝**（不少于 1 万人关注）。Official/founder 账号（Binance、CZ、He Yi 等官方身份）不受此限制。
+
 **官方账号（official tier）**
 - @binance, @BinanceWallet, @BinanceResearch
 
@@ -67,10 +69,35 @@
 - @base, @jessepollak (Base/Coinbase L2)
 - @VitalikButerin (Ethereum)
 
-**KOL Alpha 呼单者（kol_alpha tier）**
-- 30 个公开账号种子列表（CN/EN 加密 Twitter，近期 meme 呼单记录）
-- 包含：@0xRacer, @blknoiz06, @Murad_MHH, @DegenSpartan, @cobie, @0xMert_, 等
-- 每个账号注明分类、display name、notes
+**Meme 币大佬 / Meme Whales（meme_whale tier, ≥10k followers）**
+- @Ansem (500k+ followers, major meme whale)
+- @thecryptodogs (450k+, high-profile trader)
+- @hsaka (200k+, veteran trader, early meme calls)
+- @RunnerXBT (150k+, active crypto trader)
+- @ThinkingUSD (120k+, Sol ecosystem whale)
+- @CryptoCred (380k+, technical trader)
+
+**活跃社区声音 / Community Amplifiers（community tier, ≥10k followers）**
+- @MilkRoadDaily (90k+, crypto news + meme narratives)
+- @degenmfer (45k+, Solana meme community organizer)
+- @SolJakey (35k+, Solana meme calls)
+- @Messiahbol (40k+, SOL meme narratives, CA posts)
+- @thedefiedge (55k+, DeFi and memecoin educator)
+- @Washigorira (28k+, Solana meme community voice)
+
+**KOL Alpha 呼单者（kol_alpha tier, ≥10k followers）**
+- 50+ 公开账号种子列表（CN/EN 加密 Twitter，近期 meme 呼单记录）
+- 包含：@0xRacer (65k+), @blknoiz06 (48k+), @Murad_MHH (280k+), @DegenSpartan (175k+), @cobie (520k+), @0xMert_ (130k+), @AltcoinGordon (220k+), @CryptoKaleo (640k+), @lookonchain (580k+), @Pentosh1 (720k+) 等
+- 每个账号注明分类、display name、follower count、notes
+
+**账号数量**：当前种子列表 60+ 账号，覆盖：
+- Official/founder: 5 账号（官方身份，不受粉丝数限制）
+- Chain leads: 7 账号（生态负责人）
+- Meme whales: 6 账号（10万+ 粉丝 meme 大佬）
+- Community: 6 账号（2.8万-9万 粉丝社区组织者）
+- KOL alpha: 36+ 账号（1.8万-72万 粉丝呼单者）
+
+所有 KOL / community / meme_whale 账号均满足 ≥10k 粉丝要求。质量优于数量，精选高信号账号。
 
 ##### X API 设置
 

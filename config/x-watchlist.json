@@ -1,12 +1,15 @@
 {
-  "version": 1,
+  "version": 2,
   "lastUpdated": "2026-09-16",
+  "minFollowers": 10000,
+  "followerNote": "KOL/community/meme_whale accounts require ≥10k followers. Official/founder accounts exempt from this rule.",
   "accounts": [
     {
       "handle": "binance",
       "displayName": "Binance",
       "category": "official",
       "tier": "official",
+      "followerCount": null,
       "notes": "Binance main official account",
       "enabled": true
     },
@@ -15,6 +18,7 @@
       "displayName": "Binance Wallet",
       "category": "official",
       "tier": "official",
+      "followerCount": null,
       "notes": "Binance Web3 Wallet official",
       "enabled": true
     },
@@ -23,6 +27,7 @@
       "displayName": "Binance Research",
       "category": "official",
       "tier": "official",
+      "followerCount": null,
       "notes": "Binance Research official",
       "enabled": true
     },
@@ -31,6 +36,7 @@
       "displayName": "CZ",
       "category": "founder",
       "tier": "founder",
+      "followerCount": null,
       "notes": "Changpeng Zhao - Binance founder",
       "enabled": true
     },
@@ -39,6 +45,7 @@
       "displayName": "He Yi / 何一",
       "category": "founder",
       "tier": "founder",
+      "followerCount": null,
       "notes": "He Yi - Binance Co-Founder",
       "enabled": true
     },
@@ -47,6 +54,7 @@
       "displayName": "Solana",
       "category": "chain_lead",
       "tier": "chain_lead",
+      "followerCount": null,
       "notes": "Solana official account",
       "enabled": true
     },
@@ -55,6 +63,7 @@
       "displayName": "Anatoly Yakovenko",
       "category": "chain_lead",
       "tier": "chain_lead",
+      "followerCount": null,
       "notes": "Solana co-founder",
       "enabled": true
     },
@@ -63,6 +72,7 @@
       "displayName": "Raj Gokal",
       "category": "chain_lead",
       "tier": "chain_lead",
+      "followerCount": null,
       "notes": "Solana co-founder",
       "enabled": true
     },
@@ -71,6 +81,7 @@
       "displayName": "BNB Chain",
       "category": "chain_lead",
       "tier": "chain_lead",
+      "followerCount": null,
       "notes": "BNB Chain official",
       "enabled": true
     },
@@ -79,6 +90,7 @@
       "displayName": "Base",
       "category": "chain_lead",
       "tier": "chain_lead",
+      "followerCount": null,
       "notes": "Base official (Coinbase L2)",
       "enabled": true
     },
@@ -87,6 +99,7 @@
       "displayName": "Jesse Pollak",
       "category": "chain_lead",
       "tier": "chain_lead",
+      "followerCount": null,
       "notes": "Base lead at Coinbase",
       "enabled": true
     },
@@ -95,7 +108,116 @@
       "displayName": "Vitalik Buterin",
       "category": "chain_lead",
       "tier": "chain_lead",
+      "followerCount": null,
       "notes": "Ethereum founder",
+      "enabled": true
+    },
+    {
+      "handle": "Ansem",
+      "displayName": "Ansem",
+      "category": "meme_whale",
+      "tier": "meme_whale",
+      "followerCount": 500000,
+      "notes": "Major meme coin whale and caller, 500k+ followers",
+      "enabled": true
+    },
+    {
+      "handle": "thecryptodogs",
+      "displayName": "The Crypto Dog",
+      "category": "meme_whale",
+      "tier": "meme_whale",
+      "followerCount": 450000,
+      "notes": "High-profile crypto trader, meme coin focus",
+      "enabled": true
+    },
+    {
+      "handle": "hsaka",
+      "displayName": "Hsaka",
+      "category": "meme_whale",
+      "tier": "meme_whale",
+      "followerCount": 200000,
+      "notes": "Veteran crypto trader, early meme calls",
+      "enabled": true
+    },
+    {
+      "handle": "RunnerXBT",
+      "displayName": "RunnerXBT",
+      "category": "meme_whale",
+      "tier": "meme_whale",
+      "followerCount": 150000,
+      "notes": "Active crypto trader with meme plays",
+      "enabled": true
+    },
+    {
+      "handle": "ThinkingUSD",
+      "displayName": "Thinking",
+      "category": "meme_whale",
+      "tier": "meme_whale",
+      "followerCount": 120000,
+      "notes": "Sol ecosystem meme whale",
+      "enabled": true
+    },
+    {
+      "handle": "CryptoCred",
+      "displayName": "Cred",
+      "category": "meme_whale",
+      "tier": "meme_whale",
+      "followerCount": 380000,
+      "notes": "Technical trader, occasional meme plays",
+      "enabled": true
+    },
+    {
+      "handle": "MilkRoadDaily",
+      "displayName": "Milk Road",
+      "category": "community",
+      "tier": "community",
+      "followerCount": 90000,
+      "notes": "Crypto news + meme narratives",
+      "enabled": true
+    },
+    {
+      "handle": "degenmfer",
+      "displayName": "Degen MFer",
+      "category": "community",
+      "tier": "community",
+      "followerCount": 45000,
+      "notes": "Solana meme community organizer",
+      "enabled": true
+    },
+    {
+      "handle": "SolJakey",
+      "displayName": "Sol Jakey",
+      "category": "community",
+      "tier": "community",
+      "followerCount": 35000,
+      "notes": "Solana meme calls and community",
+      "enabled": true
+    },
+    {
+      "handle": "Messiahbol",
+      "displayName": "Messiah",
+      "category": "community",
+      "tier": "community",
+      "followerCount": 40000,
+      "notes": "SOL meme narratives and CA posts",
+      "enabled": true
+    },
+    {
+      "handle": "thedefiedge",
+      "displayName": "The DeFi Edge",
+      "category": "community",
+      "tier": "community",
+      "followerCount": 55000,
+      "notes": "DeFi and memecoin educator",
+      "enabled": true
+    },
+    {
+      "handle": "Washigorira",
+      "displayName": "Washi",
+      "category": "community",
+      "tier": "community",
+      "followerCount": 28000,
+      "notes": "Solana meme community voice",
       "enabled": true
     },
     {
@@ -103,6 +225,7 @@
       "displayName": "Racer",
       "category": "kol_alpha",
       "tier": "kol_alpha",
+      "followerCount": 65000,
       "notes": "Known for early SOL meme calls",
       "enabled": true
     },
@@ -111,6 +234,7 @@
       "displayName": "Blknoiz",
       "category": "kol_alpha",
       "tier": "kol_alpha",
+      "followerCount": 48000,
       "notes": "Solana alpha caller",
       "enabled": true
     },
@@ -119,7 +243,8 @@
       "displayName": "Roaring Kitty",
       "category": "kol_alpha",
       "tier": "kol_alpha",
-      "notes": "Influential meme investor",
+      "followerCount": 1500000,
+      "notes": "Influential meme investor (GME/DFV)",
       "enabled": true
     },
     {
@@ -127,6 +252,7 @@
       "displayName": "Murad",
       "category": "kol_alpha",
       "tier": "kol_alpha",
+      "followerCount": 280000,
       "notes": "Memecoin philosopher and caller",
       "enabled": true
     },
@@ -135,6 +261,7 @@
       "displayName": "Sisyphus",
       "category": "kol_alpha",
       "tier": "kol_alpha",
+      "followerCount": 42000,
       "notes": "Crypto alpha researcher",
       "enabled": true
     },
@@ -143,6 +270,7 @@
       "displayName": "Degen Spartan",
       "category": "kol_alpha",
       "tier": "kol_alpha",
+      "followerCount": 175000,
       "notes": "DeFi and meme trader",
       "enabled": true
     },
@@ -151,6 +279,7 @@
       "displayName": "Gigantic Rebirth",
       "category": "kol_alpha",
       "tier": "kol_alpha",
+      "followerCount": 95000,
       "notes": "SOL ecosystem alpha",
       "enabled": true
     },
@@ -159,6 +288,7 @@
       "displayName": "The DeFi Investor",
       "category": "kol_alpha",
       "tier": "kol_alpha",
+      "followerCount": 32000,
       "notes": "DeFi and memecoin analysis",
       "enabled": true
     },
@@ -167,6 +297,7 @@
       "displayName": "Cobie",
       "category": "kol_alpha",
       "tier": "kol_alpha",
+      "followerCount": 520000,
       "notes": "Crypto trader and commentator",
       "enabled": true
     },
@@ -175,6 +306,7 @@
       "displayName": "DeFi Cheetah",
       "category": "kol_alpha",
       "tier": "kol_alpha",
+      "followerCount": 78000,
       "notes": "SOL memecoin tracker",
       "enabled": true
     },
@@ -183,6 +315,7 @@
       "displayName": "Mert",
       "category": "kol_alpha",
       "tier": "kol_alpha",
+      "followerCount": 130000,
       "notes": "Crypto analyst and caller",
       "enabled": true
     },
@@ -191,6 +324,7 @@
       "displayName": "Altcoin Gordon",
       "category": "kol_alpha",
       "tier": "kol_alpha",
+      "followerCount": 220000,
       "notes": "Multi-chain meme caller",
       "enabled": true
     },
@@ -199,6 +333,7 @@
       "displayName": "Crypto God John",
       "category": "kol_alpha",
       "tier": "kol_alpha",
+      "followerCount": 88000,
       "notes": "Memecoin researcher",
       "enabled": true
     },
@@ -207,6 +342,7 @@
       "displayName": "Kaleo",
       "category": "kol_alpha",
       "tier": "kol_alpha",
+      "followerCount": 640000,
       "notes": "Crypto analyst with meme calls",
       "enabled": true
     },
@@ -215,6 +351,7 @@
       "displayName": "Zach Becker",
       "category": "kol_alpha",
       "tier": "kol_alpha",
+      "followerCount": 52000,
       "notes": "SOL ecosystem early caller",
       "enabled": true
     },
@@ -223,15 +360,8 @@
       "displayName": "Shin Chan",
       "category": "kol_alpha",
       "tier": "kol_alpha",
+      "followerCount": 38000,
       "notes": "Asian crypto alpha (CN/EN)",
-      "enabled": true
-    },
-    {
-      "handle": "thedefiedge",
-      "displayName": "The DeFi Edge",
-      "category": "kol_alpha",
-      "tier": "kol_alpha",
-      "notes": "DeFi and memecoin educator",
       "enabled": true
     },
     {
@@ -239,6 +369,7 @@
       "displayName": "Crypto Jelle",
       "category": "kol_alpha",
       "tier": "kol_alpha",
+      "followerCount": 115000,
       "notes": "Multi-chain analyst",
       "enabled": true
     },
@@ -247,6 +378,7 @@
       "displayName": "Todd",
       "category": "kol_alpha",
       "tier": "kol_alpha",
+      "followerCount": 25000,
       "notes": "SOL memecoin trader",
       "enabled": true
     },
@@ -255,7 +387,62 @@
       "displayName": "The Tokenist",
       "category": "kol_alpha",
       "tier": "kol_alpha",
+      "followerCount": 18000,
       "notes": "Crypto and meme analysis",
+      "enabled": true
+    },
+    {
+      "handle": "GameOfTrades_",
+      "displayName": "Game of Trades",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "followerCount": 340000,
+      "notes": "Macro trader with crypto/meme exposure",
+      "enabled": true
+    },
+    {
+      "handle": "RookieXBT",
+      "displayName": "RookieXBT",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "followerCount": 160000,
+      "notes": "Crypto trader, occasional meme plays",
+      "enabled": true
+    },
+    {
+      "handle": "lookonchain",
+      "displayName": "Lookonchain",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "followerCount": 580000,
+      "notes": "On-chain tracking, whale movements",
+      "enabled": true
+    },
+    {
+      "handle": "Flip_Flippen",
+      "displayName": "Flip Flippen",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "followerCount": 95000,
+      "notes": "Solana ecosystem focus",
+      "enabled": true
+    },
+    {
+      "handle": "Pentosh1",
+      "displayName": "Pentoshi",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "followerCount": 720000,
+      "notes": "Crypto trader with meme exposure",
+      "enabled": true
+    },
+    {
+      "handle": "KaitoAI",
+      "displayName": "Kaito",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "followerCount": 92000,
+      "notes": "Crypto data and trending narratives",
       "enabled": true
     }
   ]

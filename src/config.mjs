@@ -61,5 +61,6 @@ export const config = Object.freeze({
   xWatchlistPath: path.join(ROOT, 'config', 'x-watchlist.json'),
   xBearerToken: process.env.X_BEARER_TOKEN || '',
   xPollIntervalMs: boundedInteger(process.env.X_POLL_INTERVAL_MS, 120_000, 60_000, 10 * 60_000),
+  xMinFollowers: boundedInteger(process.env.X_MIN_FOLLOWERS, 10_000, 0, 10_000_000),
   xEnabled: Boolean(process.env.X_BEARER_TOKEN)
 });
