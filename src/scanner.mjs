@@ -338,11 +338,13 @@ function addEvent(events, type, message, chain, data = {}) {
 }
 
 export class Scanner {
-  constructor({ gmgn, secondary = null, state, controls = null, settings = config }) {
+  constructor({ gmgn, secondary = null, state, controls = null, webhookNotifier = null, xMonitor = null, settings = config }) {
     this.gmgn = gmgn;
     this.secondary = secondary;
     this.state = state;
     this.controls = controls;
+    this.webhookNotifier = webhookNotifier;
+    this.xMonitor = xMonitor;
     this.config = settings;
     this.supportedChains = [...settings.supportedChains];
     this.activeChain = this.supportedChains.includes(state.value.activeChain) ? state.value.activeChain : settings.chain;
@@ -466,8 +468,53 @@ export class Scanner {
       if (this.gmgn.keyEpoch !== keyEpoch) return;
       const reviewRequests = [...this.requestedReviews.values()].filter(item => item.chain === chain
         && item.epoch === keyEpoch && Date.now() - item.at <= 10 * 60000);
+      
+      // Enqueue X-discovered contract addresses
+      const xDiscovered = [];
+      if (this.xMonitor) {
+        const xSnapshot = this.xMonitor.snapshot();
+        for (const hit of xSnapshot.hits || []) {
+          if (!hit.hasAddresses || !hit.addresses?.all?.length) {
+            // Send webhook alert for non-CA tweets from high-tier accounts
+            if (this.webhookNotifier && (hit.tier === 'official' || hit.tier === 'founder')) {
+              void this.webhookNotifier.sendSocialAlert(hit).catch(err => console.error('Social webhook failed:', err));
+            }
+            
+            // Send webhook alert for soft mentions from configured tiers
+            if (this.webhookNotifier && hit.isSoftMention) {
+              const softMentionTiers = this.settings.xSoftMentionTiers || ['official', 'founder', 'chain_lead'];
+              if (softMentionTiers.includes(hit.tier)) {
+                void this.webhookNotifier.sendSocialAlert(hit).catch(err => console.error('Soft mention webhook failed:', err));
+              }
+            }
+            continue;
+          }
+          
+          for (const address of hit.addresses.all) {
+            const addressChain = /^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(address) ? 'sol'
+              : /^0x[a-fA-F0-9]{40}$/i.test(address) ? chain
+              : null;
+            
+            if (addressChain === chain && this.xMonitor.shouldEnqueueAddress(address, hit.handle)) {
+              xDiscovered.push({
+                address,
+                symbol: hit.cashtags?.[0] || address.slice(0, 6),
+                name: `X/${hit.handle}`,
+                _xSource: {
+                  handle: hit.handle,
+                  displayName: hit.displayName,
+                  tier: hit.tier,
+                  tweetUrl: hit.url,
+                  tweetId: hit.tweetId
+                }
+              });
+            }
+          }
+        }
+      }
+      
       // Current discovery wins over a queued preview snapshot when both exist.
-      discovered = [...new Map([...reviewRequests.map(item => item.row), ...discovered].map(row => [addressKey(row.address), row])).values()];
+      discovered = [...new Map([...reviewRequests.map(item => item.row), ...xDiscovered, ...discovered].map(row => [addressKey(row.address), row])).values()];
       const discoveredByAddress = new Map(discovered.filter(row => row?.address).map(row => [addressKey(row.address), row]));
       const screened = discovered.map(row => ({ row, screen: discoveryScreen(row, settings) }));
       const prequalified = screened.filter(item => item.screen.pass).sort((a, b) =>
@@ -592,9 +639,23 @@ export class Scanner {
           candidatesByAddress.set(addressKey(token.address), candidate);
           this.requestedReviews.delete(tokenKey(chain, token.address));
           const favorite = this.controls?.value.annotations[tokenKey(chain, token.address)]?.favorite;
-          if (candidate.status === 'X_REVIEW' && previousCandidate?.status !== 'X_REVIEW') {
-            events = addEvent(events, 'CANDIDATE_NEW', `${token.symbol}：新增链上候选，需人工复核`, chain, { address: token.address });
-          } else if ((favorite || previousCandidate?.status === 'X_REVIEW') && candidate.status !== 'X_REVIEW' && candidate.status !== previousCandidate?.status) {
+      if (candidate.status === 'X_REVIEW' && previousCandidate?.status !== 'X_REVIEW') {
+        events = addEvent(events, 'CANDIDATE_NEW', `${token.symbol}：新增链上候选，需人工复核`, chain, { address: token.address });
+        if (this.webhookNotifier && candidate.deep?.embryonic) {
+          const tier = candidate.deep.embryonic.embryonicTier;
+          if (tier === 'hot' || tier === 'watch') {
+            void this.webhookNotifier.sendCandidateAlert(candidate).catch(err => console.error('Webhook alert failed:', err));
+          }
+        }
+      }
+      
+      // Send chain competition signal if intensity crossed threshold
+      if (this.webhookNotifier && xSnapshot?.competition?.active) {
+        const competition = xSnapshot.competition;
+        if (competition.intensity >= this.settings.xCompetitionThreshold) {
+          void this.webhookNotifier.sendChainCompetitionSignal(competition).catch(err => console.error('Competition webhook failed:', err));
+        }
+      } else if ((favorite || previousCandidate?.status === 'X_REVIEW') && candidate.status !== 'X_REVIEW' && candidate.status !== previousCandidate?.status) {
             events = addEvent(events, 'RISK_WORSENED', `${token.symbol}：风险或证据状态恶化，请重新复核`, chain, { address: token.address });
           }
           const queueItem = queueByAddress.get(addressKey(token.address));

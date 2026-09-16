@@ -1,15 +1,15 @@
 {
-  "name": "meme-radar-open-source",
+  "name": "meme-radar-jindou",
   "version": "0.1.6",
-  "description": "Open-source edition of a local, read-only multi-chain meme token research radar",
+  "description": "金狗雷达 - Fork of meme-radar customized for early meme-coin research (金狗萌芽)",
   "author": "DeFi狙击手 (@bi_9527zx)",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nhovongoc0-max/meme-radar.git"
+    "url": "git+https://github.com/nehcouz-888/meme-radar.git"
   },
-  "homepage": "https://github.com/nhovongoc0-max/meme-radar#readme",
+  "homepage": "https://github.com/nehcouz-888/meme-radar#readme",
   "bugs": {
-    "url": "https://github.com/nhovongoc0-max/meme-radar/issues"
+    "url": "https://github.com/nehcouz-888/meme-radar/issues"
   },
   "private": true,
   "license": "AGPL-3.0-only",
