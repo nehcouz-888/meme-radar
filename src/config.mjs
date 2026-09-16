@@ -58,11 +58,24 @@ export const config = Object.freeze({
   webhookMinTier: process.env.WEBHOOK_MIN_TIER || 'hot',
   webhookEnabled: Boolean(process.env.WEBHOOK_URL),
   webhookDedupeMs: 30 * 60_000,
+  // X/Twitter monitoring
   xWatchlistPath: path.join(ROOT, 'config', 'x-watchlist.json'),
   xBearerToken: process.env.X_BEARER_TOKEN || '',
-  xPollIntervalMs: boundedInteger(process.env.X_POLL_INTERVAL_MS, 120_000, 60_000, 10 * 60_000),
+  xProvider: process.env.X_PROVIDER || '', // official | socialdata | sorsa | stub
+  xPollIntervalMs: boundedInteger(
+    process.env.X_POLL_INTERVAL_MS,
+    // Default: 10 minutes for cheap providers, 2 minutes for official
+    process.env.SOCIALDATA_API_KEY || process.env.SORSA_API_KEY ? 600_000 : 120_000,
+    60_000,
+    30 * 60_000
+  ),
   xMinFollowers: boundedInteger(process.env.X_MIN_FOLLOWERS, 10_000, 0, 10_000_000),
   xCompetitionWindowHours: boundedInteger(process.env.X_COMPETITION_WINDOW_HOURS, 6, 1, 24),
   xCompetitionThreshold: boundedInteger(process.env.X_COMPETITION_THRESHOLD, 60, 0, 100),
-  xEnabled: Boolean(process.env.X_BEARER_TOKEN)
+  xEnabled: Boolean(process.env.X_BEARER_TOKEN || process.env.SOCIALDATA_API_KEY || process.env.SORSA_API_KEY),
+  
+  // Third-party X providers
+  socialDataApiKey: process.env.SOCIALDATA_API_KEY || '',
+  socialDataBaseUrl: process.env.SOCIALDATA_BASE_URL || 'https://api.socialdata.tools',
+  sorsaApiKey: process.env.SORSA_API_KEY || ''
 });

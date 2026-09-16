@@ -138,35 +138,91 @@
 
 所有 KOL / community / meme_whale 账号均满足 ≥10k 粉丝要求。质量优于数量，精选高信号账号。
 
-##### X API 设置
+##### X API 设置（多种方式）
 
-**实时模式（推荐）**
-
-设置环境变量 `X_BEARER_TOKEN`：
-
+**方式1：官方 Twitter API（最贵，实时性最好）**
 ```bash
 export X_BEARER_TOKEN=your_twitter_api_v2_bearer_token
+export X_PROVIDER=official  # 可选，有 bearer token 时自动选择
+export X_POLL_INTERVAL_MS=120000  # 默认2分钟（官方API）
 ```
 
-如何获取 Twitter API Bearer Token：
+**方式2：SocialData 第三方（便宜，推荐）**
+```bash
+export SOCIALDATA_API_KEY=your_socialdata_api_key
+export X_PROVIDER=socialdata  # 可选，有 API key 时自动选择
+export X_POLL_INTERVAL_MS=600000  # 默认10分钟（第三方API）
+```
+
+**方式3：Sorsa 第三方（待实现）**
+```bash
+export SORSA_API_KEY=your_sorsa_api_key
+export X_PROVIDER=sorsa
+```
+
+**方式4：演示模式（无需配置）**
+
+不设置任何密钥时，自动使用演示模式生成假数据用于测试。
+
+##### 便宜第三方 vs 官方 API
+
+**官方 Twitter API v2**
+- **优势**：实时性最佳，直接从 Twitter 获取，数据完整度高
+- **劣势**：**非常贵** — Free tier 极其有限（每月500条推文），Basic $100/月（10k条），Pro $5000/月
+- **适用场景**：资金充足、需要实时监控、商业级产品
+- **轮询频率**：可每 1-2 分钟
+
+**SocialData.tools 第三方**
+- **优势**：**价格友好** — 约 $29-79/月套餐，支持合理频率轮询
+- **劣势**：非官方，有 ToS 风险，可能有延迟或断连，数据完整性次于官方
+- **适用场景**：个人研究、成本敏感、可接受轻度延迟
+- **轮询频率**：建议 10-15 分钟（避免触发限流）
+- **月度成本估算**（~20个优先账号 @ 10分钟轮询）：
+  - 每账号每小时6次 × 24小时 = 144次/天
+  - 20账号 = 2,880次/天
+  - 月度 ≈ 86,400次调用
+  - SocialData 套餐通常包含 100k-500k 次调用/月，**足够覆盖**
+
+**ToS 与可靠性风险**
+- ⚠️ 第三方服务**非官方授权**，可能违反 Twitter ToS
+- 第三方可能随时**下线、调整定价、限流**，无法保证长期稳定
+- 生产环境或重要项目建议**官方API** + 备用第三方做冗余
+- 本项目为**研究工具**，风险自担
+
+**自动选择逻辑**
+1. 若设置 `SOCIALDATA_API_KEY`，优先使用 SocialData（便宜）
+2. 若仅设置 `X_BEARER_TOKEN`，使用官方API
+3. 若设置 `X_PROVIDER=official|socialdata|sorsa|stub`，强制指定
+4. 都不设置时，演示模式
+
+**如何获取密钥**
+
+Twitter API Bearer Token (官方)：
 1. 访问 https://developer.twitter.com/en/portal/dashboard
 2. 创建或选择一个 App
 3. 在 "Keys and tokens" 中生成 Bearer Token
 4. 将 token 设置为环境变量或在启动命令中传入
 
+SocialData API Key (第三方)：
+1. 访问 https://socialdata.tools 或类似服务
+2. 注册账号并订阅套餐
+3. 在 Dashboard 获取 API Key
+
+**配置示例**：参考项目根目录的 `.env.example` 文件。
+
 **演示/Dry-run 模式（无 token）**
 
-未设置 `X_BEARER_TOKEN` 时，X 监控进入演示模式：
-- 不发起真实 Twitter API 请求
+未设置任何 API 密钥时，X 监控进入演示模式：
+- 不发起真实 API 请求
 - UI 和 API 端点正常工作
-- 页面显示 "演示模式（设置 X_BEARER_TOKEN 启用实时监控）"
+- 页面显示 "演示模式（设置 X_BEARER_TOKEN 或 SOCIALDATA_API_KEY 启用实时监控）"
 - 可用于开发和测试 watchlist 配置
 
 **不提供**凭据抓取或违反 ToS 的浏览器 cookie 窃取。
 
 ##### 工作流程
 
-1. **推文拉取**：每 2 分钟（可配）从监控账号拉取最新推文
+1. **推文拉取**：默认每 10 分钟（第三方 API）或 2 分钟（官方 API，可配）从监控账号拉取最新推文
 2. **合约地址提取**：自动识别 Solana（base58）和 EVM（0x...）地址
 3. **候选入队**：发现的合约地址入队到与链上发现相同的候选管道
 4. **社交警报**：无合约地址的高层级（official/founder）推文通过 webhook 发送社交警报

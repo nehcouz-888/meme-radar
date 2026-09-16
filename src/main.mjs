@@ -73,7 +73,12 @@ await new Promise((resolve, reject) => {
 });
 console.log(`金狗雷达 (Meme Radar Jindou)：http://127.0.0.1:${config.port}`);
 console.log('只读扫描器：交易执行永久关闭');
-console.log(`X监控模式：${xMonitor.mode === 'stub' ? '演示模式（设置 X_BEARER_TOKEN 启用实时监控）' : '实时API'}`);
+    const providerName = xMonitor.mode === 'stub' ? '演示模式' 
+      : xMonitor.mode === 'official' ? '官方Twitter API'
+      : xMonitor.mode === 'socialdata' ? 'SocialData第三方'
+      : xMonitor.mode === 'sorsa' ? 'Sorsa第三方'
+      : '未知';
+    console.log(`X监控模式：${providerName}${xMonitor.mode === 'stub' ? '（设置 X_BEARER_TOKEN 或 SOCIALDATA_API_KEY 启用实时监控）' : ''}`);
 console.log(`Webhook通知：${webhookNotifier.isEnabled() ? '已启用' : '未启用（设置 WEBHOOK_URL 启用）'}`);
 for (const signal of ['SIGINT', 'SIGTERM']) {
   process.on(signal, () => {

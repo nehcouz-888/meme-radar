@@ -2,6 +2,7 @@ import fs from 'node:fs/promises';
 import crypto from 'node:crypto';
 import { config } from './config.mjs';
 import { detectChainCompetition } from './chain-competition.mjs';
+import { createXProvider } from './x-providers.mjs';
 
 const SOLANA_ADDRESS_PATTERN = /\b([1-9A-HJ-NP-Za-km-z]{32,44})\b/g;
 const EVM_ADDRESS_PATTERN = /\b(0x[a-fA-F0-9]{40})\b/g;
@@ -253,6 +254,7 @@ export class XMonitor {
     
     return {
       mode: this.mode,
+      provider: this.provider?.name || 'none',
       enabled: !this.stopped,
       watchlistSize: this.watchlist.length,
       watchlist: this.watchlist.map(a => ({ 
