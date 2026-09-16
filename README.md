@@ -1,12 +1,209 @@
-# Meme雷达开源版
+# 金狗雷达（Meme Radar Jindou）
+
+**Fork of [nhovongoc0-max/meme-radar](https://github.com/nhovongoc0-max/meme-radar) v0.1.6**
 
 作者：**DeFi狙击手** · X：[@bi_9527zx](https://x.com/bi_9527zx)
 
 本地运行的多链 Meme 候选雷达。使用 GMGN 做发现与标签，GoPlus 做已支持链的合约风险复核，DexScreener 做市值、流动性与官网交叉校验。
 
-这是从自用版本隔离出的开源版，只包含本地只读扫描、证据展示与人工复核能力。Windows 与 macOS 共用同一套扫描逻辑。
+这是从上游开源版定制改造的**金狗萌芽研究版**，专注于极早期 meme 代币发现，增加了：
+- **金狗萌芽评分系统**：0-100 分embryonic评分，hot/watch/ignore 三档分类
+- **X/Twitter 监控**：官方账号、KOL 推特实时监控，自动提取合约地址
+- **Webhook 通知**：可选的 HTTP webhook 推送，30 分钟去重
+- **Solana 优先**：默认扫描 Solana 链，市值范围调整为 $10k-$200k 早期带
 
-它不包含钱包私钥、链上交易签名、swap 或下单模块。系统只提供筛选证据，不构成投资建议，也不保证候选代币安全或上涨。
+## 改造说明
+
+### 与上游的关系
+
+- **上游来源**：https://github.com/nhovongoc0-max/meme-radar v0.1.6
+- **许可证**：AGPL-3.0-only（保持不变，完整保留上游 LICENSE 文件和版权声明）
+- **改造性质**：私有 fork 用于金狗萌芽研究，**不向上游提交 PR**
+- **功能边界**：保持只读/研究定位，**永不添加**钱包私钥、交易签名、swap 或自动下单功能
+
+### 主要改造内容
+
+#### 1. 金狗萌芽评分层（Embryonic Scoring）
+
+在原有安全检查（貔貅/rug 仍硬拒绝）**之后**增加早期研究评分：
+
+- **embryonicScore** (0-100)：综合市值带、流动性、年龄、聪明钱、持有人、成交量、社交链接
+- **embryonicTier**：`ignore` | `watch` | `hot`（可配置阈值，默认 hot≥70, watch≥50）
+- **embryonicSignals**：中英文原因列表，标记得分来源
+
+评分因子（可用字段；未知显式标记，不伪造通过）：
+- 市值带：偏好 $30k–$150k 最佳区间（可配 $10k–$200k）
+- 流动性：足够交易但不荒谬（vs mcap 比例合理）
+- 持有人集中度：top10 不极端；标记 bundler/sniper/dev 重仓 tag
+- 年龄/新鲜度：偏好分钟–小时级（可检测时）
+- 聪明钱/KOL 参与：有则加分（不强制）
+- 社交链接（X/website）：轻度加分，**不自动背书**
+- 1分钟发现成交额：轻度加分
+
+**不改变原有 reject/review/watch 安全语义**；embryonic 是额外研究层。
+
+#### 2. Solana 优先配置
+
+- 默认扫描链：`sol`（Solana）
+- 即时发现市值窗口默认调整为早期萌芽带
+- 配置键在 README 记录
+
+#### 3. X/Twitter 监控（核心优先功能）
+
+##### 监控账号（Watchlist）
+
+配置文件：`config/x-watchlist.json`
+
+**官方账号（official tier）**
+- @binance, @BinanceWallet, @BinanceResearch
+
+**创始人（founder tier）**
+- @cz_binance (CZ - Changpeng Zhao)
+- @heyibinance (He Yi / 何一)
+
+**链生态负责人（chain_lead tier）**
+- @solana, @aeyakovenko, @rajgokal (Solana)
+- @bnbchain (BNB Chain)
+- @base, @jessepollak (Base/Coinbase L2)
+- @VitalikButerin (Ethereum)
+
+**KOL Alpha 呼单者（kol_alpha tier）**
+- 30 个公开账号种子列表（CN/EN 加密 Twitter，近期 meme 呼单记录）
+- 包含：@0xRacer, @blknoiz06, @Murad_MHH, @DegenSpartan, @cobie, @0xMert_, 等
+- 每个账号注明分类、display name、notes
+
+##### X API 设置
+
+**实时模式（推荐）**
+
+设置环境变量 `X_BEARER_TOKEN`：
+
+```bash
+export X_BEARER_TOKEN=your_twitter_api_v2_bearer_token
+```
+
+如何获取 Twitter API Bearer Token：
+1. 访问 https://developer.twitter.com/en/portal/dashboard
+2. 创建或选择一个 App
+3. 在 "Keys and tokens" 中生成 Bearer Token
+4. 将 token 设置为环境变量或在启动命令中传入
+
+**演示/Dry-run 模式（无 token）**
+
+未设置 `X_BEARER_TOKEN` 时，X 监控进入演示模式：
+- 不发起真实 Twitter API 请求
+- UI 和 API 端点正常工作
+- 页面显示 "演示模式（设置 X_BEARER_TOKEN 启用实时监控）"
+- 可用于开发和测试 watchlist 配置
+
+**不提供**凭据抓取或违反 ToS 的浏览器 cookie 窃取。
+
+##### 工作流程
+
+1. **推文拉取**：每 2 分钟（可配）从监控账号拉取最新推文
+2. **合约地址提取**：自动识别 Solana（base58）和 EVM（0x...）地址
+3. **候选入队**：发现的合约地址入队到与链上发现相同的候选管道
+4. **社交警报**：无合约地址的高层级（official/founder）推文通过 webhook 发送社交警报
+5. **去重**：同一推文 ID / 同一 mint+账号 30 分钟去重
+
+**X 来源标记**：从 X 发现的代币在候选中标记 `_xSource`（handle, displayName, tier, tweetUrl）
+
+##### 未来扩展点（当前仅注释）
+
+`social.mjs` 中预留集成注释：
+- 聚合 X 命中与链上发现统一评分
+- 交叉引用 KOL 呼单与链上地址
+- 计算"社交动量"（多 KOL 提及）
+- 跟踪 KOL 历史准确率加权
+
+当前 X 监控功能（`x-monitor.mjs` 已实现）：
+- Watchlist of Binance officials, CZ, He Yi, chain leads, 30 alpha KOLs
+- Twitter API v2 integration + dry-run mode
+- Contract address extraction (Solana + EVM)
+- Enqueue into candidate pipeline
+- Social alert webhooks
+- 30-min deduplication
+
+#### 4. Webhook 通知（可选，本地）
+
+环境变量：
+```bash
+export WEBHOOK_URL=http://127.0.0.1:8080/alerts    # 或用户提供的 webhook 地址
+export WEBHOOK_MIN_TIER=hot                        # hot | watch（默认 hot）
+```
+
+- **候选通知**：新 `hot`（或可选 `watch`）候选深度审计后 POST JSON 摘要
+- **社交通知**：高层级账号无 CA 推文（official/founder）发送社交警报
+- **安全**：payload 自动过滤 API key/secret/bearerToken 等敏感字段（显示 `[REDACTED]`）
+- **去重**：同一 mint 30 分钟不重复发送
+
+Webhook payload 示例（候选）：
+```json
+{
+  "type": "embryonic_candidate",
+  "timestamp": 1726455600000,
+  "candidate": {
+    "address": "...",
+    "chain": "sol",
+    "symbol": "EXAMPLE",
+    "embryonicScore": 82,
+    "embryonicTier": "hot",
+    "embryonicSignals": ["Market cap in optimal early range", "..."],
+    "embryonicSignalsCN": ["市值处于最佳早期区间", "..."],
+    "status": "X_REVIEW",
+    "gmgnUrl": "...",
+    "twitter": "...",
+    "website": "..."
+  }
+}
+```
+
+Webhook payload 示例（社交）：
+```json
+{
+  "type": "social_alert",
+  "timestamp": 1726455600000,
+  "social": {
+    "tweetId": "1234567890",
+    "handle": "cz_binance",
+    "displayName": "CZ",
+    "tier": "founder",
+    "category": "founder",
+    "text": "Interesting project...",
+    "url": "https://twitter.com/cz_binance/status/1234567890",
+    "createdAt": 1726455000000,
+    "addresses": { "solana": [], "evm": [], "all": [] },
+    "cashtags": ["BTC"]
+  }
+}
+```
+
+#### 5. UI 更新
+
+- 候选卡片展示 embryonic score / tier / signals
+- 筛选/排序按 embryonic score
+- X 监控面板：显示 watchlist、最近 X hits、推文链接
+- 扫描设置中 webhook 配置项（中文 UI 标签）
+
+（注：完整 UI 实现在 `public/index.html`，本次改造为后端优先，UI 为占位/API 就绪）
+
+#### 6. 测试
+
+单元测试（`test/embryonic.test.mjs`, `test/x-monitor.test.mjs`）：
+- embryonic 评分逻辑 fixtures
+- X watchlist 加载
+- 合约地址提取（SOL + EVM）
+- Cashtag 提取
+- 去重逻辑
+
+运行：`npm test`（必须通过）
+
+### 硬约束（不变）
+
+- **无交易模块**：无 swap、无 follow-wallet trade execution
+- **Key 本地保存**：不记录或返回 secrets
+- **AGPL-3.0-only**：保留许可证与上游归属
+- **中文友好**：README「改造说明」+ 中文 UI 标签
 
 ## 功能介绍
 
