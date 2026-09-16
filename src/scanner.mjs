@@ -479,6 +479,14 @@ export class Scanner {
             if (this.webhookNotifier && (hit.tier === 'official' || hit.tier === 'founder')) {
               void this.webhookNotifier.sendSocialAlert(hit).catch(err => console.error('Social webhook failed:', err));
             }
+            
+            // Send webhook alert for soft mentions from configured tiers
+            if (this.webhookNotifier && hit.isSoftMention) {
+              const softMentionTiers = this.settings.xSoftMentionTiers || ['official', 'founder', 'chain_lead'];
+              if (softMentionTiers.includes(hit.tier)) {
+                void this.webhookNotifier.sendSocialAlert(hit).catch(err => console.error('Soft mention webhook failed:', err));
+              }
+            }
             continue;
           }
           

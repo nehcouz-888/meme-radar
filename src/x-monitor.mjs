@@ -13,6 +13,84 @@ function normalizeHandle(value) {
   return /^[A-Za-z0-9_]{1,15}$/.test(handle) ? handle : '';
 }
 
+/**
+ * Load trigger keywords for soft mention detection
+ */
+export async function loadTriggerKeywords(path = config.xTriggerKeywordsPath) {
+  try {
+    const content = await fs.readFile(path, 'utf8');
+    const data = JSON.parse(content);
+    
+    // Flatten global keywords into searchable array
+    const globalKeywords = [];
+    if (data.globalKeywords) {
+      for (const category of Object.values(data.globalKeywords)) {
+        if (Array.isArray(category.examples)) {
+          globalKeywords.push(...category.examples);
+        }
+        if (Array.isArray(category.cn)) {
+          globalKeywords.push(...category.cn);
+        }
+        if (Array.isArray(category.en)) {
+          globalKeywords.push(...category.en);
+        }
+      }
+    }
+    
+    return {
+      globalKeywords: globalKeywords.map(k => String(k).toLowerCase()),
+      accountSpecific: data.accountSpecificKeywords || {},
+      softMentionTiers: data.softMentionTiers || ['official', 'founder', 'chain_lead'],
+      alwaysAlertTiers: data.alwaysAlertTiers?.tiers || ['official', 'founder'],
+      minTweetLength: data.alwaysAlertTiers?.minTweetLength || 20
+    };
+  } catch (error) {
+    if (error.code === 'ENOENT') {
+      console.warn('Trigger keywords file not found, using empty defaults');
+      return {
+        globalKeywords: [],
+        accountSpecific: {},
+        softMentionTiers: ['official', 'founder', 'chain_lead'],
+        alwaysAlertTiers: ['official', 'founder'],
+        minTweetLength: 20
+      };
+    }
+    throw error;
+  }
+}
+
+/**
+ * Check if tweet text matches trigger keywords
+ */
+export function matchesTriggerKeywords(text, account, triggerKeywords) {
+  if (!text || !triggerKeywords) return { matched: false, keywords: [] };
+  
+  const lowerText = text.toLowerCase();
+  const matchedKeywords = [];
+  
+  // Check global keywords
+  for (const keyword of triggerKeywords.globalKeywords || []) {
+    if (lowerText.includes(keyword.toLowerCase())) {
+      matchedKeywords.push(keyword);
+    }
+  }
+  
+  // Check account-specific keywords
+  const accountConfig = triggerKeywords.accountSpecific?.[account.handle];
+  if (accountConfig?.enabled && accountConfig.keywords) {
+    for (const keyword of accountConfig.keywords) {
+      if (lowerText.includes(keyword.toLowerCase()) && !matchedKeywords.includes(keyword)) {
+        matchedKeywords.push(keyword);
+      }
+    }
+  }
+  
+  return {
+    matched: matchedKeywords.length > 0,
+    keywords: matchedKeywords
+  };
+}
+
 export async function loadWatchlist(path = config.xWatchlistPath, minFollowers = config.xMinFollowers) {
   try {
     const content = await fs.readFile(path, 'utf8');
@@ -71,6 +149,8 @@ export class XMonitor {
     this.now = now;
     this.schedule = schedule;
     this.cancel = cancel;
+    this.provider = null; // Will be set in init()
+    this.triggerKeywords = null; // Will be set in init()
     this.watchlist = [];
     this.seenTweets = new Map();
     this.seenMints = new Map();
@@ -79,18 +159,21 @@ export class XMonitor {
     this.running = false;
     this.stopped = false;
     this.timer = null;
-    this.mode = settings.xBearerToken ? 'api' : 'stub';
-    this.pollCount = 0;
     this.hits = [];
+    this.pollCount = 0;
+    this.mode = 'pending'; // Will be set in init()
   }
 
   async init() {
     this.watchlist = await loadWatchlist(this.settings.xWatchlistPath, this.settings.xMinFollowers);
+    this.triggerKeywords = await loadTriggerKeywords(this.settings.xTriggerKeywordsPath);
+    this.provider = createXProvider(this.settings);
+    this.mode = this.provider.name;
     return this;
   }
 
   isDryRun() {
-    return this.mode === 'stub' || !this.settings.xBearerToken;
+    return this.mode === 'stub';
   }
 
   async fetchTimeline(handle) {
@@ -159,6 +242,17 @@ export class XMonitor {
     const addresses = extractContractAddresses(text);
     const cashtags = extractCashtags(text);
     const tweetUrl = `https://twitter.com/${account.handle}/status/${tweetId}`;
+    const hasAddresses = addresses.all.length > 0;
+    
+    // Check for soft mentions (keywords or high-tier account without CA)
+    const keywordMatch = matchesTriggerKeywords(text, account, this.triggerKeywords);
+    const isAlwaysAlertTier = this.triggerKeywords?.alwaysAlertTiers?.includes(account.tier);
+    const meetsMinLength = text.length >= (this.triggerKeywords?.minTweetLength || 20);
+    
+    const isSoftMention = !hasAddresses && (
+      keywordMatch.matched || 
+      (isAlwaysAlertTier && meetsMinLength)
+    );
 
     const hit = {
       tweetId,
@@ -172,7 +266,12 @@ export class XMonitor {
       discoveredAt: this.now(),
       addresses,
       cashtags,
-      hasAddresses: addresses.all.length > 0
+      hasAddresses,
+      isSoftMention,
+      matchedKeywords: keywordMatch.keywords || [],
+      softMentionReason: isSoftMention 
+        ? (keywordMatch.matched ? 'keyword_match' : 'high_tier_post')
+        : null
     };
 
     this.seenTweets.set(tweetId, { at: this.now(), hit });

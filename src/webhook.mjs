@@ -153,7 +153,10 @@ export class WebhookNotifier {
         url: hit.url,
         createdAt: hit.createdAt,
         addresses: hit.addresses,
-        cashtags: hit.cashtags
+        cashtags: hit.cashtags,
+        isSoftMention: hit.isSoftMention || false,
+        matchedKeywords: hit.matchedKeywords || [],
+        softMentionReason: hit.softMentionReason || null
       }
     };
     

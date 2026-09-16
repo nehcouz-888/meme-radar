@@ -220,13 +220,54 @@ SocialData API Key (第三方)：
 
 **不提供**凭据抓取或违反 ToS 的浏览器 cookie 窃取。
 
+##### 软提及 / 权威造词（Soft Mentions）
+
+**核心洞察**：权威账号的「软提及」比直接喊单更重要。
+
+CZ 随口提到"西兰花"（broccoli）、狗名、某个 meme IP、叙事关键词 → 即使**不贴合约地址**，也能引发多链 meme 币涌现。
+
+**软提及检测逻辑**：
+1. **关键词匹配**：推文包含触发关键词（动物、食物、叙事词、链名等）但无 CA
+2. **权威发声**：official/founder 账号的任何有内容推文（≥20字符）都视为潜在信号
+
+**触发关键词配置** (`config/x-trigger-keywords.json`)：
+- **全局关键词**：动物（dog/cat/pepe）、食物（broccoli/banana）、叙事（AI Agent/meme season）、链（Solana/Base/BNB Chain）
+- **账号专属关键词**：如 CZ 的 "SAFU"/"build"，Vitalik 的 "rollup"/"L2"
+- **可编辑**：用户可添加自定义关键词
+
+**Webhook 通知**：
+- 软提及事件通过 `social_alert` 发送，包含：
+  - `isSoftMention: true`
+  - `matchedKeywords: [...]`
+  - `softMentionReason: 'keyword_match' | 'high_tier_post'`
+- 可配置接收软提及的账号层级（默认：official/founder/chain_lead）
+
+**示例**：
+```json
+{
+  "type": "social_alert",
+  "social": {
+    "handle": "cz_binance",
+    "tier": "founder",
+    "text": "Just had some delicious broccoli for lunch",
+    "isSoftMention": true,
+    "matchedKeywords": ["broccoli"],
+    "softMentionReason": "keyword_match",
+    "hasAddresses": false
+  }
+}
+```
+
+即使推文中没有合约地址，因为包含"broccoli"且来自 CZ，系统识别为软提及并发送警报。
+
 ##### 工作流程
 
-1. **推文拉取**：默认每 10 分钟（第三方 API）或 2 分钟（官方 API，可配）从监控账号拉取最新推文
+1. **推文拉取**：默认每 3-5 分钟（第三方 API）或 2 分钟（官方 API，可配）从监控账号拉取最新推文
 2. **合约地址提取**：自动识别 Solana（base58）和 EVM（0x...）地址
-3. **候选入队**：发现的合约地址入队到与链上发现相同的候选管道
-4. **社交警报**：无合约地址的高层级（official/founder）推文通过 webhook 发送社交警报
-5. **去重**：同一推文 ID / 同一 mint+账号 30 分钟去重
+3. **软提及检测**：无 CA 时检查关键词匹配或高层级账号发声
+4. **候选入队**：发现的合约地址入队到与链上发现相同的候选管道
+5. **社交警报**：软提及或无 CA 的高层级推文通过 webhook 发送
+6. **去重**：同一推文 ID 去重
 
 **X 来源标记**：从 X 发现的代币在候选中标记 `_xSource`（handle, displayName, tier, tweetUrl）
 

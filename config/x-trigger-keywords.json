@@ -1,0 +1,134 @@
+{
+  "version": 1,
+  "lastUpdated": "2026-09-16",
+  "description": "Trigger keywords for soft mention detection. High-tier accounts (official/founder/chain_lead) posting these keywords WITHOUT contract addresses still get social alerts.",
+  "note": "软提及比直接喊单更重要 - Soft mentions matter more than direct shills. Example: CZ mentions 'broccoli' without CA → spawns multi-chain meme coins.",
+  
+  "globalKeywords": {
+    "narrative": {
+      "cn": [
+        "AI Agent",
+        "AI代理",
+        "人工智能",
+        "Meme季",
+        "牛市",
+        "熊市",
+        "DeFi Summer",
+        "NFT",
+        "元宇宙",
+        "Web3"
+      ],
+      "en": [
+        "AI Agent",
+        "artificial intelligence",
+        "meme season",
+        "bull market",
+        "bear market",
+        "DeFi Summer",
+        "metaverse",
+        "Web3",
+        "pump",
+        "moon"
+      ]
+    },
+    
+    "animals": {
+      "note": "Animals often become meme coin themes after influencer mentions",
+      "examples": [
+        "dog",
+        "cat",
+        "pepe",
+        "frog",
+        "hamster",
+        "monkey",
+        "ape",
+        "shiba",
+        "doge",
+        "狗",
+        "猫",
+        "青蛙",
+        "猴子"
+      ]
+    },
+    
+    "food": {
+      "note": "Food mentions can trigger meme coin launches (e.g., broccoli)",
+      "examples": [
+        "broccoli",
+        "西兰花",
+        "banana",
+        "香蕉",
+        "pizza",
+        "披萨"
+      ]
+    },
+    
+    "tech": {
+      "examples": [
+        "blockchain",
+        "区块链",
+        "smart contract",
+        "智能合约",
+        "DeFi",
+        "去中心化"
+      ]
+    },
+    
+    "chains": {
+      "examples": [
+        "Solana",
+        "SOL",
+        "Ethereum",
+        "ETH",
+        "Base",
+        "BNB Chain",
+        "BSC"
+      ]
+    }
+  },
+  
+  "accountSpecificKeywords": {
+    "cz_binance": {
+      "enabled": true,
+      "keywords": [
+        "Binance",
+        "BNB",
+        "SAFU",
+        "build"
+      ],
+      "note": "CZ's casual mentions often spark meme trends"
+    },
+    "heyibinance": {
+      "enabled": true,
+      "keywords": [
+        "Binance",
+        "BNB",
+        "listing"
+      ]
+    },
+    "VitalikButerin": {
+      "enabled": true,
+      "keywords": [
+        "Ethereum",
+        "scaling",
+        "rollup",
+        "L2"
+      ]
+    }
+  },
+  
+  "softMentionTiers": [
+    "official",
+    "founder",
+    "chain_lead"
+  ],
+  
+  "alwaysAlertTiers": {
+    "note": "These tiers trigger soft mention alerts even without keyword matches (any non-trivial tweet)",
+    "tiers": [
+      "official",
+      "founder"
+    ],
+    "minTweetLength": 20
+  }
+}
