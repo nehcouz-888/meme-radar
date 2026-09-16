@@ -5,27 +5,38 @@ import { promises as fs } from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
 
-test('loadWatchlist: loads and filters enabled accounts', async () => {
+test('loadWatchlist: loads and filters enabled accounts with follower requirements', async () => {
   const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), 'x-watchlist-test-'));
   const watchlistPath = path.join(tempDir, 'test-watchlist.json');
   
   const testWatchlist = {
-    version: 1,
+    version: 2,
+    minFollowers: 10000,
     accounts: [
-      { handle: 'binance', displayName: 'Binance', category: 'official', tier: 'official', enabled: true, notes: 'Test' },
-      { handle: 'disabled_account', displayName: 'Disabled', category: 'kol_alpha', tier: 'kol_alpha', enabled: false, notes: '' },
-      { handle: 'cz_binance', displayName: 'CZ', category: 'founder', tier: 'founder', enabled: true, notes: 'Test' }
+      { handle: 'binance', displayName: 'Binance', category: 'official', tier: 'official', followerCount: null, enabled: true, notes: 'Test' },
+      { handle: 'low_follower_kol', displayName: 'Low Follower', category: 'kol_alpha', tier: 'kol_alpha', followerCount: 5000, enabled: true, notes: 'Below threshold' },
+      { handle: 'high_follower_kol', displayName: 'High Follower', category: 'kol_alpha', tier: 'kol_alpha', followerCount: 50000, enabled: true, notes: 'Above threshold' },
+      { handle: 'disabled_account', displayName: 'Disabled', category: 'kol_alpha', tier: 'kol_alpha', followerCount: 100000, enabled: false, notes: '' },
+      { handle: 'cz_binance', displayName: 'CZ', category: 'founder', tier: 'founder', followerCount: null, enabled: true, notes: 'Test' },
+      { handle: 'solana', displayName: 'Solana', category: 'chain_lead', tier: 'chain_lead', followerCount: null, enabled: true, notes: 'Test' }
     ]
   };
   
   await fs.writeFile(watchlistPath, JSON.stringify(testWatchlist));
   
-  const accounts = await loadWatchlist(watchlistPath);
+  const accounts = await loadWatchlist(watchlistPath, 10000);
   
-  assert.equal(accounts.length, 2, 'Should only load enabled accounts');
-  assert.ok(accounts.some(a => a.handle === 'binance'), 'Should include binance');
-  assert.ok(accounts.some(a => a.handle === 'cz_binance'), 'Should include cz_binance');
+  assert.ok(accounts.length >= 4, 'Should load accounts meeting criteria');
+  assert.ok(accounts.some(a => a.handle === 'binance'), 'Should include official (exempt)');
+  assert.ok(accounts.some(a => a.handle === 'cz_binance'), 'Should include founder (exempt)');
+  assert.ok(accounts.some(a => a.handle === 'solana'), 'Should include chain_lead (exempt)');
+  assert.ok(accounts.some(a => a.handle === 'high_follower_kol'), 'Should include KOL with sufficient followers');
+  assert.ok(!accounts.some(a => a.handle === 'low_follower_kol'), 'Should exclude KOL below threshold');
   assert.ok(!accounts.some(a => a.handle === 'disabled_account'), 'Should not include disabled');
+  
+  // Check follower count is preserved
+  const highFollowerAccount = accounts.find(a => a.handle === 'high_follower_kol');
+  assert.equal(highFollowerAccount.followerCount, 50000, 'Should preserve follower count');
   
   await fs.rm(tempDir, { recursive: true });
 });

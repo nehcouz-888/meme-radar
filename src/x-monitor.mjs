@@ -11,18 +11,31 @@ function normalizeHandle(value) {
   return /^[A-Za-z0-9_]{1,15}$/.test(handle) ? handle : '';
 }
 
-export async function loadWatchlist(path = config.xWatchlistPath) {
+export async function loadWatchlist(path = config.xWatchlistPath, minFollowers = config.xMinFollowers) {
   try {
     const content = await fs.readFile(path, 'utf8');
     const data = JSON.parse(content);
     const accounts = Array.isArray(data.accounts) ? data.accounts : [];
     return accounts
-      .filter(account => account && account.enabled && normalizeHandle(account.handle))
+      .filter(account => {
+        if (!account || !account.enabled || !normalizeHandle(account.handle)) return false;
+        
+        // Official, founder, and chain_lead accounts exempt from follower requirement
+        const tier = String(account.tier || '').toLowerCase();
+        if (['official', 'founder', 'chain_lead'].includes(tier)) return true;
+        
+        // Other tiers (kol_alpha, community, meme_whale) must meet follower threshold
+        const followerCount = typeof account.followerCount === 'number' ? account.followerCount : null;
+        if (followerCount === null) return false; // Require explicit follower count for non-exempt tiers
+        
+        return followerCount >= minFollowers;
+      })
       .map(account => ({
         handle: normalizeHandle(account.handle),
         displayName: String(account.displayName || account.handle).slice(0, 80),
         category: String(account.category || 'unknown').slice(0, 32),
         tier: String(account.tier || 'kol_alpha').slice(0, 32),
+        followerCount: typeof account.followerCount === 'number' ? account.followerCount : null,
         notes: String(account.notes || '').slice(0, 200)
       }));
   } catch (error) {
@@ -69,7 +82,7 @@ export class XMonitor {
   }
 
   async init() {
-    this.watchlist = await loadWatchlist(this.settings.xWatchlistPath);
+    this.watchlist = await loadWatchlist(this.settings.xWatchlistPath, this.settings.xMinFollowers);
     return this;
   }
 
@@ -233,7 +246,13 @@ export class XMonitor {
       mode: this.mode,
       enabled: !this.stopped,
       watchlistSize: this.watchlist.length,
-      watchlist: this.watchlist.map(a => ({ handle: a.handle, displayName: a.displayName, tier: a.tier, category: a.category })),
+      watchlist: this.watchlist.map(a => ({ 
+        handle: a.handle, 
+        displayName: a.displayName, 
+        tier: a.tier, 
+        category: a.category,
+        followerCount: a.followerCount
+      })),
       hits: this.hits.slice(0, 50),
       pollCount: this.pollCount,
       lastPollAt: this.lastPollAt,
