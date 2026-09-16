@@ -129,7 +129,7 @@
   - 不构成自动下单依据
   - 文档明确说明这是研究启发式，非证明
 
-**账号数量**：当前种子列表 80+ 账号，覆盖：
+**账号数量**：当前种子列表 65 账号，覆盖：
 - Official/founder: 7 账号（官方身份，不受粉丝数限制）
   - **Binance 官方集群**：@binance, @BinanceWallet, @BinanceResearch, **@BinanceChinese（币安中文官推）**, @BinanceAcademy
   - CZ, He Yi
