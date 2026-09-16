@@ -16,7 +16,13 @@
         "DeFi Summer",
         "NFT",
         "元宇宙",
-        "Web3"
+        "Web3",
+        "上币",
+        "上线",
+        "合约",
+        "迷因",
+        "金狗",
+        "土狗"
       ],
       "en": [
         "AI Agent",
@@ -28,7 +34,9 @@
         "metaverse",
         "Web3",
         "pump",
-        "moon"
+        "moon",
+        "listing",
+        "launch"
       ]
     },
     
@@ -47,7 +55,8 @@
         "狗",
         "猫",
         "青蛙",
-        "猴子"
+        "猴子",
+        "柴犬"
       ]
     },
     
@@ -94,7 +103,8 @@
         "Binance",
         "BNB",
         "SAFU",
-        "build"
+        "build",
+        "币安"
       ],
       "note": "CZ's casual mentions often spark meme trends"
     },
@@ -103,8 +113,20 @@
       "keywords": [
         "Binance",
         "BNB",
-        "listing"
+        "listing",
+        "币安",
+        "上币"
       ]
+    },
+    "BinanceChinese": {
+      "enabled": true,
+      "keywords": [
+        "上币",
+        "上线",
+        "合约",
+        "币安"
+      ],
+      "note": "Binance Chinese official - listing keywords"
     },
     "VitalikButerin": {
       "enabled": true,
@@ -114,6 +136,26 @@
         "rollup",
         "L2"
       ]
+    },
+    "WuBlockchain": {
+      "enabled": true,
+      "keywords": [
+        "币安",
+        "Binance",
+        "上币",
+        "迷因"
+      ],
+      "note": "Major Chinese crypto news - Binance ecosystem"
+    },
+    "Colin_Wu": {
+      "enabled": true,
+      "keywords": [
+        "币安",
+        "Binance",
+        "独家",
+        "爆料"
+      ],
+      "note": "Wu Blockchain founder - breaking Chinese crypto news"
     }
   },
   

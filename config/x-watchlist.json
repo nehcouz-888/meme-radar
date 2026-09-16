@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "lastUpdated": "2026-09-16",
   "minFollowers": 10000,
   "followerNote": "KOL/community/meme_whale accounts require ≥10k followers. Official/founder accounts exempt from this rule.",
@@ -33,6 +33,26 @@
       "chainAffinity": "multi",
       "followerCount": null,
       "notes": "Binance Research official - multi-chain coverage",
+      "enabled": true
+    },
+    {
+      "handle": "BinanceChinese",
+      "displayName": "币安中文",
+      "category": "official",
+      "tier": "official",
+      "chainAffinity": "bsc",
+      "followerCount": null,
+      "notes": "Binance Chinese official - verify handle if changed",
+      "enabled": true
+    },
+    {
+      "handle": "BinanceAcademy",
+      "displayName": "Binance Academy",
+      "category": "official",
+      "tier": "official",
+      "chainAffinity": "multi",
+      "followerCount": null,
+      "notes": "Binance Academy official - educational content",
       "enabled": true
     },
     {

@@ -129,14 +129,31 @@
   - 不构成自动下单依据
   - 文档明确说明这是研究启发式，非证明
 
-**账号数量**：当前种子列表 60+ 账号，覆盖：
-- Official/founder: 5 账号（官方身份，不受粉丝数限制）
+**账号数量**：当前种子列表 80+ 账号，覆盖：
+- Official/founder: 7 账号（官方身份，不受粉丝数限制）
+  - **Binance 官方集群**：@binance, @BinanceWallet, @BinanceResearch, **@BinanceChinese（币安中文官推）**, @BinanceAcademy
+  - CZ, He Yi
 - Chain leads: 7 账号（生态负责人）
-- Meme whales: 6 账号（10万+ 粉丝 meme 大佬）
-- Community: 6 账号（2.8万-9万 粉丝社区组织者）
-- KOL alpha: 36+ 账号（1.8万-72万 粉丝呼单者）
+- Meme whales: 9 账号（17.5万-50万 粉丝 meme 大佬）
+  - 包含 Arthur Hayes (@CryptoHayes) - BitMEX 创始人，宏观交易者
+- Community: 10 账号（4.2万-53万 粉丝社区组织者/媒体）
+  - **WuBlockchain (@WuBlockchain, 53万+)** - 重要中文加密媒体，币安生态覆盖
+  - **8BTC (@8btcci, 32万+)** - 主要中文加密媒体平台
+- KOL alpha: 47+ 账号（1.8万-72万 粉丝呼单者）
+  - **中文加密 KOL 大结果博主**：
+    - **Colin Wu (@Colin_Wu, 42万+)** - Wu Blockchain 创始人，中文加密记者，重大影响力
+    - **BTC大宇 (@BTCdayu, 18万+)** - 主要中文 KOL，经验证的历史记录
+    - **比特币秋山君 (@bitouq, 9.5万+)** - 中文加密分析师
+    - **Crypto Wendy O (@CryptoWendyO, 22.5万+)** - 双语 CN/EN 分析师，币安生态
+    - **Crypto Messiah (@CryptoMessiah, 21万+)** - 大量中文粉丝的加密分析师
+  - EN/multi: Ansem, thecryptodogs, Murad, cobie, Pentosh1, 0xMert_, AltcoinGordon, CryptoKaleo, etc.
 
 所有 KOL / community / meme_whale 账号均满足 ≥10k 粉丝要求。质量优于数量，精选高信号账号。
+
+**Must-Watch 重点**：
+- 币安中文官推 (@BinanceChinese) + Binance 官方集群
+- 拿到大结果的中文博主 (Colin Wu, BTC大宇, WuBlockchain 等)
+- CZ/何一日常发声（软提及比直接喊单更重要）
 
 ##### X API 设置（多种方式）
 
