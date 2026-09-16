@@ -56,39 +56,78 @@
 
 **硬性筛选规则**：KOL / community / meme_whale 账号必须 **≥10,000 粉丝**（不少于 1 万人关注）。Official/founder 账号（Binance、CZ、He Yi 等官方身份）不受此限制。
 
+**链亲和性标签（Chain Affinity）**：
+- 每个账号标记其主要链对齐：`sol` | `bsc` | `base` | `eth` | `multi` | `null`
+- 用于跨链竞争检测和早期信号放大
+- 示例：
+  - Solana 官方和创始人 → `sol`
+  - Binance/CZ/何一 → `bsc` (BNB Chain 创始人/倾向)
+  - Base 官方和 Jesse Pollak → `base`
+  - Vitalik → `eth`
+  - 多链账号如 Binance Wallet → `multi`
+
 **官方账号（official tier）**
-- @binance, @BinanceWallet, @BinanceResearch
+- @binance (chainAffinity: bsc), @BinanceWallet (multi), @BinanceResearch (multi)
 
 **创始人（founder tier）**
-- @cz_binance (CZ - Changpeng Zhao)
-- @heyibinance (He Yi / 何一)
+- @cz_binance (CZ - Changpeng Zhao, chainAffinity: bsc)
+- @heyibinance (He Yi / 何一, chainAffinity: bsc)
 
 **链生态负责人（chain_lead tier）**
-- @solana, @aeyakovenko, @rajgokal (Solana)
-- @bnbchain (BNB Chain)
-- @base, @jessepollak (Base/Coinbase L2)
-- @VitalikButerin (Ethereum)
+- @solana, @aeyakovenko, @rajgokal (Solana, chainAffinity: sol)
+- @bnbchain (BNB Chain, chainAffinity: bsc)
+- @base, @jessepollak (Base/Coinbase L2, chainAffinity: base)
+- @VitalikButerin (Ethereum, chainAffinity: eth)
 
 **Meme 币大佬 / Meme Whales（meme_whale tier, ≥10k followers）**
-- @Ansem (500k+ followers, major meme whale)
-- @thecryptodogs (450k+, high-profile trader)
-- @hsaka (200k+, veteran trader, early meme calls)
-- @RunnerXBT (150k+, active crypto trader)
-- @ThinkingUSD (120k+, Sol ecosystem whale)
-- @CryptoCred (380k+, technical trader)
+- @Ansem (500k+ followers, major meme whale, chainAffinity: sol)
+- @thecryptodogs (450k+, high-profile trader, chainAffinity: multi)
+- @hsaka (200k+, veteran trader, early meme calls, chainAffinity: eth)
+- @RunnerXBT (150k+, active crypto trader, chainAffinity: multi)
+- @ThinkingUSD (120k+, Sol ecosystem whale, chainAffinity: sol)
+- @CryptoCred (380k+, technical trader, chainAffinity: multi)
 
 **活跃社区声音 / Community Amplifiers（community tier, ≥10k followers）**
-- @MilkRoadDaily (90k+, crypto news + meme narratives)
-- @degenmfer (45k+, Solana meme community organizer)
-- @SolJakey (35k+, Solana meme calls)
-- @Messiahbol (40k+, SOL meme narratives, CA posts)
-- @thedefiedge (55k+, DeFi and memecoin educator)
-- @Washigorira (28k+, Solana meme community voice)
+- @MilkRoadDaily (90k+, crypto news + meme narratives, chainAffinity: multi)
+- @degenmfer (45k+, Solana meme community organizer, chainAffinity: sol)
+- @SolJakey (35k+, Solana meme calls, chainAffinity: sol)
+- @Messiahbol (40k+, SOL meme narratives, CA posts, chainAffinity: sol)
+- @thedefiedge (55k+, DeFi and memecoin educator, chainAffinity: multi)
+- @Washigorira (28k+, Solana meme community voice, chainAffinity: sol)
 
 **KOL Alpha 呼单者（kol_alpha tier, ≥10k followers）**
 - 50+ 公开账号种子列表（CN/EN 加密 Twitter，近期 meme 呼单记录）
-- 包含：@0xRacer (65k+), @blknoiz06 (48k+), @Murad_MHH (280k+), @DegenSpartan (175k+), @cobie (520k+), @0xMert_ (130k+), @AltcoinGordon (220k+), @CryptoKaleo (640k+), @lookonchain (580k+), @Pentosh1 (720k+) 等
-- 每个账号注明分类、display name、follower count、notes
+- 包含：@0xRacer (65k+, chainAffinity: sol), @blknoiz06 (48k+, sol), @Murad_MHH (280k+, sol), @DegenSpartan (175k+, eth), @cobie (520k+, eth), @0xMert_ (130k+, multi), @AltcoinGordon (220k+, multi), @CryptoKaleo (640k+, multi), @lookonchain (580k+, multi), @Pentosh1 (720k+, eth) 等
+- 每个账号注明分类、display name、follower count、notes、chainAffinity
+
+**跨链竞争检测（Cross-Chain Competition Detection）**：
+
+系统检测当不同链的官方/创始人/chain_lead 账号在短时间窗口（默认6小时，可配置）内同时发布 meme 相关内容时的**链间竞争信号**：
+
+- **触发条件**：
+  - 同一链的多个高层级账号活跃（official/founder/chain_lead）
+  - **或** 不同链在同一时间窗口推送竞争性叙事
+
+- **竞争强度（Intensity）**：0-100 分，基于账号层级权重和活跃度
+  - Official/Founder 权重最高 (10)
+  - Chain Lead 次之 (7)
+  - Meme Whale 中等 (4)
+  - Community 较低 (3)
+  - KOL Alpha 最低 (2)
+
+- **信号应用**：
+  - 当代币所属链的竞争强度 ≥40 且有高层级账号参与时，胚芽评分获得**加分**（最高 +20）
+  - 信号示例（中文）：「所属链竞争升温（SOL） / 链官方或嫡系 KOL 同向」
+  - 跨链竞争时信号：「跨链竞争：SOL vs BASE vs BSC」
+
+- **Webhook 通知**：
+  - 竞争强度 ≥60（默认，可通过 `X_COMPETITION_THRESHOLD` 配置）时，可选发送 `chain_competition_signal` 事件
+  - Payload 包含：intensity, chains, signals, signalsCN, recentHitCount, windowHours, detectedAt
+
+- **研究性质**：
+  - 基于启发式算法（v1），非交易信号，仅用于早期叙事趋势研究
+  - 不构成自动下单依据
+  - 文档明确说明这是研究启发式，非证明
 
 **账号数量**：当前种子列表 60+ 账号，覆盖：
 - Official/founder: 5 账号（官方身份，不受粉丝数限制）

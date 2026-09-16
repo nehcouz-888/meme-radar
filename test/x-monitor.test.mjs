@@ -14,9 +14,9 @@ test('loadWatchlist: loads and filters enabled accounts with follower requiremen
     minFollowers: 10000,
     accounts: [
       { handle: 'binance', displayName: 'Binance', category: 'official', tier: 'official', followerCount: null, enabled: true, notes: 'Test' },
-      { handle: 'low_follower_kol', displayName: 'Low Follower', category: 'kol_alpha', tier: 'kol_alpha', followerCount: 5000, enabled: true, notes: 'Below threshold' },
-      { handle: 'high_follower_kol', displayName: 'High Follower', category: 'kol_alpha', tier: 'kol_alpha', followerCount: 50000, enabled: true, notes: 'Above threshold' },
-      { handle: 'disabled_account', displayName: 'Disabled', category: 'kol_alpha', tier: 'kol_alpha', followerCount: 100000, enabled: false, notes: '' },
+      { handle: 'low_kol', displayName: 'Low Follower', category: 'kol_alpha', tier: 'kol_alpha', followerCount: 5000, enabled: true, notes: 'Below threshold' },
+      { handle: 'high_kol', displayName: 'High Follower', category: 'kol_alpha', tier: 'kol_alpha', followerCount: 50000, enabled: true, notes: 'Above threshold' },
+      { handle: 'disabled_acc', displayName: 'Disabled', category: 'kol_alpha', tier: 'kol_alpha', followerCount: 100000, enabled: false, notes: '' },
       { handle: 'cz_binance', displayName: 'CZ', category: 'founder', tier: 'founder', followerCount: null, enabled: true, notes: 'Test' },
       { handle: 'solana', displayName: 'Solana', category: 'chain_lead', tier: 'chain_lead', followerCount: null, enabled: true, notes: 'Test' }
     ]
@@ -30,12 +30,12 @@ test('loadWatchlist: loads and filters enabled accounts with follower requiremen
   assert.ok(accounts.some(a => a.handle === 'binance'), 'Should include official (exempt)');
   assert.ok(accounts.some(a => a.handle === 'cz_binance'), 'Should include founder (exempt)');
   assert.ok(accounts.some(a => a.handle === 'solana'), 'Should include chain_lead (exempt)');
-  assert.ok(accounts.some(a => a.handle === 'high_follower_kol'), 'Should include KOL with sufficient followers');
-  assert.ok(!accounts.some(a => a.handle === 'low_follower_kol'), 'Should exclude KOL below threshold');
-  assert.ok(!accounts.some(a => a.handle === 'disabled_account'), 'Should not include disabled');
+  assert.ok(accounts.some(a => a.handle === 'high_kol'), 'Should include KOL with sufficient followers');
+  assert.ok(!accounts.some(a => a.handle === 'low_kol'), 'Should exclude KOL below threshold');
+  assert.ok(!accounts.some(a => a.handle === 'disabled_acc'), 'Should not include disabled');
   
   // Check follower count is preserved
-  const highFollowerAccount = accounts.find(a => a.handle === 'high_follower_kol');
+  const highFollowerAccount = accounts.find(a => a.handle === 'high_kol');
   assert.equal(highFollowerAccount.followerCount, 50000, 'Should preserve follower count');
   
   await fs.rm(tempDir, { recursive: true });

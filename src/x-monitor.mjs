@@ -1,6 +1,7 @@
 import fs from 'node:fs/promises';
 import crypto from 'node:crypto';
 import { config } from './config.mjs';
+import { detectChainCompetition } from './chain-competition.mjs';
 
 const SOLANA_ADDRESS_PATTERN = /\b([1-9A-HJ-NP-Za-km-z]{32,44})\b/g;
 const EVM_ADDRESS_PATTERN = /\b(0x[a-fA-F0-9]{40})\b/g;
@@ -35,6 +36,7 @@ export async function loadWatchlist(path = config.xWatchlistPath, minFollowers =
         displayName: String(account.displayName || account.handle).slice(0, 80),
         category: String(account.category || 'unknown').slice(0, 32),
         tier: String(account.tier || 'kol_alpha').slice(0, 32),
+        chainAffinity: account.chainAffinity || null,
         followerCount: typeof account.followerCount === 'number' ? account.followerCount : null,
         notes: String(account.notes || '').slice(0, 200)
       }));
@@ -242,6 +244,13 @@ export class XMonitor {
   }
 
   snapshot() {
+    const competition = detectChainCompetition(
+      this.hits,
+      this.watchlist,
+      this.settings.xCompetitionWindowHours,
+      this.now()
+    );
+    
     return {
       mode: this.mode,
       enabled: !this.stopped,
@@ -251,6 +260,7 @@ export class XMonitor {
         displayName: a.displayName, 
         tier: a.tier, 
         category: a.category,
+        chainAffinity: a.chainAffinity,
         followerCount: a.followerCount
       })),
       hits: this.hits.slice(0, 50),
@@ -260,7 +270,8 @@ export class XMonitor {
       seenTweets: this.seenTweets.size,
       seenMints: this.seenMints.size,
       dryRun: this.isDryRun(),
-      status: this.isDryRun() ? 'DRY_RUN' : 'READY'
+      status: this.isDryRun() ? 'DRY_RUN' : 'READY',
+      competition
     };
   }
 

@@ -631,15 +631,23 @@ export class Scanner {
           candidatesByAddress.set(addressKey(token.address), candidate);
           this.requestedReviews.delete(tokenKey(chain, token.address));
           const favorite = this.controls?.value.annotations[tokenKey(chain, token.address)]?.favorite;
-          if (candidate.status === 'X_REVIEW' && previousCandidate?.status !== 'X_REVIEW') {
-            events = addEvent(events, 'CANDIDATE_NEW', `${token.symbol}：新增链上候选，需人工复核`, chain, { address: token.address });
-            if (this.webhookNotifier && candidate.deep?.embryonic) {
-              const tier = candidate.deep.embryonic.embryonicTier;
-              if (tier === 'hot' || tier === 'watch') {
-                void this.webhookNotifier.sendCandidateAlert(candidate).catch(err => console.error('Webhook alert failed:', err));
-              }
-            }
-          } else if ((favorite || previousCandidate?.status === 'X_REVIEW') && candidate.status !== 'X_REVIEW' && candidate.status !== previousCandidate?.status) {
+      if (candidate.status === 'X_REVIEW' && previousCandidate?.status !== 'X_REVIEW') {
+        events = addEvent(events, 'CANDIDATE_NEW', `${token.symbol}：新增链上候选，需人工复核`, chain, { address: token.address });
+        if (this.webhookNotifier && candidate.deep?.embryonic) {
+          const tier = candidate.deep.embryonic.embryonicTier;
+          if (tier === 'hot' || tier === 'watch') {
+            void this.webhookNotifier.sendCandidateAlert(candidate).catch(err => console.error('Webhook alert failed:', err));
+          }
+        }
+      }
+      
+      // Send chain competition signal if intensity crossed threshold
+      if (this.webhookNotifier && xSnapshot?.competition?.active) {
+        const competition = xSnapshot.competition;
+        if (competition.intensity >= this.settings.xCompetitionThreshold) {
+          void this.webhookNotifier.sendChainCompetitionSignal(competition).catch(err => console.error('Competition webhook failed:', err));
+        }
+      } else if ((favorite || previousCandidate?.status === 'X_REVIEW') && candidate.status !== 'X_REVIEW' && candidate.status !== previousCandidate?.status) {
             events = addEvent(events, 'RISK_WORSENED', `${token.symbol}：风险或证据状态恶化，请重新复核`, chain, { address: token.address });
           }
           const queueItem = queueByAddress.get(addressKey(token.address));

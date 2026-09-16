@@ -1,3 +1,6 @@
+import { config } from './config.mjs';
+import { computeChainAffinityBonus } from './chain-competition.mjs';
+
 const NUMBER_PATTERN = /^[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:e[+-]?\d+)?$/i;
 
 function optionalNumber(value) {
@@ -521,7 +524,7 @@ export function empiricalSellability({ info, discovery, traders, nowSec = Date.n
   };
 }
 
-export function computeEmbryonicScore({ discovery, info, audit, nowMs = Date.now() }, config) {
+export function computeEmbryonicScore({ discovery, info, audit, nowMs = Date.now(), xCompetition = null, tokenChain = 'sol' }, config) {
   const mcValue = optionalNumber(first(discovery.market_cap, discovery.usd_market_cap, discovery.mcp, info?.market_cap));
   const liquidityValue = optionalNumber(first(discovery.liquidity, info?.liquidity));
   const createdValue = optionalNumber(first(discovery.creation_timestamp, discovery.created_timestamp, discovery.open_timestamp, info?.creation_timestamp));
@@ -665,6 +668,14 @@ export function computeEmbryonicScore({ discovery, info, audit, nowMs = Date.now
     signalsCN.push('部分社交链接');
   }
   
+  // Chain competition bonus
+  if (xCompetition) {
+    const affinityBonus = computeChainAffinityBonus(tokenChain, xCompetition);
+    score += affinityBonus.bonus;
+    signals.push(...affinityBonus.signals);
+    signalsCN.push(...affinityBonus.signalsCN);
+  }
+  
   score = Math.max(0, Math.min(100, score));
   
   const tier = score >= config.embryonicHotThreshold ? 'hot'
@@ -685,7 +696,8 @@ export function computeEmbryonicScore({ discovery, info, audit, nowMs = Date.now
       holderCount,
       volume5m,
       hasWebsite,
-      hasTwitter
+      hasTwitter,
+      chainCompetitionBonus: xCompetition ? computeChainAffinityBonus(tokenChain, xCompetition).bonus : 0
     }
   };
 }

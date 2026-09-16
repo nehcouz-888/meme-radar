@@ -185,4 +185,54 @@ export class WebhookNotifier {
       };
     }
   }
+  
+  async sendChainCompetitionSignal(competition) {
+    if (!this.isEnabled()) return { sent: false, reason: 'disabled' };
+    if (!competition || !competition.active) return { sent: false, reason: 'inactive' };
+    if (competition.intensity < this.settings.xCompetitionThreshold) {
+      return { sent: false, reason: 'below_threshold' };
+    }
+    
+    const key = `competition:${Math.floor(competition.detectedAt / 60_000)}`; // 1-minute dedupe window
+    
+    if (this.sentAlerts.has(key)) {
+      return { sent: false, reason: 'duplicate' };
+    }
+    
+    const payload = {
+      type: 'chain_competition_signal',
+      timestamp: this.now(),
+      competition: {
+        intensity: competition.intensity,
+        chains: competition.chains,
+        signals: competition.signals,
+        signalsCN: competition.signalsCN,
+        recentHitCount: competition.recentHitCount,
+        windowHours: competition.windowHours,
+        detectedAt: competition.detectedAt
+      }
+    };
+    
+    try {
+      const response = await fetch(this.settings.webhookUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'User-Agent': 'meme-radar-jindou/0.1.6'
+        },
+        body: JSON.stringify(this.sanitizePayload(payload))
+      });
+      
+      this.markSent(key);
+      this.cleanup();
+      
+      return {
+        sent: response.ok,
+        status: response.status,
+        statusText: response.statusText
+      };
+    } catch (err) {
+      return { sent: false, reason: 'network_error', error: err.message };
+    }
+  }
 }
