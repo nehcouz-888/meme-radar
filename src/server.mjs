@@ -123,6 +123,7 @@ function publicCandidate(row = {}) {
   const sellability = deep.sellability || {};
   const social = row.social || {};
   const info = row.info || {};
+  const embryonic = deep.embryonic || {};
   return {
     address: text(row.address, 80),
     chain: text(row.chain, 32),
@@ -148,6 +149,10 @@ function publicCandidate(row = {}) {
     auditHealth: { earlyExit },
     auditError: row.auditError ? '深度审计暂时失败，已进入等待复查。' : '',
     decisionReason: text(row.decisionReason, 120),
+    embryonicScore: finite(embryonic.embryonicScore),
+    embryonicTier: text(embryonic.embryonicTier, 16),
+    embryonicSignals: Array.isArray(embryonic.embryonicSignals) ? embryonic.embryonicSignals.slice(0, 20).map(s => text(s, 120)) : [],
+    embryonicSignalsCN: Array.isArray(embryonic.embryonicSignalsCN) ? embryonic.embryonicSignalsCN.slice(0, 20).map(s => text(s, 120)) : [],
     deep: {
       chainPass: deep.chainPass === true,
       failed: Array.isArray(deep.failed) ? deep.failed.slice(0, 32).map(value => text(value, 40)) : [],
@@ -570,7 +575,7 @@ function allowedChainIds(supportedChains) {
   return new Set(configured.length ? configured : CHAIN_IDS);
 }
 
-export function createServer({ state, settings, controls, switchChain, saveGmgnKey, disconnectGmgnKey, getGmgnOnboarding, getGmgnConnection, liveDiscovery, enqueueReview, supportedChains = [] }) {
+export function createServer({ state, settings, controls, switchChain, saveGmgnKey, disconnectGmgnKey, getGmgnOnboarding, getGmgnConnection, liveDiscovery, enqueueReview, xMonitor = null, webhookNotifier = null, supportedChains = [] }) {
   const dashboard = path.join(settings.publicDir, 'index.html');
   const dashboardHtml = fs.readFileSync(dashboard, 'utf8');
   const csp = contentSecurityPolicy(dashboardHtml);
@@ -770,6 +775,48 @@ export function createServer({ state, settings, controls, switchChain, saveGmgnK
       }
       return sendJson(res, 200, output, csp);
     }
+    
+    if (url.pathname === '/api/x-monitor' && req.method === 'GET') {
+      if (!xMonitor) return sendJson(res, 503, { error: 'x_monitor_unavailable' }, csp);
+      const snapshot = xMonitor.snapshot();
+      return sendJson(res, 200, {
+        mode: text(snapshot.mode, 16),
+        enabled: snapshot.enabled === true,
+        dryRun: snapshot.dryRun === true,
+        status: text(snapshot.status, 32),
+        watchlistSize: finite(snapshot.watchlistSize),
+        watchlist: (snapshot.watchlist || []).slice(0, 100).map(account => ({
+          handle: text(account.handle, 80),
+          displayName: text(account.displayName, 120),
+          tier: text(account.tier, 32),
+          category: text(account.category, 32)
+        })),
+        hits: (snapshot.hits || []).slice(0, 50).map(hit => ({
+          tweetId: text(hit.tweetId, 80),
+          handle: text(hit.handle, 80),
+          displayName: text(hit.displayName, 120),
+          tier: text(hit.tier, 32),
+          category: text(hit.category, 32),
+          text: text(hit.text, 500),
+          url: externalUrl(hit.url),
+          createdAt: finite(hit.createdAt),
+          discoveredAt: finite(hit.discoveredAt),
+          hasAddresses: hit.hasAddresses === true,
+          addresses: hit.addresses ? {
+            solana: (hit.addresses.solana || []).slice(0, 10).map(addr => text(addr, 64)),
+            evm: (hit.addresses.evm || []).slice(0, 10).map(addr => text(addr, 42)),
+            all: (hit.addresses.all || []).slice(0, 10).map(addr => text(addr, 64))
+          } : { solana: [], evm: [], all: [] },
+          cashtags: (hit.cashtags || []).slice(0, 10).map(tag => text(tag, 16))
+        })),
+        pollCount: finite(snapshot.pollCount),
+        lastPollAt: finite(snapshot.lastPollAt),
+        nextPollAt: finite(snapshot.nextPollAt),
+        seenTweets: finite(snapshot.seenTweets),
+        seenMints: finite(snapshot.seenMints)
+      }, csp);
+    }
+    
     if (url.pathname === '/health') return sendJson(res, 200, healthSnapshot(state.value, settings), csp);
     if (url.pathname === '/' || url.pathname === '/index.html') {
       res.writeHead(200, { ...headers('text/html; charset=utf-8', csp), 'Content-Length': Buffer.byteLength(dashboardHtml) });
