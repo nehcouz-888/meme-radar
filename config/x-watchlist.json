@@ -1,0 +1,262 @@
+{
+  "version": 1,
+  "lastUpdated": "2026-09-16",
+  "accounts": [
+    {
+      "handle": "binance",
+      "displayName": "Binance",
+      "category": "official",
+      "tier": "official",
+      "notes": "Binance main official account",
+      "enabled": true
+    },
+    {
+      "handle": "BinanceWallet",
+      "displayName": "Binance Wallet",
+      "category": "official",
+      "tier": "official",
+      "notes": "Binance Web3 Wallet official",
+      "enabled": true
+    },
+    {
+      "handle": "BinanceResearch",
+      "displayName": "Binance Research",
+      "category": "official",
+      "tier": "official",
+      "notes": "Binance Research official",
+      "enabled": true
+    },
+    {
+      "handle": "cz_binance",
+      "displayName": "CZ",
+      "category": "founder",
+      "tier": "founder",
+      "notes": "Changpeng Zhao - Binance founder",
+      "enabled": true
+    },
+    {
+      "handle": "heyibinance",
+      "displayName": "He Yi / 何一",
+      "category": "founder",
+      "tier": "founder",
+      "notes": "He Yi - Binance Co-Founder",
+      "enabled": true
+    },
+    {
+      "handle": "solana",
+      "displayName": "Solana",
+      "category": "chain_lead",
+      "tier": "chain_lead",
+      "notes": "Solana official account",
+      "enabled": true
+    },
+    {
+      "handle": "aeyakovenko",
+      "displayName": "Anatoly Yakovenko",
+      "category": "chain_lead",
+      "tier": "chain_lead",
+      "notes": "Solana co-founder",
+      "enabled": true
+    },
+    {
+      "handle": "rajgokal",
+      "displayName": "Raj Gokal",
+      "category": "chain_lead",
+      "tier": "chain_lead",
+      "notes": "Solana co-founder",
+      "enabled": true
+    },
+    {
+      "handle": "bnbchain",
+      "displayName": "BNB Chain",
+      "category": "chain_lead",
+      "tier": "chain_lead",
+      "notes": "BNB Chain official",
+      "enabled": true
+    },
+    {
+      "handle": "base",
+      "displayName": "Base",
+      "category": "chain_lead",
+      "tier": "chain_lead",
+      "notes": "Base official (Coinbase L2)",
+      "enabled": true
+    },
+    {
+      "handle": "jessepollak",
+      "displayName": "Jesse Pollak",
+      "category": "chain_lead",
+      "tier": "chain_lead",
+      "notes": "Base lead at Coinbase",
+      "enabled": true
+    },
+    {
+      "handle": "VitalikButerin",
+      "displayName": "Vitalik Buterin",
+      "category": "chain_lead",
+      "tier": "chain_lead",
+      "notes": "Ethereum founder",
+      "enabled": true
+    },
+    {
+      "handle": "0xRacer",
+      "displayName": "Racer",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "notes": "Known for early SOL meme calls",
+      "enabled": true
+    },
+    {
+      "handle": "blknoiz06",
+      "displayName": "Blknoiz",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "notes": "Solana alpha caller",
+      "enabled": true
+    },
+    {
+      "handle": "TheRoaringKitty",
+      "displayName": "Roaring Kitty",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "notes": "Influential meme investor",
+      "enabled": true
+    },
+    {
+      "handle": "Murad_MHH",
+      "displayName": "Murad",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "notes": "Memecoin philosopher and caller",
+      "enabled": true
+    },
+    {
+      "handle": "0xSisyphus",
+      "displayName": "Sisyphus",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "notes": "Crypto alpha researcher",
+      "enabled": true
+    },
+    {
+      "handle": "DegenSpartan",
+      "displayName": "Degen Spartan",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "notes": "DeFi and meme trader",
+      "enabled": true
+    },
+    {
+      "handle": "GiganticRebirth",
+      "displayName": "Gigantic Rebirth",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "notes": "SOL ecosystem alpha",
+      "enabled": true
+    },
+    {
+      "handle": "TheDeFinvestor",
+      "displayName": "The DeFi Investor",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "notes": "DeFi and memecoin analysis",
+      "enabled": true
+    },
+    {
+      "handle": "cobie",
+      "displayName": "Cobie",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "notes": "Crypto trader and commentator",
+      "enabled": true
+    },
+    {
+      "handle": "DeFi_Cheetah",
+      "displayName": "DeFi Cheetah",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "notes": "SOL memecoin tracker",
+      "enabled": true
+    },
+    {
+      "handle": "0xMert_",
+      "displayName": "Mert",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "notes": "Crypto analyst and caller",
+      "enabled": true
+    },
+    {
+      "handle": "AltcoinGordon",
+      "displayName": "Altcoin Gordon",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "notes": "Multi-chain meme caller",
+      "enabled": true
+    },
+    {
+      "handle": "CryptoGodJohn",
+      "displayName": "Crypto God John",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "notes": "Memecoin researcher",
+      "enabled": true
+    },
+    {
+      "handle": "CryptoKaleo",
+      "displayName": "Kaleo",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "notes": "Crypto analyst with meme calls",
+      "enabled": true
+    },
+    {
+      "handle": "ZssBecker",
+      "displayName": "Zach Becker",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "notes": "SOL ecosystem early caller",
+      "enabled": true
+    },
+    {
+      "handle": "0xShinChan",
+      "displayName": "Shin Chan",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "notes": "Asian crypto alpha (CN/EN)",
+      "enabled": true
+    },
+    {
+      "handle": "thedefiedge",
+      "displayName": "The DeFi Edge",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "notes": "DeFi and memecoin educator",
+      "enabled": true
+    },
+    {
+      "handle": "CryptoJelleNL",
+      "displayName": "Crypto Jelle",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "notes": "Multi-chain analyst",
+      "enabled": true
+    },
+    {
+      "handle": "0x_Todd",
+      "displayName": "Todd",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "notes": "SOL memecoin trader",
+      "enabled": true
+    },
+    {
+      "handle": "thetokenist",
+      "displayName": "The Tokenist",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "notes": "Crypto and meme analysis",
+      "enabled": true
+    }
+  ]
+}
