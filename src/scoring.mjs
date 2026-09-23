@@ -312,10 +312,26 @@ export function marketBehaviorScreen({ discovery = {}, info = {}, holders = [], 
   const tagEvidence = taggedWalletSignals(holders, config.chain);
   const aggregateSmart = optionalCount(first(info.wallet_tags_stat?.smart_wallets, discovery.smart_degen_count));
   const aggregateRenowned = optionalCount(first(info.wallet_tags_stat?.renowned_wallets, discovery.renowned_count));
-  const smartKnown = aggregateSmart !== null || tagEvidence.smartWallets > 0;
-  const renownedKnown = aggregateRenowned !== null || tagEvidence.renownedWallets > 0;
-  const smartWallets = smartKnown ? Math.max(aggregateSmart ?? 0, tagEvidence.smartWallets) : null;
-  const renownedWallets = renownedKnown ? Math.max(aggregateRenowned ?? 0, tagEvidence.renownedWallets) : null;
+  
+  // Prefer live still-holding counts from holder sample when available.
+  // Aggregate counts include wallets that may have fully exited (AURACAT-style false positive).
+  // Only fall back to aggregate when holders data is unavailable or sample is too small.
+  const holderSampleSize = Array.isArray(holders) ? holders.length : 0;
+  const holderSampleAdequate = holderSampleSize >= 3;
+  
+  const liveSmartHolding = tagEvidence.smartWallets;
+  const liveRenownedHolding = tagEvidence.renownedWallets;
+  
+  // Use live count when holder sample is adequate; otherwise fall back to aggregate but mark as fallback.
+  const smartMoneySource = holderSampleAdequate ? 'live_holders' : aggregateSmart !== null ? 'aggregate_fallback' : 'unknown';
+  const smartWallets = holderSampleAdequate ? liveSmartHolding 
+    : aggregateSmart !== null ? aggregateSmart 
+    : liveSmartHolding > 0 ? liveSmartHolding : null;
+  
+  const renownedMoneySource = holderSampleAdequate ? 'live_holders' : aggregateRenowned !== null ? 'aggregate_fallback' : 'unknown';
+  const renownedWallets = holderSampleAdequate ? liveRenownedHolding
+    : aggregateRenowned !== null ? aggregateRenowned
+    : liveRenownedHolding > 0 ? liveRenownedHolding : null;
 
   const holderCount = optionalCount(first(info.holder_count, info.stat?.holder_count, discovery.holder_count));
   const swaps5m = optionalCount(first(price.swaps_5m, discovery.swaps_5m, discovery.swaps));
@@ -390,11 +406,19 @@ export function marketBehaviorScreen({ discovery = {}, info = {}, holders = [], 
   ].filter(Boolean);
   const warnings = [
     creatorLaunchCount !== null && creatorLaunchCount >= 10 ? `创建者历史发币${creatorLaunchCount}个` : null,
-    creatorStatus === 'UNKNOWN' ? '创建者当前持币状态未知' : null
+    creatorStatus === 'UNKNOWN' ? '创建者当前持币状态未知' : null,
+    smartMoneySource === 'aggregate_fallback' && aggregateSmart !== null && liveSmartHolding < aggregateSmart 
+      ? `聪明钱数据来源：历史统计${aggregateSmart}个（当前持仓样本仅${liveSmartHolding}个，可能已退出）` : null
   ].filter(Boolean);
   const strengths = [
-    smartWallets !== null && smartWallets >= 3 ? `${smartWallets}个聪明钱钱包形成多钱包验证` : null,
-    smartWallets === 2 ? '2个聪明钱钱包，只有轻度加分' : null
+    smartWallets !== null && smartWallets >= 3 && smartMoneySource === 'live_holders'
+      ? `${smartWallets}个聪明钱仍持仓，形成多钱包验证` : null,
+    smartWallets !== null && smartWallets >= 3 && smartMoneySource !== 'live_holders'
+      ? `${smartWallets}个聪明钱钱包形成多钱包验证` : null,
+    smartWallets === 2 && smartMoneySource === 'live_holders' 
+      ? `2个聪明钱仍持仓，只有轻度加分` : null,
+    smartWallets === 2 && smartMoneySource !== 'live_holders'
+      ? `2个聪明钱钱包，只有轻度加分` : null
   ].filter(Boolean);
   const unknownFields = [
     smartWallets === null ? 'marketBehavior.smartWallets' : null,
@@ -413,7 +437,11 @@ export function marketBehaviorScreen({ discovery = {}, info = {}, holders = [], 
     status: downgradeReasons.length ? 'WAITING' : 'PASS',
     downgradeReasons, warnings, strengths, unknownFields,
     evidence: {
-      smartWallets, renownedWallets, taggedSmartWallets: tagEvidence.smartWallets,
+      smartWallets, renownedWallets,
+      liveSmartHolding, liveRenownedHolding,
+      aggregateSmartWallets: aggregateSmart, aggregateRenownedWallets: aggregateRenowned,
+      smartMoneySource, renownedMoneySource,
+      taggedSmartWallets: tagEvidence.smartWallets,
       taggedRenownedWallets: tagEvidence.renownedWallets, sampledTaggedWallets: tagEvidence.sampledTaggedWallets,
       holderCount, holderSampleDistinct, swaps5m, buys5m, sells5m, volume5m, priceChange5m,
       swapsPerHolder5m, swapCountConsistent, holderSampleConsistent, sellBuyRatio, ageSec,
