@@ -1,12 +1,389 @@
-# Meme雷达开源版
+# 金狗雷达（Meme Radar Jindou）
+
+**Fork of [nhovongoc0-max/meme-radar](https://github.com/nhovongoc0-max/meme-radar) v0.1.6**
 
 作者：**DeFi狙击手** · X：[@bi_9527zx](https://x.com/bi_9527zx)
 
 本地运行的多链 Meme 候选雷达。使用 GMGN 做发现与标签，GoPlus 做已支持链的合约风险复核，DexScreener 做市值、流动性与官网交叉校验。
 
-这是从自用版本隔离出的开源版，只包含本地只读扫描、证据展示与人工复核能力。Windows 与 macOS 共用同一套扫描逻辑。
+这是从上游开源版定制改造的**金狗萌芽研究版**，专注于极早期 meme 代币发现，增加了：
+- **金狗萌芽评分系统**：0-100 分embryonic评分，hot/watch/ignore 三档分类
+- **X/Twitter 监控**：官方账号、KOL 推特实时监控，自动提取合约地址
+- **Webhook 通知**：可选的 HTTP webhook 推送，30 分钟去重
+- **Solana 优先**：默认扫描 Solana 链，市值范围调整为 $10k-$200k 早期带
 
-它不包含钱包私钥、链上交易签名、swap 或下单模块。系统只提供筛选证据，不构成投资建议，也不保证候选代币安全或上涨。
+## 改造说明
+
+### 与上游的关系
+
+- **上游来源**：https://github.com/nhovongoc0-max/meme-radar v0.1.6
+- **许可证**：AGPL-3.0-only（保持不变，完整保留上游 LICENSE 文件和版权声明）
+- **改造性质**：私有 fork 用于金狗萌芽研究，**不向上游提交 PR**
+- **功能边界**：保持只读/研究定位，**永不添加**钱包私钥、交易签名、swap 或自动下单功能
+
+### 主要改造内容
+
+#### 1. 金狗萌芽评分层（Embryonic Scoring）
+
+在原有安全检查（貔貅/rug 仍硬拒绝）**之后**增加早期研究评分：
+
+- **embryonicScore** (0-100)：综合市值带、流动性、年龄、聪明钱、持有人、成交量、社交链接
+- **embryonicTier**：`ignore` | `watch` | `hot`（可配置阈值，默认 hot≥70, watch≥50）
+- **embryonicSignals**：中英文原因列表，标记得分来源
+
+评分因子（可用字段；未知显式标记，不伪造通过）：
+- 市值带：偏好 $30k–$150k 最佳区间（可配 $10k–$200k）
+- 流动性：足够交易但不荒谬（vs mcap 比例合理）
+- 持有人集中度：top10 不极端；标记 bundler/sniper/dev 重仓 tag
+- 年龄/新鲜度：偏好分钟–小时级（可检测时）
+- 聪明钱/KOL 参与：有则加分（不强制）
+- 社交链接（X/website）：轻度加分，**不自动背书**
+- 1分钟发现成交额：轻度加分
+
+**不改变原有 reject/review/watch 安全语义**；embryonic 是额外研究层。
+
+#### 2. Solana 优先配置
+
+- 默认扫描链：`sol`（Solana）
+- 即时发现市值窗口默认调整为早期萌芽带
+- 配置键在 README 记录
+
+#### 3. X/Twitter 监控（核心优先功能）
+
+##### 监控账号（Watchlist）
+
+配置文件：`config/x-watchlist.json`
+
+**硬性筛选规则**：KOL / community / meme_whale 账号必须 **≥10,000 粉丝**（不少于 1 万人关注）。Official/founder 账号（Binance、CZ、He Yi 等官方身份）不受此限制。
+
+**链亲和性标签（Chain Affinity）**：
+- 每个账号标记其主要链对齐：`sol` | `bsc` | `base` | `eth` | `multi` | `null`
+- 用于跨链竞争检测和早期信号放大
+- 示例：
+  - Solana 官方和创始人 → `sol`
+  - Binance/CZ/何一 → `bsc` (BNB Chain 创始人/倾向)
+  - Base 官方和 Jesse Pollak → `base`
+  - Vitalik → `eth`
+  - 多链账号如 Binance Wallet → `multi`
+
+**官方账号（official tier）**
+- @binance (chainAffinity: bsc), @BinanceWallet (multi), @BinanceResearch (multi)
+
+**创始人（founder tier）**
+- @cz_binance (CZ - Changpeng Zhao, chainAffinity: bsc)
+- @heyibinance (He Yi / 何一, chainAffinity: bsc)
+
+**链生态负责人（chain_lead tier）**
+- @solana, @aeyakovenko, @rajgokal (Solana, chainAffinity: sol)
+- @bnbchain (BNB Chain, chainAffinity: bsc)
+- @base, @jessepollak (Base/Coinbase L2, chainAffinity: base)
+- @VitalikButerin (Ethereum, chainAffinity: eth)
+
+**Meme 币大佬 / Meme Whales（meme_whale tier, ≥10k followers）**
+- @Ansem (500k+ followers, major meme whale, chainAffinity: sol)
+- @thecryptodogs (450k+, high-profile trader, chainAffinity: multi)
+- @hsaka (200k+, veteran trader, early meme calls, chainAffinity: eth)
+- @RunnerXBT (150k+, active crypto trader, chainAffinity: multi)
+- @ThinkingUSD (120k+, Sol ecosystem whale, chainAffinity: sol)
+- @CryptoCred (380k+, technical trader, chainAffinity: multi)
+
+**活跃社区声音 / Community Amplifiers（community tier, ≥10k followers）**
+- @MilkRoadDaily (90k+, crypto news + meme narratives, chainAffinity: multi)
+- @degenmfer (45k+, Solana meme community organizer, chainAffinity: sol)
+- @SolJakey (35k+, Solana meme calls, chainAffinity: sol)
+- @Messiahbol (40k+, SOL meme narratives, CA posts, chainAffinity: sol)
+- @thedefiedge (55k+, DeFi and memecoin educator, chainAffinity: multi)
+- @Washigorira (28k+, Solana meme community voice, chainAffinity: sol)
+
+**KOL Alpha 呼单者（kol_alpha tier, ≥10k followers）**
+- 50+ 公开账号种子列表（CN/EN 加密 Twitter，近期 meme 呼单记录）
+- 包含：@0xRacer (65k+, chainAffinity: sol), @blknoiz06 (48k+, sol), @Murad_MHH (280k+, sol), @DegenSpartan (175k+, eth), @cobie (520k+, eth), @0xMert_ (130k+, multi), @AltcoinGordon (220k+, multi), @CryptoKaleo (640k+, multi), @lookonchain (580k+, multi), @Pentosh1 (720k+, eth) 等
+- 每个账号注明分类、display name、follower count、notes、chainAffinity
+
+**跨链竞争检测（Cross-Chain Competition Detection）**：
+
+系统检测当不同链的官方/创始人/chain_lead 账号在短时间窗口（默认6小时，可配置）内同时发布 meme 相关内容时的**链间竞争信号**：
+
+- **触发条件**：
+  - 同一链的多个高层级账号活跃（official/founder/chain_lead）
+  - **或** 不同链在同一时间窗口推送竞争性叙事
+
+- **竞争强度（Intensity）**：0-100 分，基于账号层级权重和活跃度
+  - Official/Founder 权重最高 (10)
+  - Chain Lead 次之 (7)
+  - Meme Whale 中等 (4)
+  - Community 较低 (3)
+  - KOL Alpha 最低 (2)
+
+- **信号应用**：
+  - 当代币所属链的竞争强度 ≥40 且有高层级账号参与时，胚芽评分获得**加分**（最高 +20）
+  - 信号示例（中文）：「所属链竞争升温（SOL） / 链官方或嫡系 KOL 同向」
+  - 跨链竞争时信号：「跨链竞争：SOL vs BASE vs BSC」
+
+- **Webhook 通知**：
+  - 竞争强度 ≥60（默认，可通过 `X_COMPETITION_THRESHOLD` 配置）时，可选发送 `chain_competition_signal` 事件
+  - Payload 包含：intensity, chains, signals, signalsCN, recentHitCount, windowHours, detectedAt
+
+- **研究性质**：
+  - 基于启发式算法（v1），非交易信号，仅用于早期叙事趋势研究
+  - 不构成自动下单依据
+  - 文档明确说明这是研究启发式，非证明
+
+**账号数量**：当前种子列表 65 账号，覆盖：
+- Official/founder: 7 账号（官方身份，不受粉丝数限制）
+  - **Binance 官方集群**：@binance, @BinanceWallet, @BinanceResearch, **@BinanceChinese（币安中文官推）**, @BinanceAcademy
+  - CZ, He Yi
+- Chain leads: 7 账号（生态负责人）
+- Meme whales: 9 账号（17.5万-50万 粉丝 meme 大佬）
+  - 包含 Arthur Hayes (@CryptoHayes) - BitMEX 创始人，宏观交易者
+- Community: 10 账号（4.2万-53万 粉丝社区组织者/媒体）
+  - **WuBlockchain (@WuBlockchain, 53万+)** - 重要中文加密媒体，币安生态覆盖
+  - **8BTC (@8btcci, 32万+)** - 主要中文加密媒体平台
+- KOL alpha: 47+ 账号（1.8万-72万 粉丝呼单者）
+  - **中文加密 KOL 大结果博主**：
+    - **Colin Wu (@Colin_Wu, 42万+)** - Wu Blockchain 创始人，中文加密记者，重大影响力
+    - **BTC大宇 (@BTCdayu, 18万+)** - 主要中文 KOL，经验证的历史记录
+    - **比特币秋山君 (@bitouq, 9.5万+)** - 中文加密分析师
+    - **Crypto Wendy O (@CryptoWendyO, 22.5万+)** - 双语 CN/EN 分析师，币安生态
+    - **Crypto Messiah (@CryptoMessiah, 21万+)** - 大量中文粉丝的加密分析师
+  - EN/multi: Ansem, thecryptodogs, Murad, cobie, Pentosh1, 0xMert_, AltcoinGordon, CryptoKaleo, etc.
+
+所有 KOL / community / meme_whale 账号均满足 ≥10k 粉丝要求。质量优于数量，精选高信号账号。
+
+**Must-Watch 重点**：
+- 币安中文官推 (@BinanceChinese) + Binance 官方集群
+- 拿到大结果的中文博主 (Colin Wu, BTC大宇, WuBlockchain 等)
+- CZ/何一日常发声（软提及比直接喊单更重要）
+
+##### X API 设置（多种方式）
+
+**方式1：官方 Twitter API（最贵，实时性最好）**
+```bash
+export X_BEARER_TOKEN=your_twitter_api_v2_bearer_token
+export X_PROVIDER=official  # 可选，有 bearer token 时自动选择
+export X_POLL_INTERVAL_MS=120000  # 默认2分钟（官方API）
+```
+
+**方式2：SocialData 第三方（便宜，推荐）**
+```bash
+export SOCIALDATA_API_KEY=your_socialdata_api_key
+export X_PROVIDER=socialdata  # 可选，有 API key 时自动选择
+export X_POLL_INTERVAL_MS=600000  # 默认10分钟（第三方API）
+```
+
+**方式3：Sorsa 第三方（待实现）**
+```bash
+export SORSA_API_KEY=your_sorsa_api_key
+export X_PROVIDER=sorsa
+```
+
+**方式4：演示模式（无需配置）**
+
+不设置任何密钥时，自动使用演示模式生成假数据用于测试。
+
+##### 便宜第三方 vs 官方 API
+
+**官方 Twitter API v2**
+- **优势**：实时性最佳，直接从 Twitter 获取，数据完整度高
+- **劣势**：**非常贵** — Free tier 极其有限（每月500条推文），Basic $100/月（10k条），Pro $5000/月
+- **适用场景**：资金充足、需要实时监控、商业级产品
+- **轮询频率**：可每 1-2 分钟
+
+**SocialData.tools 第三方**
+- **优势**：**价格友好** — 约 $29-79/月套餐，支持合理频率轮询
+- **劣势**：非官方，有 ToS 风险，可能有延迟或断连，数据完整性次于官方
+- **适用场景**：个人研究、成本敏感、可接受轻度延迟
+- **轮询频率**：建议 10-15 分钟（避免触发限流）
+- **月度成本估算**（~20个优先账号 @ 10分钟轮询）：
+  - 每账号每小时6次 × 24小时 = 144次/天
+  - 20账号 = 2,880次/天
+  - 月度 ≈ 86,400次调用
+  - SocialData 套餐通常包含 100k-500k 次调用/月，**足够覆盖**
+
+**ToS 与可靠性风险**
+- ⚠️ 第三方服务**非官方授权**，可能违反 Twitter ToS
+- 第三方可能随时**下线、调整定价、限流**，无法保证长期稳定
+- 生产环境或重要项目建议**官方API** + 备用第三方做冗余
+- 本项目为**研究工具**，风险自担
+
+**自动选择逻辑**
+1. 若设置 `SOCIALDATA_API_KEY`，优先使用 SocialData（便宜）
+2. 若仅设置 `X_BEARER_TOKEN`，使用官方API
+3. 若设置 `X_PROVIDER=official|socialdata|sorsa|stub`，强制指定
+4. 都不设置时，演示模式
+
+**如何获取密钥**
+
+Twitter API Bearer Token (官方)：
+1. 访问 https://developer.twitter.com/en/portal/dashboard
+2. 创建或选择一个 App
+3. 在 "Keys and tokens" 中生成 Bearer Token
+4. 将 token 设置为环境变量或在启动命令中传入
+
+SocialData API Key (第三方)：
+1. 访问 https://socialdata.tools 或类似服务
+2. 注册账号并订阅套餐
+3. 在 Dashboard 获取 API Key
+
+**配置示例**：参考项目根目录的 `.env.example` 文件。
+
+**演示/Dry-run 模式（无 token）**
+
+未设置任何 API 密钥时，X 监控进入演示模式：
+- 不发起真实 API 请求
+- UI 和 API 端点正常工作
+- 页面显示 "演示模式（设置 X_BEARER_TOKEN 或 SOCIALDATA_API_KEY 启用实时监控）"
+- 可用于开发和测试 watchlist 配置
+
+**不提供**凭据抓取或违反 ToS 的浏览器 cookie 窃取。
+
+##### 软提及 / 权威造词（Soft Mentions）
+
+**核心洞察**：权威账号的「软提及」比直接喊单更重要。
+
+CZ 随口提到"西兰花"（broccoli）、狗名、某个 meme IP、叙事关键词 → 即使**不贴合约地址**，也能引发多链 meme 币涌现。
+
+**软提及检测逻辑**：
+1. **关键词匹配**：推文包含触发关键词（动物、食物、叙事词、链名等）但无 CA
+2. **权威发声**：official/founder 账号的任何有内容推文（≥20字符）都视为潜在信号
+
+**触发关键词配置** (`config/x-trigger-keywords.json`)：
+- **全局关键词**：动物（dog/cat/pepe）、食物（broccoli/banana）、叙事（AI Agent/meme season）、链（Solana/Base/BNB Chain）
+- **账号专属关键词**：如 CZ 的 "SAFU"/"build"，Vitalik 的 "rollup"/"L2"
+- **可编辑**：用户可添加自定义关键词
+
+**Webhook 通知**：
+- 软提及事件通过 `social_alert` 发送，包含：
+  - `isSoftMention: true`
+  - `matchedKeywords: [...]`
+  - `softMentionReason: 'keyword_match' | 'high_tier_post'`
+- 可配置接收软提及的账号层级（默认：official/founder/chain_lead）
+
+**示例**：
+```json
+{
+  "type": "social_alert",
+  "social": {
+    "handle": "cz_binance",
+    "tier": "founder",
+    "text": "Just had some delicious broccoli for lunch",
+    "isSoftMention": true,
+    "matchedKeywords": ["broccoli"],
+    "softMentionReason": "keyword_match",
+    "hasAddresses": false
+  }
+}
+```
+
+即使推文中没有合约地址，因为包含"broccoli"且来自 CZ，系统识别为软提及并发送警报。
+
+##### 工作流程
+
+1. **推文拉取**：默认每 3-5 分钟（第三方 API）或 2 分钟（官方 API，可配）从监控账号拉取最新推文
+2. **合约地址提取**：自动识别 Solana（base58）和 EVM（0x...）地址
+3. **软提及检测**：无 CA 时检查关键词匹配或高层级账号发声
+4. **候选入队**：发现的合约地址入队到与链上发现相同的候选管道
+5. **社交警报**：软提及或无 CA 的高层级推文通过 webhook 发送
+6. **去重**：同一推文 ID 去重
+
+**X 来源标记**：从 X 发现的代币在候选中标记 `_xSource`（handle, displayName, tier, tweetUrl）
+
+##### 未来扩展点（当前仅注释）
+
+`social.mjs` 中预留集成注释：
+- 聚合 X 命中与链上发现统一评分
+- 交叉引用 KOL 呼单与链上地址
+- 计算"社交动量"（多 KOL 提及）
+- 跟踪 KOL 历史准确率加权
+
+当前 X 监控功能（`x-monitor.mjs` 已实现）：
+- Watchlist of Binance officials, CZ, He Yi, chain leads, 30 alpha KOLs
+- Twitter API v2 integration + dry-run mode
+- Contract address extraction (Solana + EVM)
+- Enqueue into candidate pipeline
+- Social alert webhooks
+- 30-min deduplication
+
+#### 4. Webhook 通知（可选，本地）
+
+环境变量：
+```bash
+export WEBHOOK_URL=http://127.0.0.1:8080/alerts    # 或用户提供的 webhook 地址
+export WEBHOOK_MIN_TIER=hot                        # hot | watch（默认 hot）
+```
+
+- **候选通知**：新 `hot`（或可选 `watch`）候选深度审计后 POST JSON 摘要
+- **社交通知**：高层级账号无 CA 推文（official/founder）发送社交警报
+- **安全**：payload 自动过滤 API key/secret/bearerToken 等敏感字段（显示 `[REDACTED]`）
+- **去重**：同一 mint 30 分钟不重复发送
+
+Webhook payload 示例（候选）：
+```json
+{
+  "type": "embryonic_candidate",
+  "timestamp": 1726455600000,
+  "candidate": {
+    "address": "...",
+    "chain": "sol",
+    "symbol": "EXAMPLE",
+    "embryonicScore": 82,
+    "embryonicTier": "hot",
+    "embryonicSignals": ["Market cap in optimal early range", "..."],
+    "embryonicSignalsCN": ["市值处于最佳早期区间", "..."],
+    "status": "X_REVIEW",
+    "gmgnUrl": "...",
+    "twitter": "...",
+    "website": "..."
+  }
+}
+```
+
+Webhook payload 示例（社交）：
+```json
+{
+  "type": "social_alert",
+  "timestamp": 1726455600000,
+  "social": {
+    "tweetId": "1234567890",
+    "handle": "cz_binance",
+    "displayName": "CZ",
+    "tier": "founder",
+    "category": "founder",
+    "text": "Interesting project...",
+    "url": "https://twitter.com/cz_binance/status/1234567890",
+    "createdAt": 1726455000000,
+    "addresses": { "solana": [], "evm": [], "all": [] },
+    "cashtags": ["BTC"]
+  }
+}
+```
+
+#### 5. UI 更新
+
+- 候选卡片展示 embryonic score / tier / signals
+- 筛选/排序按 embryonic score
+- X 监控面板：显示 watchlist、最近 X hits、推文链接
+- 扫描设置中 webhook 配置项（中文 UI 标签）
+
+（注：完整 UI 实现在 `public/index.html`，本次改造为后端优先，UI 为占位/API 就绪）
+
+#### 6. 测试
+
+单元测试（`test/embryonic.test.mjs`, `test/x-monitor.test.mjs`）：
+- embryonic 评分逻辑 fixtures
+- X watchlist 加载
+- 合约地址提取（SOL + EVM）
+- Cashtag 提取
+- 去重逻辑
+
+运行：`npm test`（必须通过）
+
+### 硬约束（不变）
+
+- **无交易模块**：无 swap、无 follow-wallet trade execution
+- **Key 本地保存**：不记录或返回 secrets
+- **AGPL-3.0-only**：保留许可证与上游归属
+- **中文友好**：README「改造说明」+ 中文 UI 标签
 
 ## 功能介绍
 

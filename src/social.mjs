@@ -3,6 +3,28 @@ import { promisify } from 'node:util';
 
 const execFileAsync = promisify(execFile);
 
+// FUTURE X/KOL INTEGRATION NOTES:
+// The x-monitor.mjs module now handles Twitter/X watchlist monitoring.
+// This module (social.mjs) can be extended to:
+// 1. Aggregate X hits with on-chain discoveries for unified scoring
+// 2. Cross-reference KOL calls with contract addresses found on-chain
+// 3. Compute "social momentum" scores based on multiple KOL mentions
+// 4. Track historical KOL call accuracy for weighted scoring
+//
+// Current X monitoring features (implemented in x-monitor.mjs):
+// - Watchlist of Binance officials, CZ, He Yi, chain leads, and alpha KOLs
+// - Twitter API v2 integration with dry-run mode when no bearer token
+// - Contract address extraction (Solana + EVM) from tweets
+// - Enqueue discovered addresses into candidate pipeline
+// - Social alert webhooks for non-CA tweets
+// - 30-minute deduplication for tweets and mint+account pairs
+//
+// Integration points for future enhancement:
+// - socialGate() could check if a token was mentioned by watched accounts
+// - Add "xMentions" count and tier breakdown (official/founder/kol_alpha)
+// - Boost embryonic score for tokens with high-tier KOL endorsement
+// - Track time-to-mention: tokens called by KOLs before major price moves
+
 export async function xCapability() {
   try {
     const { stdout } = await execFileAsync('agent-reach', ['doctor', '--json'], { timeout: 15_000, maxBuffer: 2 * 1024 * 1024 });

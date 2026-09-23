@@ -10,7 +10,7 @@ function boundedInteger(value, fallback, minimum, maximum) {
 }
 
 export const config = Object.freeze({
-  chain: 'robinhood',
+  chain: 'sol',
   supportedChains: Object.freeze(['sol', 'bsc', 'base', 'eth', 'robinhood', 'arc', 'stable']),
   port: boundedInteger(process.env.RADAR_PORT, 3791, 1024, 65_535),
   scanIntervalMs: boundedInteger(process.env.SCAN_INTERVAL_MS, 120_000, 30_000, 30 * 60_000),
@@ -21,7 +21,7 @@ export const config = Object.freeze({
   minAgeSec: 5 * 60,
   maxAgeSec: 7 * 86400,
   discoveryMinMarketCap: 10_000,
-  discoveryMaxMarketCap: 150_000,
+  discoveryMaxMarketCap: 200_000,
   priorityMinMarketCap: 20_000,
   priorityMaxMarketCap: 80_000,
   minLiquidity: 3_000,
@@ -46,5 +46,38 @@ export const config = Object.freeze({
   staleCandidateMs: 10 * 60_000,
   outcomeRetentionMs: 7 * 24 * 60 * 60_000,
   stateDir: path.join(ROOT, 'state'),
-  publicDir: path.join(ROOT, 'public')
+  publicDir: path.join(ROOT, 'public'),
+  configDir: path.join(ROOT, 'config'),
+  embryonicMinMarketCap: 10_000,
+  embryonicMaxMarketCap: 200_000,
+  embryonicOptimalMinMarketCap: 30_000,
+  embryonicOptimalMaxMarketCap: 150_000,
+  embryonicHotThreshold: 70,
+  embryonicWatchThreshold: 50,
+  webhookUrl: process.env.WEBHOOK_URL || '',
+  webhookMinTier: process.env.WEBHOOK_MIN_TIER || 'hot',
+  webhookEnabled: Boolean(process.env.WEBHOOK_URL),
+  webhookDedupeMs: 30 * 60_000,
+  // X/Twitter monitoring
+  xWatchlistPath: path.join(ROOT, 'config', 'x-watchlist.json'),
+  xTriggerKeywordsPath: path.join(ROOT, 'config', 'x-trigger-keywords.json'),
+  xBearerToken: process.env.X_BEARER_TOKEN || '',
+  xProvider: process.env.X_PROVIDER || '', // official | socialdata | sorsa | stub
+  xPollIntervalMs: boundedInteger(
+    process.env.X_POLL_INTERVAL_MS,
+    // Default: 3-5 minutes for cheap providers (Ai Boom architecture), 2 minutes for official
+    process.env.SOCIALDATA_API_KEY || process.env.SORSA_API_KEY ? 240_000 : 120_000,
+    60_000,
+    30 * 60_000
+  ),
+  xMinFollowers: boundedInteger(process.env.X_MIN_FOLLOWERS, 10_000, 0, 10_000_000),
+  xCompetitionWindowHours: boundedInteger(process.env.X_COMPETITION_WINDOW_HOURS, 6, 1, 24),
+  xCompetitionThreshold: boundedInteger(process.env.X_COMPETITION_THRESHOLD, 60, 0, 100),
+  xSoftMentionTiers: (process.env.X_SOFT_MENTION_TIERS || 'official,founder,chain_lead').split(',').map(s => s.trim()),
+  xEnabled: Boolean(process.env.X_BEARER_TOKEN || process.env.SOCIALDATA_API_KEY || process.env.SORSA_API_KEY),
+  
+  // Third-party X providers
+  socialDataApiKey: process.env.SOCIALDATA_API_KEY || '',
+  socialDataBaseUrl: process.env.SOCIALDATA_BASE_URL || 'https://api.socialdata.tools',
+  sorsaApiKey: process.env.SORSA_API_KEY || ''
 });
