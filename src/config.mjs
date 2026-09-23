@@ -10,7 +10,7 @@ function boundedInteger(value, fallback, minimum, maximum) {
 }
 
 export const config = Object.freeze({
-  chain: 'sol',
+  chain: 'robinhood',
   supportedChains: Object.freeze(['sol', 'bsc', 'base', 'eth', 'robinhood', 'arc', 'stable']),
   port: boundedInteger(process.env.RADAR_PORT, 3791, 1024, 65_535),
   scanIntervalMs: boundedInteger(process.env.SCAN_INTERVAL_MS, 120_000, 30_000, 30 * 60_000),
@@ -21,7 +21,7 @@ export const config = Object.freeze({
   minAgeSec: 5 * 60,
   maxAgeSec: 7 * 86400,
   discoveryMinMarketCap: 10_000,
-  discoveryMaxMarketCap: 200_000,
+  discoveryMaxMarketCap: 150_000,
   priorityMinMarketCap: 20_000,
   priorityMaxMarketCap: 80_000,
   minLiquidity: 3_000,

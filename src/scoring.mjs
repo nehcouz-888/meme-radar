@@ -559,8 +559,22 @@ export function computeEmbryonicScore({ discovery, info, audit, nowMs = Date.now
   const ageSec = createdValue && createdValue > 0 ? nowMs / 1000 - createdValue : null;
   const ageHours = ageSec ? ageSec / 3600 : null;
   
-  const smartWallets = optionalCount(first(info?.wallet_tags_stat?.smart_wallets, discovery.smart_degen_count)) ?? 0;
-  const renownedWallets = optionalCount(first(info?.wallet_tags_stat?.renowned_wallets, discovery.renowned_count)) ?? 0;
+  // Prefer live still-holding counts over historical aggregates (AURACAT fix)
+  const holders = audit?.holders || [];
+  const holderSampleSize = Array.isArray(holders) ? holders.length : 0;
+  const holderSampleAdequate = holderSampleSize >= 3;
+  
+  const tagEvidence = holderSampleSize > 0 ? taggedWalletSignals(holders, config.chain) : { smartWallets: 0, renownedWallets: 0, sampledTaggedWallets: 0 };
+  const aggregateSmart = optionalCount(first(info?.wallet_tags_stat?.smart_wallets, discovery.smart_degen_count)) ?? 0;
+  const aggregateRenowned = optionalCount(first(info?.wallet_tags_stat?.renowned_wallets, discovery.renowned_count)) ?? 0;
+  
+  const liveSmartHolding = tagEvidence.smartWallets;
+  const liveRenownedHolding = tagEvidence.renownedWallets;
+  
+  const smartMoneySource = holderSampleAdequate ? 'live_holders' : aggregateSmart > 0 ? 'aggregate_fallback' : 'unknown';
+  const smartWallets = holderSampleAdequate ? liveSmartHolding : aggregateSmart;
+  const renownedWallets = holderSampleAdequate ? liveRenownedHolding : aggregateRenowned;
+  
   const holderCount = optionalCount(first(info?.holder_count, info?.stat?.holder_count, discovery.holder_count)) ?? 0;
   const volume5m = optionalNonNegativeNumber(first(info?.price?.volume_5m, discovery.volume_5m, discovery.volume)) ?? 0;
   
@@ -645,22 +659,34 @@ export function computeEmbryonicScore({ discovery, info, audit, nowMs = Date.now
   
   if (smartWallets >= 3) {
     score += 20;
-    signals.push(`${smartWallets} smart money wallets`);
-    signalsCN.push(`${smartWallets}个聪明钱钱包`);
+    const suffix = smartMoneySource === 'live_holders' ? ' still holding' : ' wallets';
+    const suffixCN = smartMoneySource === 'live_holders' ? '仍持仓' : '钱包';
+    signals.push(`${smartWallets} smart money${suffix}`);
+    signalsCN.push(`${smartWallets}个聪明钱${suffixCN}`);
   } else if (smartWallets === 2) {
     score += 10;
-    signals.push('2 smart money wallets');
-    signalsCN.push('2个聪明钱钱包');
+    const suffix = smartMoneySource === 'live_holders' ? ' still holding' : ' wallets';
+    const suffixCN = smartMoneySource === 'live_holders' ? '仍持仓' : '钱包';
+    signals.push(`2 smart money${suffix}`);
+    signalsCN.push(`2个聪明钱${suffixCN}`);
   } else if (smartWallets === 1) {
     score += 5;
-    signals.push('1 smart money wallet');
-    signalsCN.push('1个聪明钱钱包');
+    const suffix = smartMoneySource === 'live_holders' ? ' still holding' : ' wallet';
+    const suffixCN = smartMoneySource === 'live_holders' ? '仍持仓' : '钱包';
+    signals.push(`1 smart money${suffix}`);
+    signalsCN.push(`1个聪明钱${suffixCN}`);
+  } else if (smartMoneySource === 'live_holders' && aggregateSmart > 0) {
+    // AURACAT case: aggregate high but live 0
+    signals.push(`No smart money still holding (${aggregateSmart} historical)`);
+    signalsCN.push(`无聪明钱仍持仓（历史${aggregateSmart}个）`);
   }
   
   if (renownedWallets > 0) {
     score += 5;
-    signals.push(`${renownedWallets} KOL/renowned wallets`);
-    signalsCN.push(`${renownedWallets}个KOL/知名钱包`);
+    const suffix = smartMoneySource === 'live_holders' ? ' still holding' : '';
+    const suffixCN = smartMoneySource === 'live_holders' ? '仍持仓' : '';
+    signals.push(`${renownedWallets} KOL/renowned${suffix}`);
+    signalsCN.push(`${renownedWallets}个KOL/知名${suffixCN}`);
   }
   
   if (holderCount >= 100) {
@@ -721,6 +747,11 @@ export function computeEmbryonicScore({ discovery, info, audit, nowMs = Date.now
       ageHours,
       smartWallets,
       renownedWallets,
+      liveSmartHolding,
+      liveRenownedHolding,
+      aggregateSmartWallets: aggregateSmart,
+      aggregateRenownedWallets: aggregateRenowned,
+      smartMoneySource,
       holderCount,
       volume5m,
       hasWebsite,
