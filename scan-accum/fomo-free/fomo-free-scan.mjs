@@ -61,8 +61,18 @@ async function getJson(src, url, { headers = {}, retries = 2, gap = FREE_GAP_MS 
 
 // ---------- FOMO with credit ledger ----------
 const monthKey = () => new Date().toISOString().slice(0, 7);
-// ✅ Compatible with watcher reservation protocol
-function readLedger() { try { const l = JSON.parse(fs.readFileSync(LEDGER, 'utf8')); if (l.month === monthKey()) return l; } catch {} return { month: monthKey(), spent: 0, calls: 0, lastRemaining: null, log: [], reservations: {} }; }
+// ✅ Compatible with watcher reservation protocol + migrate legacy format
+function readLedger() { 
+  try { 
+    const l = JSON.parse(fs.readFileSync(LEDGER, 'utf8')); 
+    if (l.month === monthKey()) {
+      // Migrate legacy ledgers missing reservations field
+      if (!l.reservations) l.reservations = {};
+      return l;
+    }
+  } catch {} 
+  return { month: monthKey(), spent: 0, calls: 0, lastRemaining: null, log: [], reservations: {} }; 
+}
 const fomoRun = { calls: 0, credits: 0, remainingBefore: null, remainingAfter: null, skipped: [] };
 function saveLedger(ledger) { ledger.log = ledger.log.slice(-200); fs.writeFileSync(LEDGER + '.tmp', JSON.stringify(ledger, null, 1)); fs.renameSync(LEDGER + '.tmp', LEDGER); }
 
@@ -140,15 +150,29 @@ async function fomo(pathq, estCost = 250) {
   // ✅ Settle reservation atomically
   const settleLock = acquireLedgerLock();
   try {
-    ledger = readLedger();
-    delete ledger.reservations[reservationId];
-    
-    if (rem !== null) { if (fomoRun.remainingBefore === null) fomoRun.remainingBefore = rem + cost; fomoRun.remainingAfter = rem; ledger.lastRemaining = rem; }
-    if (rem !== null) ledger.spent = Math.max(ledger.spent, Number(process.env.FOMO_PLAN_CREDITS || 250000) - rem - cost);
-    if (r.status === 402) { fomoRun.skipped.push(`${pathq} (402 out of credits)`); }
-    fomoRun.calls++; fomoRun.credits += cost; ledger.spent += cost; ledger.calls++;
-    ledger.log.push({ at: STAMP, path: pathq.split('?')[0], cost, remaining: rem, ok: !!r.ok });
-    saveLedger(ledger);
+    try {
+      ledger = readLedger();
+      delete ledger.reservations[reservationId];
+      
+      if (rem !== null) { if (fomoRun.remainingBefore === null) fomoRun.remainingBefore = rem + cost; fomoRun.remainingAfter = rem; ledger.lastRemaining = rem; }
+      if (rem !== null) ledger.spent = Math.max(ledger.spent, Number(process.env.FOMO_PLAN_CREDITS || 250000) - rem - cost);
+      if (r.status === 402) { fomoRun.skipped.push(`${pathq} (402 out of credits)`); }
+      fomoRun.calls++; fomoRun.credits += cost; ledger.spent += cost; ledger.calls++;
+      ledger.log.push({ at: STAMP, path: pathq.split('?')[0], cost, remaining: rem, ok: !!r.ok });
+      saveLedger(ledger);
+    } catch (settleErr) {
+      // Conservative: if settle save fails after fetch, convert reserved amount to spent
+      // to prevent permanent budget lockup. Still holding lock, re-read to get fresh state.
+      const cleanupLedger = readLedger();
+      if (cleanupLedger.reservations[reservationId]) {
+        const reservedAmount = cleanupLedger.reservations[reservationId].amount;
+        delete cleanupLedger.reservations[reservationId];
+        cleanupLedger.spent += reservedAmount;
+        cleanupLedger.log.push({ at: STAMP, path: pathq.split('?')[0], cost: reservedAmount, remaining: null, ok: false, settleFailure: true });
+        try { saveLedger(cleanupLedger); } catch {}
+      }
+      throw settleErr;
+    }
   } finally {
     releaseLedgerLock(settleLock);
   }
@@ -443,6 +467,8 @@ for (const c of top.slice(0, STATS_MAX)) { const b = await fomo(`/v2/token/${c.a
 scored = [...cands.values()].map(c => score(c, smart)).sort((a, b) => b.score - a.score);
 
 // ---------- report ----------
+// Re-read ledger to get post-transaction state
+const finalLedger = readLedger();
 const cst = d => new Date(d).toLocaleString('zh-CN', { timeZone: 'Asia/Shanghai', hour12: false });
 const fmt = v => v == null ? '?' : v >= 1e6 ? `$${(v / 1e6).toFixed(2)}M` : v >= 1e3 ? `$${(v / 1e3).toFixed(1)}K` : `$${v.toFixed(0)}`;
 const valid = scored.filter(x => x.status !== 'NO_MARKET_DATA');
@@ -455,7 +481,7 @@ L.push(`- **链**：${CHAINS.join(', ')}`);
 L.push('- **评分**：降级版 embryonicScore 0–100（流动性/市值/量价/年龄/Fomo 热度/仍持仓聪明钱/Jupiter+RugCheck 风控）；原始≥70 也封顶观察');
 L.push(`- **聪明钱计分模式**：仅计仍持仓聪明钱（SMART_RETENTION_MODE=score）——来源 Fomo 24h 排行榜交易者当前 topTokens 持仓${HOLDERS_MAX ? `，前 ${HOLDERS_MAX} 名候选用 /token/{addr}/holders 实时复核` : ''}；不持仓/历史交易不加分`);
 L.push(`- **Fomo 排行榜快照**：${smart.traders.length} 交易者，抓取于 ${smart.fetchedAt ? cst(smart.fetchedAt) : '无'} CST${smart.fresh ? '（本次新拉）' : '（缓存复用）'}`);
-L.push(`- **Fomo credits**：本次 ${fomoRun.calls} 次调用 / ${fomoRun.credits} credits；剩余 ${fomoRun.remainingAfter ?? ledger.lastRemaining ?? '?'}；本月账本已用 ${ledger.spent}/${MONTHLY_BUDGET}${fomoRun.skipped.length ? `；跳过：${fomoRun.skipped.join('; ')}` : ''}`);
+L.push(`- **Fomo credits**：本次 ${fomoRun.calls} 次调用 / ${fomoRun.credits} credits；剩余 ${fomoRun.remainingAfter ?? finalLedger.lastRemaining ?? '?'}；本月账本已用 ${finalLedger.spent}/${MONTHLY_BUDGET}${fomoRun.skipped.length ? `；跳过：${fomoRun.skipped.join('; ')}` : ''}`);
 L.push(`- **合计**：热门 **0**（降级封顶）/ 观察 **${valid.filter(x => x.tier === 'watch').length}** / 已评分 **${valid.length}**（HARD_REJECT ${valid.filter(x => x.status === 'HARD_REJECT').length}）`, '');
 L.push('## 链路结果一览', '', '| 链 | 发现 | 有行情 | 拒绝 | 观察 | 原始≥70(已封顶) |', '|---|---:|---:|---:|---:|---:|');
 for (const b of byChain) L.push(`| ${b.ch} | ${b.disc} | ${b.mkt} | ${b.rej} | ${b.watch} | ${b.hotRaw} |`);
@@ -491,5 +517,5 @@ L.push('', '## 数据源健康', '', `- 请求数：${JSON.stringify(metrics.req
 fs.mkdirSync(OUT_DIR, { recursive: true });
 fs.writeFileSync(path.join(OUT_DIR, 'fullchain-scan-report.md'), L.join('\n'));
 const strip = ({ fomoHoldersLive, ...x }) => x;
-fs.writeFileSync(path.join(OUT_DIR, 'fullchain-scan-results.json'), JSON.stringify({ generatedAt: STAMP, mode: 'fomo_free', degraded: true, chains: CHAINS, fomo: { ...fomoRun, monthSpent: ledger.spent, monthBudget: MONTHLY_BUDGET, leaderboardFetchedAt: smart.fetchedAt }, metrics, errors: [...new Set(errors)], byChain, spillover: { enabled: SPILL.enabled, followers: SPILL.followers, log: spillLog }, results: scored.map(strip) }, null, 1));
-console.log(JSON.stringify({ mode: 'fomo_free', discovered: cands.size, scored: valid.length, watch: valid.filter(x => x.tier === 'watch').length, reject: rej.length, top: valid.filter(x => x.status !== 'HARD_REJECT').slice(0, 5).map(x => `${x.symbol}:${x.chain}:${x.score}`), fomo: fomoRun, monthSpent: ledger.spent, requests: metrics.requests, errors: [...new Set(errors)].length }));
+fs.writeFileSync(path.join(OUT_DIR, 'fullchain-scan-results.json'), JSON.stringify({ generatedAt: STAMP, mode: 'fomo_free', degraded: true, chains: CHAINS, fomo: { ...fomoRun, monthSpent: finalLedger.spent, monthBudget: MONTHLY_BUDGET, leaderboardFetchedAt: smart.fetchedAt }, metrics, errors: [...new Set(errors)], byChain, spillover: { enabled: SPILL.enabled, followers: SPILL.followers, log: spillLog }, results: scored.map(strip) }, null, 1));
+console.log(JSON.stringify({ mode: 'fomo_free', discovered: cands.size, scored: valid.length, watch: valid.filter(x => x.tier === 'watch').length, reject: rej.length, top: valid.filter(x => x.status !== 'HARD_REJECT').slice(0, 5).map(x => `${x.symbol}:${x.chain}:${x.score}`), fomo: fomoRun, monthSpent: finalLedger.spent, requests: metrics.requests, errors: [...new Set(errors)].length }));

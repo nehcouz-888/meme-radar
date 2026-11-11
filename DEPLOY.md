@@ -3,8 +3,8 @@
 This package uses `fs-ext` (native addon) for OS-level file locking across three deployment locations:
 
 1. **Queue** (branch): `meme-radar-branch/src/modules/alert-queue.mjs`
-2. **Watcher** (sibling): `scripts-production/fomo-trader-watch-integrated.mjs`
-3. **Scanner** (outside): `scan-accum/fomo-free/fomo-free-scan.mjs`
+2. **Watcher** (branch): `meme-radar-branch/scripts-production/fomo-trader-watch-integrated.mjs`
+3. **Scanner** (branch): `meme-radar-branch/scan-accum/fomo-free/fomo-free-scan.mjs`
 
 ## Dependencies
 
@@ -13,56 +13,33 @@ This package uses `fs-ext` (native addon) for OS-level file locking across three
 
 Total: 3 packages (including build artifacts)
 
-## Deployment Layouts
+## Deployment Layout
 
-### Option A: Shared Parent node_modules (Recommended)
+All entry points (queue, watcher, scanner) are packaged inside `meme-radar-branch/`:
 
 ```
 /workspace/meme-radar-run/
-  ├── node_modules/           # Shared dependencies
-  │   ├── fs-ext/
-  │   └── nan/
-  ├── meme-radar-branch/      # Queue
-  ├── fomo-trader-watch/      # Watcher (sibling)
-  └── scan-accum/             # Scanner (outside)
+  └── meme-radar-branch/
+      ├── src/
+      │   └── modules/
+      │       └── alert-queue.mjs        # Queue entry
+      ├── scripts-production/
+      │   └── fomo-trader-watch-integrated.mjs  # Watcher entry
+      ├── scan-accum/
+      │   └── fomo-free/
+      │       └── fomo-free-scan.mjs     # Scanner entry
+      └── node_modules/                  # Shared dependencies
+          ├── fs-ext/
+          └── nan/
 ```
 
 **Setup:**
 ```bash
 cd /workspace/meme-radar-run
-cp -r meme-radar-branch/node_modules ./
+tar -xzf meme-radar-v16.tar.gz  # Extracts meme-radar-branch/ with all components
 ```
 
-Node.js module resolution walks up to parent directories, so all three entry points will find the shared `node_modules`.
-
-### Option B: Per-Entry node_modules
-
-```
-/workspace/meme-radar-run/
-  ├── meme-radar-branch/
-  │   └── node_modules/       # Queue dependencies
-  ├── fomo-trader-watch/
-  │   └── node_modules/       # Watcher dependencies (copy from branch)
-  └── scan-accum/
-      └── node_modules/       # Scanner dependencies (copy from branch)
-```
-
-**Setup:**
-```bash
-cd /workspace/meme-radar-run
-cp -r meme-radar-branch/node_modules fomo-trader-watch/
-cp -r meme-radar-branch/node_modules scan-accum/
-```
-
-### Option C: Symlink (if filesystem supports)
-
-```bash
-cd /workspace/meme-radar-run/fomo-trader-watch
-ln -s ../meme-radar-branch/node_modules node_modules
-
-cd /workspace/meme-radar-run/scan-accum
-ln -s ../meme-radar-branch/node_modules node_modules
-```
+All three entry points share `meme-radar-branch/node_modules/` via Node.js's module resolution.
 
 ## Verification
 
@@ -75,11 +52,11 @@ node -e "import fs from 'fs-ext'; console.log('Queue OK')" \
 
 # Watcher
 node -e "import fs from 'fs-ext'; console.log('Watcher OK')" \
-  /workspace/meme-radar-run/fomo-trader-watch/fomo-trader-watch.mjs
+  /workspace/meme-radar-run/meme-radar-branch/scripts-production/fomo-trader-watch-integrated.mjs
 
 # Scanner
 node -e "import fs from 'fs-ext'; console.log('Scanner OK')" \
-  /workspace/meme-radar-run/scan-accum/fomo-free/fomo-free-scan.mjs
+  /workspace/meme-radar-run/meme-radar-branch/scan-accum/fomo-free/fomo-free-scan.mjs
 ```
 
 ## Offline Installation
