@@ -10,6 +10,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
 import { fileURLToPath } from 'node:url';
+import properLockfile from 'proper-lockfile';
 import { addPendingAlert } from '/workspace/meme-radar-run/meme-radar-branch/src/modules/alert-queue.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -641,79 +642,42 @@ function saveLedger(ledger) {
 }
 
 /**
- * ✅ Atomic mkdir ledger lock (same as queue lock)
- * - Lock dir: {ledger}.lock (single shared arbitration point)
- * - Metadata: owner.json with {pid, token, at}
- * - Mutual exclusion: POSIX atomic mkdir
+ * ✅ proper-lockfile ledger lock (same as queue)
  */
 function acquireLedgerLock(timeoutMs = 5000) {
-  const lockDir = LEDGER_FILE + '.lock';
-  const lockToken = Math.random().toString(36).slice(2, 10);
-  const ownerFile = path.join(lockDir, 'owner.json');
   const startTime = Date.now();
+  const options = {
+    stale: 10000,
+    realpath: false,
+    fs: fs
+  };
   
   while (Date.now() - startTime < timeoutMs) {
     try {
-      // ✅ Atomic mkdir
-      fs.mkdirSync(lockDir, { recursive: false });
-      
-      // Write owner metadata
-      const lockData = JSON.stringify({ pid: process.pid, token: lockToken, at: Date.now() });
-      fs.writeFileSync(ownerFile, lockData);
-      
-      return { lockDir, token: lockToken };
+      const release = properLockfile.lockSync(LEDGER_FILE, options);
+      return { release, ledgerFile: LEDGER_FILE };
     } catch (e) {
-      if (e.code !== 'EEXIST') throw e;
-      
-      // Check if owner alive
-      try {
-        const ownerData = fs.readFileSync(ownerFile, 'utf8');
-        const owner = JSON.parse(ownerData);
-        
-        let processAlive = false;
-        try {
-          process.kill(owner.pid, 0);
-          processAlive = true;
-        } catch {}
-        
-        if (!processAlive) {
-          try {
-            fs.rmSync(lockDir, { recursive: true, force: true });
-            continue;
-          } catch {}
+      if (e.code === 'ELOCKED') {
+        const waitMs = Math.min(50 + Math.random() * 50, timeoutMs - (Date.now() - startTime));
+        if (waitMs > 0) {
+          const start = Date.now();
+          while (Date.now() - start < waitMs) {}
         }
-      } catch {
-        try {
-          const stat = fs.statSync(lockDir);
-          if (Date.now() - stat.mtimeMs > 10000) {
-            fs.rmSync(lockDir, { recursive: true, force: true });
-            continue;
-          }
-        } catch {}
+        continue;
       }
-    }
-    
-    const waitMs = Math.min(50 + Math.random() * 50, timeoutMs - (Date.now() - startTime));
-    if (waitMs > 0) {
-      const start = Date.now();
-      while (Date.now() - start < waitMs) {}
+      throw e;
     }
   }
+  
   throw new Error(`Failed to acquire ledger lock after ${timeoutMs}ms`);
 }
 
 /**
- * Release atomic mkdir ledger lock with token validation
+ * Release proper-lockfile ledger lock
  */
 function releaseLedgerLock(lockObj) {
   try {
-    const ownerFile = path.join(lockObj.lockDir, 'owner.json');
-    const ownerData = fs.readFileSync(ownerFile, 'utf8');
-    const owner = JSON.parse(ownerData);
-    
-    if (owner.token === lockObj.token && owner.pid === process.pid) {
-      fs.rmSync(lockObj.lockDir, { recursive: true, force: true });
-    }
+    lockObj.release();
   } catch {}
 }
 

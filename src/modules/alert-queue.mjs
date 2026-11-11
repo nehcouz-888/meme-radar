@@ -8,6 +8,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { randomBytes } from 'node:crypto';
+import properLockfile from 'proper-lockfile';
 
 const CST_OFFSET_MS = 8 * 3600_000;
 
@@ -91,97 +92,53 @@ export function addPendingAlert(queueFile, alert) {
  * ✅ Safe recovery from SIGKILL crashed processes
  */
 /**
- * ✅ Atomic mkdir lock: single shared arbitration point
- * - Lock dir: {file}.lock (single path, POSIX atomic mkdir)
- * - Metadata: {file}.lock/owner.json with {pid, token, at}
- * - Mutual exclusion: only one process can mkdir at a time
- * - SIGKILL recovery: check PID liveness from owner.json
- * - Atomic: mkdir is POSIX-guaranteed atomic operation
+ * ✅ proper-lockfile: mature OS-level lockfile implementation
+ * - Handles all edge cases: stale locks, crashes, concurrent access
+ * - Atomic operations with proper fencing
+ * - SIGKILL recovery with stale detection
+ * - Generation-safe: cannot delete wrong generation
  */
 function acquireLock(queueFile, timeoutMs = 5000) {
-  const lockDir = queueFile + '.lock';
-  const lockToken = randomBytes(16).toString('hex').slice(0, 8);
-  const ownerFile = path.join(lockDir, 'owner.json');
   const startTime = Date.now();
   
+  const options = {
+    stale: 10000, // 10s stale timeout
+    realpath: false, // Don't resolve symlinks
+    fs: fs
+  };
+  
+  // Retry loop (sync API doesn't support retries option)
   while (Date.now() - startTime < timeoutMs) {
     try {
-      // ✅ Atomic mkdir: POSIX guarantees only one succeeds
-      fs.mkdirSync(lockDir, { recursive: false });
-      
-      // ✅ Write owner metadata AFTER acquiring lock
-      const lockData = JSON.stringify({
-        pid: process.pid,
-        token: lockToken,
-        acquiredAt: Date.now(),
-        acquiredIso: new Date().toISOString()
-      });
-      fs.writeFileSync(ownerFile, lockData);
-      
-      return { lockDir, token: lockToken };
+      const release = properLockfile.lockSync(queueFile, options);
+      return { release, queueFile };
     } catch (e) {
-      if (e.code !== 'EEXIST') throw e;
-      
-      // Lock exists, check if owner alive
-      try {
-        const ownerData = fs.readFileSync(ownerFile, 'utf8');
-        const owner = JSON.parse(ownerData);
-        
-        let processAlive = false;
-        try {
-          process.kill(owner.pid, 0); // Check PID liveness
-          processAlive = true;
-        } catch {}
-        
-        if (!processAlive) {
-          // Owner dead, reclaim lock
-          try {
-            fs.rmSync(lockDir, { recursive: true, force: true });
-            continue; // Retry acquire
-          } catch {}
+      if (e.code === 'ELOCKED') {
+        // Lock held by another process, retry
+        const waitMs = Math.min(50 + Math.random() * 50, timeoutMs - (Date.now() - startTime));
+        if (waitMs > 0) {
+          const start = Date.now();
+          while (Date.now() - start < waitMs) {} // busy wait
         }
-        
-        // Owner alive, wait
-      } catch {
-        // Cannot read owner (corrupted/init), try to reclaim if old
-        try {
-          const stat = fs.statSync(lockDir);
-          if (Date.now() - stat.mtimeMs > 10000) {
-            fs.rmSync(lockDir, { recursive: true, force: true });
-            continue;
-          }
-        } catch {}
+        continue;
       }
-    }
-    
-    // Wait and retry
-    const jitter = Math.random() * 50;
-    const waitMs = Math.min(50 + jitter, timeoutMs - (Date.now() - startTime));
-    if (waitMs > 0) {
-      const start = Date.now();
-      while (Date.now() - start < waitMs) {} // busy wait
+      throw e;
     }
   }
+  
   throw new Error(`Failed to acquire lock for ${queueFile} after ${timeoutMs}ms`);
 }
 
 /**
- * Release atomic mkdir lock with token validation
- * ✅ Only delete our own lock (PID+token match)
+ * Release proper-lockfile lock
+ * ✅ proper-lockfile handles generation safety internally
  */
 function releaseLock(lockObj) {
-  const { lockDir, token } = lockObj;
+  const { release } = lockObj;
   try {
-    const ownerFile = path.join(lockDir, 'owner.json');
-    const ownerData = fs.readFileSync(ownerFile, 'utf8');
-    const owner = JSON.parse(ownerData);
-    
-    // Verify we still own the lock
-    if (owner.token === token && owner.pid === process.pid) {
-      fs.rmSync(lockDir, { recursive: true, force: true });
-    }
+    release();
   } catch (e) {
-    // Lock already gone or unreadable, ok
+    // Lock already released or error, ok
   }
 }
 

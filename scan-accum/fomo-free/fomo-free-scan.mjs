@@ -8,6 +8,7 @@
 // 2026-10-24: narrative-early smartMoney.scoreCurrentHoldersOnly — never bonus historical aggregates; Fomo 10-person watch lives at /workspace/meme-radar-run/fomo-trader-watch/.
 import fs from 'node:fs';
 import path from 'node:path';
+import properLockfile from 'proper-lockfile';
 import { washTemplateCheck } from '../../src/wash-template.mjs';
 import { spilloverConfig, isLeader, pickFollowers, spilloverBonus, hardFilterConfig, evaluateEvmFollower, volumeCheck, solBundleCheck } from '../../src/spillover.mjs';
 import { evaluateAgeWindow, ageWindowConfig } from '../../src/age-window.mjs';
@@ -69,32 +70,27 @@ function saveLedger(ledger) { ledger.log = ledger.log.slice(-200); fs.writeFileS
  * ✅ Atomic mkdir ledger lock (same as watcher)
  */
 function acquireLedgerLock(timeoutMs = 5000) {
-  const lockDir = LEDGER + '.lock';
-  const lockToken = Math.random().toString(36).slice(2, 10);
-  const ownerFile = path.join(lockDir, 'owner.json');
   const startTime = Date.now();
+  const options = { stale: 10000, realpath: false, fs: fs };
   while (Date.now() - startTime < timeoutMs) {
     try {
-      fs.mkdirSync(lockDir, { recursive: false });
-      const lockData = JSON.stringify({ pid: process.pid, token: lockToken, at: Date.now() });
-      fs.writeFileSync(ownerFile, lockData);
-      return { lockDir, token: lockToken };
+      const release = properLockfile.lockSync(LEDGER, options);
+      return { release, ledgerFile: LEDGER };
     } catch (e) {
-      if (e.code !== 'EEXIST') throw e;
-      try {
-        const ownerData = fs.readFileSync(ownerFile, 'utf8');
-        const owner = JSON.parse(ownerData);
-        let processAlive = false;
-        try { process.kill(owner.pid, 0); processAlive = true; } catch {}
-        if (!processAlive) { try { fs.rmSync(lockDir, { recursive: true, force: true }); continue; } catch {} }
-      } catch { try { const stat = fs.statSync(lockDir); if (Date.now() - stat.mtimeMs > 10000) { fs.rmSync(lockDir, { recursive: true, force: true }); continue; } } catch {} }
+      if (e.code === 'ELOCKED') {
+        const waitMs = Math.min(50 + Math.random() * 50, timeoutMs - (Date.now() - startTime));
+        if (waitMs > 0) {
+          const start = Date.now();
+          while (Date.now() - start < waitMs) {}
+        }
+        continue;
+      }
+      throw e;
     }
-    const waitMs = Math.min(50 + Math.random() * 50, timeoutMs - (Date.now() - startTime));
-    if (waitMs > 0) { const start = Date.now(); while (Date.now() - start < waitMs) {} }
   }
   throw new Error(`Failed to acquire ledger lock after ${timeoutMs}ms`);
 }
-function releaseLedgerLock(lockObj) { try { const ownerFile = path.join(lockObj.lockDir, 'owner.json'); const ownerData = fs.readFileSync(ownerFile, 'utf8'); const owner = JSON.parse(ownerData); if (owner.token === lockObj.token && owner.pid === process.pid) { fs.rmSync(lockObj.lockDir, { recursive: true, force: true }); } } catch {} }
+function releaseLedgerLock(lockObj) { try { lockObj.release(); } catch {} }
 
 async function fomo(pathq, estCost = 250) {
   // ✅ Atomic budget check with shared lock
