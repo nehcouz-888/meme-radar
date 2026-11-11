@@ -106,20 +106,13 @@ export function classifyTokenizable(raw, cfg = narrativeDailyConfig()) {
 export function filterTokenizableEvents(events, cfg = narrativeDailyConfig(), { now = Date.now() } = {}) {
   if (!cfg.enabled) return [];
   
-  // ✅ Fix (a): TTL筛选 - 只保留最近N天的事件
-  const ttlMs = cfg.ttlDays * 24 * 3600 * 1000;
-  const cutoff = now - ttlMs;
-  
   const allowSrc = new Set(cfg.sources);
   const seen = new Map();
   
+  // ✅ Step 1: 聚合所有事件，跟踪first_seen/last_seen（不过滤TTL）
   for (const e of events || []) {
     const src = String(e.source || '').toLowerCase();
     if (allowSrc.size && !allowSrc.has(src)) continue;
-    
-    // ✅ Fix (a): TTL检查 - 过滤旧事件
-    const eventAt = e.at ? new Date(e.at).getTime() : now;
-    if (eventAt < cutoff) continue;  // 跳过过期事件
     
     const raw = e.title || e.name || e.text || e.keyword || '';
     const c = classifyTokenizable(raw, cfg);
@@ -144,15 +137,20 @@ export function filterTokenizableEvents(events, cfg = narrativeDailyConfig(), { 
       row.last_seen = row.at;
       seen.set(key, row);
     } else {
-      // ✅ Fix (a): 合并来源，更新last_seen，保留first_seen
+      // ✅ Fix (a): 合并来源，更新first_seen和last_seen
       const sources = new Set(String(prev.sources || prev.source).split('+').filter(Boolean));
       sources.add(src);
       prev.sources = [...sources].join('+');
       
-      // 更新last_seen
-      const prevAt = new Date(prev.last_seen || prev.at).getTime();
+      // 更新first_seen（取最早）和last_seen（取最晚）
+      const prevFirst = new Date(prev.first_seen || prev.at).getTime();
+      const prevLast = new Date(prev.last_seen || prev.at).getTime();
       const currAt = new Date(row.at).getTime();
-      if (currAt > prevAt) {
+      
+      if (currAt < prevFirst) {
+        prev.first_seen = row.at;
+      }
+      if (currAt > prevLast) {
         prev.last_seen = row.at;
       }
       
@@ -169,9 +167,17 @@ export function filterTokenizableEvents(events, cfg = narrativeDailyConfig(), { 
   
   const list = [...seen.values()].map(x => ({ ...x, sources: x.sources || x.source }));
   
-  // ✅ Fix (a): 排序优先最新事件，而非历史最佳rank
+  // ✅ Step 2: TTL筛选 - 只保留last_seen在TTL内的项目
+  const ttlMs = cfg.ttlDays * 24 * 3600 * 1000;
+  const cutoff = now - ttlMs;
+  const fresh = list.filter(item => {
+    const lastSeenTime = new Date(item.last_seen || item.at).getTime();
+    return lastSeenTime >= cutoff;
+  });
+  
+  // ✅ Step 3: 排序优先最新事件，而非历史最佳rank
   // 先按last_seen降序（最新的在前），再按rank升序
-  list.sort((a, b) => {
+  fresh.sort((a, b) => {
     const aTime = new Date(a.last_seen || a.at).getTime();
     const bTime = new Date(b.last_seen || b.at).getTime();
     if (bTime !== aTime) return bTime - aTime;  // 最新的在前
@@ -179,7 +185,7 @@ export function filterTokenizableEvents(events, cfg = narrativeDailyConfig(), { 
   });
   
   // ✅ Fix (b): 不填充到40，允许零候选
-  return list.slice(0, cfg.maxCandidates);
+  return fresh.slice(0, cfg.maxCandidates);
 }
 
 export function appendHotEvent(file, event) {
@@ -205,7 +211,6 @@ export function readHotEvents(file, { limit = 2000 } = {}) {
 }
 
 export function formatNarrativeDigest(candidates) {
-  // ✅ 日筛摘要不加A级disclaimer（A级在真实出口）
   const lines = [
     '叙事日筛 (可代币化候选，微博+X 热)',
     `共 ${candidates.length} 条`,
@@ -223,6 +228,11 @@ export function formatNarrativeDigest(candidates) {
     });
   }
   
-  lines.push('', '仅研究提醒，不自动交易。可对同名低市值币做 SOL/BSC 检索。');
+  // ✅ A级disclaimer：叙事匹配非链上安全
+  lines.push('');
+  lines.push('A级：仅叙事匹配，非链上安全验证');
+  lines.push('仿盘不共享主币评级');
+  lines.push('');
+  lines.push('仅研究提醒，不自动交易。可对同名低市值币做 SOL/BSC 检索。');
   return lines.join('\n');
 }

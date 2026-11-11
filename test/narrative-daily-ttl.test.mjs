@@ -151,7 +151,7 @@ test('filterTokenizableEvents: sorts by last_seen (freshness), not historical ra
       source: 'x_hot',
       title: 'OLDCOIN',
       rank: 1,  // 历史最佳rank
-      at: '2026-11-08T12:00:00Z'  // 较旧
+      at: '2026-11-10T14:00:00Z'  // 较旧但在TTL内
     },
     {
       source: 'x_hot',
