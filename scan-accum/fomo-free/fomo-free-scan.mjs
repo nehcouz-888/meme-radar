@@ -161,15 +161,24 @@ async function fomo(pathq, estCost = 250) {
       ledger.log.push({ at: STAMP, path: pathq.split('?')[0], cost, remaining: rem, ok: !!r.ok });
       saveLedger(ledger);
     } catch (settleErr) {
-      // Conservative: if settle save fails after fetch, convert reserved amount to spent
-      // to prevent permanent budget lockup. Still holding lock, re-read to get fresh state.
+      // Conservative: if settle save fails after fetch, convert actual incurred cost to spent
+      // to prevent permanent budget lockup. Use max(reserved, actual) to never truncate real cost.
+      // Still holding lock, re-read to get fresh state.
       const cleanupLedger = readLedger();
       if (cleanupLedger.reservations[reservationId]) {
         const reservedAmount = cleanupLedger.reservations[reservationId].amount;
+        const actualCost = Math.max(reservedAmount, cost);
         delete cleanupLedger.reservations[reservationId];
-        cleanupLedger.spent += reservedAmount;
-        cleanupLedger.log.push({ at: STAMP, path: pathq.split('?')[0], cost: reservedAmount, remaining: null, ok: false, settleFailure: true });
-        try { saveLedger(cleanupLedger); } catch {}
+        cleanupLedger.spent += actualCost;
+        cleanupLedger.log.push({ at: STAMP, path: pathq.split('?')[0], cost: actualCost, remaining: null, ok: false, settleFailure: true });
+        try { 
+          saveLedger(cleanupLedger); 
+        } catch (cleanupErr) {
+          // If cleanup save also fails, log observable failure and rethrow.
+          // Do NOT silently leave reservation occupying budget.
+          console.error(`[SETTLE_CLEANUP_FAILURE] path=${pathq} reserved=${reservedAmount} actual=${cost} cleanup_save_failed reservation_id=${reservationId}`);
+          throw new Error(`Settle and cleanup both failed: ${settleErr.message}; cleanup: ${cleanupErr.message}`);
+        }
       }
       throw settleErr;
     }

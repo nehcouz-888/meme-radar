@@ -36,7 +36,7 @@ All entry points (queue, watcher, scanner) are packaged inside `meme-radar-branc
 **Setup:**
 ```bash
 cd /workspace/meme-radar-run
-tar -xzf meme-radar-v16.tar.gz  # Extracts meme-radar-branch/ with all components
+tar -xzf meme-radar-v17.tar.gz  # Extracts meme-radar-branch/ with all components
 ```
 
 All three entry points share `meme-radar-branch/node_modules/` via Node.js's module resolution.
