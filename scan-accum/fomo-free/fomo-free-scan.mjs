@@ -73,6 +73,24 @@ function readLedger() {
   } catch {} 
   return { month: monthKey(), spent: 0, calls: 0, lastRemaining: null, log: [], reservations: {} }; 
 }
+
+// Reclaim orphaned reservations (dead process or >5min timeout)
+// Call this while holding the ledger lock, before budget check
+function reclaimOrphans(ledger) {
+  const now = Date.now();
+  let reclaimed = false;
+  for (const [id, res] of Object.entries(ledger.reservations)) {
+    const isDead = (() => { try { process.kill(res.pid, 0); return false; } catch { return true; } })();
+    const isTimeout = (now - res.at) > 5 * 60 * 1000;
+    if (isDead || isTimeout) {
+      ledger.spent += res.amount;
+      ledger.log.push({ at: now, path: res.path, cost: res.amount, remaining: null, ok: false, orphanReclaim: true, reason: isDead ? 'dead_pid' : 'timeout' });
+      delete ledger.reservations[id];
+      reclaimed = true;
+    }
+  }
+  return reclaimed;
+}
 const fomoRun = { calls: 0, credits: 0, remainingBefore: null, remainingAfter: null, skipped: [] };
 function saveLedger(ledger) { ledger.log = ledger.log.slice(-200); fs.writeFileSync(LEDGER + '.tmp', JSON.stringify(ledger, null, 1)); fs.renameSync(LEDGER + '.tmp', LEDGER); }
 
@@ -120,6 +138,9 @@ async function fomo(pathq, estCost = 250) {
   try {
     ledger = readLedger();
     
+    // Reclaim orphaned reservations from failed processes
+    const hadOrphans = reclaimOrphans(ledger);
+    
     // Calculate total reserved (including watcher reservations)
     let totalReserved = 0;
     for (const resId in ledger.reservations) {
@@ -131,7 +152,7 @@ async function fomo(pathq, estCost = 250) {
       return null;
     }
     
-    // Reserve
+    // Reserve (also persists any reclaimed orphans)
     ledger.reservations[reservationId] = { amount: estCost, pid: process.pid, at: Date.now(), path: pathq.split('?')[0] };
     saveLedger(ledger);
   } finally {
