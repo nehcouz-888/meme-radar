@@ -151,7 +151,7 @@ export function discoveryScreen(row, config, nowSec = Date.now() / 1000) {
   else if (!(ageSec >= config.minAgeSec)) reasons.push('创建不足5分钟');
   else if (ageSec > config.maxAgeSec) reasons.push('超过观察年龄上限');
   if (mcValue === null) reasons.push('市值数据未知');
-  else if (!(mc >= config.discoveryMinMarketCap && mc <= config.discoveryMaxMarketCap)) reasons.push('市值不在发现范围');
+  // Market cap is for tiering/scoring only, NOT hard exclusion (per 2026-11-12 audit acceptance)
   if (liquidityValue === null) reasons.push('流动性数据未知');
   else if (liquidity < config.minLiquidity) reasons.push('流动性不足');
   if (rug === null) reasons.push('rug风险数据未知');
@@ -167,13 +167,14 @@ export function discoveryScreen(row, config, nowSec = Date.now() / 1000) {
     else if (honeypot) reasons.push('检测到貔貅盘');
   }
   const priorityBand = mc >= config.priorityMinMarketCap && mc <= config.priorityMaxMarketCap;
+  const mcTier = mc >= 20e6 ? 'high' : mc >= 1e6 ? 'mid' : mc >= 100e3 ? 'low' : mc >= 1e3 ? 'micro' : 'nano';
   const volume = num(first(row.volume_1h, row.volume, row.volume_24h));
   const holders = num(row.holder_count);
   const signals = discoverySignalView(row);
   const score = (priorityBand ? 35 : 10) + Math.min(25, liquidity / 1000) + Math.min(20, volume / 1000)
     + Math.min(20, holders / 10) + signals.scoreAdjustment;
   return {
-    pass: reasons.length === 0, reasons, priorityBand, score, mc, liquidity, ageSec, signals,
+    pass: reasons.length === 0, reasons, priorityBand, mcTier, score, mc, liquidity, ageSec, signals,
     unknownFields: [
       mcValue === null ? 'marketCap' : null,
       createdValue === null ? 'createdAt' : null,
@@ -325,16 +326,15 @@ export function marketBehaviorScreen({ discovery = {}, info = {}, holders = [], 
   const liveSmartHolding = tagEvidence.smartWallets;
   const liveRenownedHolding = tagEvidence.renownedWallets;
   
-  // Use live count when holder sample is adequate; otherwise fall back to aggregate but mark as fallback.
-  const smartMoneySource = holderSampleAdequate ? 'live_holders' : aggregateSmart !== null ? 'aggregate_fallback' : 'unknown';
-  const smartWallets = holderSampleAdequate ? liveSmartHolding 
-    : aggregateSmart !== null ? aggregateSmart 
-    : liveSmartHolding > 0 ? liveSmartHolding : null;
+  // Only use live holder sample when adequate (>=3). Incomplete/missing samples score 0, NOT aggregate fallback.
+  // Historical aggregate counts (smart_degen_count) are for display/risk only, never for scoring.
+  const smartMoneySource = holderSampleAdequate ? 'live_holders' 
+    : holderSampleSize === 0 ? 'sample_missing' 
+    : 'sample_incomplete';
+  const smartWallets = holderSampleAdequate ? liveSmartHolding : 0;
   
-  const renownedMoneySource = holderSampleAdequate ? 'live_holders' : aggregateRenowned !== null ? 'aggregate_fallback' : 'unknown';
-  const renownedWallets = holderSampleAdequate ? liveRenownedHolding
-    : aggregateRenowned !== null ? aggregateRenowned
-    : liveRenownedHolding > 0 ? liveRenownedHolding : null;
+  const renownedMoneySource = smartMoneySource;
+  const renownedWallets = holderSampleAdequate ? liveRenownedHolding : 0;
 
   const holderCount = optionalCount(first(info.holder_count, info.stat?.holder_count, discovery.holder_count));
   const swaps5m = optionalCount(first(price.swaps_5m, discovery.swaps_5m, discovery.swaps));
@@ -410,18 +410,20 @@ export function marketBehaviorScreen({ discovery = {}, info = {}, holders = [], 
   const warnings = [
     creatorLaunchCount !== null && creatorLaunchCount >= 10 ? `创建者历史发币${creatorLaunchCount}个` : null,
     creatorStatus === 'UNKNOWN' ? '创建者当前持币状态未知' : null,
-    smartMoneySource === 'aggregate_fallback' && aggregateSmart !== null && liveSmartHolding < aggregateSmart 
-      ? `聪明钱数据来源：历史统计${aggregateSmart}个（当前持仓样本仅${liveSmartHolding}个，可能已退出）` : null
+    smartMoneySource === 'sample_missing' ? '持仓样本缺失，聪明钱计分为0' 
+      : smartMoneySource === 'sample_incomplete' && holderSampleSize > 0 
+        ? `持仓样本不完整（仅${holderSampleSize}个，需>=3），聪明钱计分为0` 
+        : null,
+    aggregateSmart !== null && aggregateSmart > 0 && smartMoneySource !== 'live_holders'
+      ? `历史统计${aggregateSmart}个聪明钱（仅供参考，未计分）` : null
   ].filter(Boolean);
   const strengths = [
-    smartWallets !== null && smartWallets >= 3 && smartMoneySource === 'live_holders'
+    smartWallets >= 3 && smartMoneySource === 'live_holders'
       ? `${smartWallets}个聪明钱仍持仓，形成多钱包验证` : null,
-    smartWallets !== null && smartWallets >= 3 && smartMoneySource !== 'live_holders'
-      ? `${smartWallets}个聪明钱钱包形成多钱包验证` : null,
     smartWallets === 2 && smartMoneySource === 'live_holders' 
       ? `2个聪明钱仍持仓，只有轻度加分` : null,
-    smartWallets === 2 && smartMoneySource !== 'live_holders'
-      ? `2个聪明钱钱包，只有轻度加分` : null
+    smartWallets === 0 && holderSampleSize >= 3 && smartMoneySource === 'live_holders'
+      ? '已验证当前无聪明钱持仓（样本完整）' : null
   ].filter(Boolean);
   const unknownFields = [
     smartWallets === null ? 'marketBehavior.smartWallets' : null,
@@ -571,9 +573,12 @@ export function computeEmbryonicScore({ discovery, info, audit, nowMs = Date.now
   const liveSmartHolding = tagEvidence.smartWallets;
   const liveRenownedHolding = tagEvidence.renownedWallets;
   
-  const smartMoneySource = holderSampleAdequate ? 'live_holders' : aggregateSmart > 0 ? 'aggregate_fallback' : 'unknown';
-  const smartWallets = holderSampleAdequate ? liveSmartHolding : aggregateSmart;
-  const renownedWallets = holderSampleAdequate ? liveRenownedHolding : aggregateRenowned;
+  // Only live-verified adequate samples score. Incomplete/missing samples score 0, NOT aggregate fallback.
+  const smartMoneySource = holderSampleAdequate ? 'live_holders' 
+    : holderSampleSize === 0 ? 'sample_missing' 
+    : 'sample_incomplete';
+  const smartWallets = holderSampleAdequate ? liveSmartHolding : 0;
+  const renownedWallets = holderSampleAdequate ? liveRenownedHolding : 0;
   
   const holderCount = optionalCount(first(info?.holder_count, info?.stat?.holder_count, discovery.holder_count)) ?? 0;
   const volume5m = optionalNonNegativeNumber(first(info?.price?.volume_5m, discovery.volume_5m, discovery.volume)) ?? 0;

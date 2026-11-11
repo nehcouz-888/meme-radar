@@ -537,14 +537,24 @@ if (SPILL.enabled) {
   log(`spillover: leaders=${spillLog.length} followers=${spillLog.reduce((a, e) => a + e.followers.length, 0)}`);
   scored = [...cands.values()].map(c => score(c, smart));
 }
-// Live verification must cover ALL candidates that would receive smart-money scoring points,
-// not just the initial top N. Verify any candidate with historical holders or initial score > threshold.
+// Live verification priority: candidates with more historical holders have higher potential score gain.
+// Sort by historical count DESC (not pre-score) to ensure high-potential candidates are verified first,
+// even if their initial score is lower. This prevents missing candidates like MISS (hist 3) that would
+// enter watch tier (score 60) after live verification (+18 points).
 const needsVerification = scored.filter(x => {
   if (x.status === 'HARD_REJECT') return false;
   const k = x.chain === 'sol' ? x.address : x.address.toLowerCase();
   const historicalHolders = smart.holding.get(k);
   return historicalHolders && historicalHolders.size > 0;
-}).sort((a, b) => b.score - a.score);
+}).sort((a, b) => {
+  const kA = a.chain === 'sol' ? a.address : a.address.toLowerCase();
+  const kB = b.chain === 'sol' ? b.address : b.address.toLowerCase();
+  const hA = smart.holding.get(kA)?.size || 0;
+  const hB = smart.holding.get(kB)?.size || 0;
+  // Primary: historical holder count DESC (potential score gain)
+  // Secondary: current score DESC (tie-breaker)
+  return hB !== hA ? hB - hA : b.score - a.score;
+});
 
 for (const c of needsVerification.slice(0, HOLDERS_MAX)) {
   const b = await fomo(`/token/${c.address}/holders${c.chain === 'sol' ? `?networkId=${SOL_NET}` : ''}`);
