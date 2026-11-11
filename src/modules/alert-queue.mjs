@@ -90,15 +90,65 @@ export function addPendingAlert(queueFile, alert) {
  * ✅ Prevents healthy long operations from lock steal
  * ✅ Safe recovery from SIGKILL crashed processes
  */
+/**
+ * ✅ PID-based lock: filename encodes owner identity
+ * - Lock file: {file}.lock.{pid}.{token}
+ * - Atomic ownership: file creation = ownership established
+ * - No age check: only PID liveness matters
+ * - SIGKILL recovery: dead PID → reclaimable
+ * - Old owner cannot delete new owner lock (different filename)
+ */
 function acquireLock(queueFile, timeoutMs = 5000) {
-  const lockFile = queueFile + '.lock';
-  const lockToken = randomBytes(16).toString('hex');
+  const lockToken = randomBytes(16).toString('hex').slice(0, 8);
+  const myLockFile = `${queueFile}.lock.${process.pid}.${lockToken}`;
+  const lockBasename = `${queueFile}.lock.`;
   const startTime = Date.now();
   
   while (Date.now() - startTime < timeoutMs) {
+    // Scan existing locks
     try {
-      // Atomic exclusive creation
-      const fd = fs.openSync(lockFile, 'wx');
+      const lockDir = path.dirname(queueFile);
+      const lockPattern = path.basename(queueFile) + '.lock.';
+      const existingLocks = fs.readdirSync(lockDir).filter(f => f.startsWith(lockPattern));
+      
+      for (const lockName of existingLocks) {
+        const lockPath = path.join(lockDir, lockName);
+        
+        // Parse PID from filename: {file}.lock.{pid}.{token}
+        const match = lockName.match(/\.lock\.(\d+)\./);
+        if (!match) {
+          // Malformed lock, remove if old
+          try {
+            const stat = fs.statSync(lockPath);
+            if (Date.now() - stat.mtimeMs > 10000) {
+              fs.unlinkSync(lockPath);
+            }
+          } catch {}
+          continue;
+        }
+        
+        const ownerPid = parseInt(match[1], 10);
+        
+        // Check if owner process alive
+        let processAlive = false;
+        try {
+          process.kill(ownerPid, 0); // signal 0: check existence
+          processAlive = true;
+        } catch {}
+        
+        if (!processAlive) {
+          // Owner dead, reclaim
+          try {
+            fs.unlinkSync(lockPath);
+          } catch {}
+        }
+        // If alive, respect the lock (no age check)
+      }
+    } catch {}
+    
+    // Try to create our lock
+    try {
+      const fd = fs.openSync(myLockFile, 'wx');
       const lockData = JSON.stringify({
         pid: process.pid,
         token: lockToken,
@@ -107,91 +157,41 @@ function acquireLock(queueFile, timeoutMs = 5000) {
       });
       fs.writeSync(fd, lockData);
       fs.closeSync(fd);
-      return { lockFile, token: lockToken };
+      return { lockFile: myLockFile, token: lockToken };
     } catch (e) {
       if (e.code !== 'EEXIST') throw e;
-      
-      // Check if lock owner still alive and lock is fresh
-      try {
-        const stat = fs.statSync(lockFile);
-        
-        // ✅ 0-byte lock safety: distinguish healthy initialization vs crashed writer
-        // MUST NOT immediately delete 0-byte: healthy writer may be writing metadata
-        // Only reclaim if: (1) old enough to rule out init (2) owner dead
-        if (stat.size === 0) {
-          const lockAge = Date.now() - stat.mtimeMs;
-          // ✅ Initialization window: 100ms grace period for healthy writer
-          // Beyond 100ms, either crash or writer stalled -> reclaim
-          if (lockAge > 100) {
-            fs.unlinkSync(lockFile);
-            continue;
-          }
-          // ✅ Within init window: wait and retry (respect healthy owner)
-          // Fall through to retry delay below
-        } else {
-          // Non-empty lock: parse and validate
-          const lockContent = fs.readFileSync(lockFile, 'utf8');
-          let lockInfo;
-          try {
-            lockInfo = JSON.parse(lockContent);
-          } catch {
-            // ✅ Invalid JSON: reclaim if old enough
-            const lockAge = Date.now() - stat.mtimeMs;
-            if (lockAge > 1000) {
-              fs.unlinkSync(lockFile);
-              continue;
-            }
-          }
-          
-          if (lockInfo) {
-            const lockAge = Date.now() - lockInfo.acquiredAt;
-            // Check if owner process still exists
-            let processAlive = false;
-            try {
-              process.kill(lockInfo.pid, 0); // signal 0 checks existence
-              processAlive = true;
-            } catch {}
-            
-            if (!processAlive && lockAge > 1000) {
-              // Process dead > 1s, safe to reclaim
-              fs.unlinkSync(lockFile);
-              continue;
-            }
-            
-            if (processAlive && lockAge > 30000) {
-              // Process alive but lock > 30s old, still respect it (healthy long op)
-              // Only timeout our own wait, don't steal
-            }
-          }
-        }
-      } catch {}
-      
-      // Wait and retry
-      const jitter = Math.random() * 50;
-      const waitMs = Math.min(50 + jitter, timeoutMs - (Date.now() - startTime));
-      if (waitMs > 0) {
-        const start = Date.now();
-        while (Date.now() - start < waitMs) {} // busy wait
-      }
+      // Lock exists (ours or another), wait and retry
+    }
+    
+    // Wait and retry
+    const jitter = Math.random() * 50;
+    const waitMs = Math.min(50 + jitter, timeoutMs - (Date.now() - startTime));
+    if (waitMs > 0) {
+      const start = Date.now();
+      while (Date.now() - start < waitMs) {} // busy wait
     }
   }
   throw new Error(`Failed to acquire lock for ${queueFile} after ${timeoutMs}ms`);
 }
 
 /**
- * Release file lock with token validation
- * ✅ Prevents deleting another process's lock
+ * Release PID-based lock with token validation
+ * ✅ Only delete our own lock file (PID+token match)
+ * ✅ Old owner cannot delete new owner lock (different filename)
  */
 function releaseLock(lockObj) {
   const { lockFile, token } = lockObj;
   try {
-    // Verify we still own the lock
+    // PID-based lock: ensure filename contains our PID
+    if (!lockFile.includes(`.lock.${process.pid}.`)) {
+      return; // Not our lock
+    }
+    
+    // Verify we still own the lock (token match)
     const lockContent = fs.readFileSync(lockFile, 'utf8');
     const lockInfo = JSON.parse(lockContent);
-    if (lockInfo.token === token) {
+    if (lockInfo.token === token && lockInfo.pid === process.pid) {
       fs.unlinkSync(lockFile);
-    } else {
-      console.error(`Lock ${lockFile} token mismatch, not deleting (stolen or expired)`);
     }
   } catch (e) {
     // Lock file already gone or unreadable, ok
