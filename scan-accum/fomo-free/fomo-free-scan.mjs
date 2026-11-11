@@ -104,10 +104,11 @@ function releaseLedgerLock(lockObj) { try { try { fsExt.flockSync(lockObj.fd, 'u
 async function fomo(pathq, estCost = 250) {
   // ✅ Atomic budget check with shared lock
   const reservationId = `scanner-${process.pid}-${Date.now()}`;
+  let ledger;
   const ledgerLock = acquireLedgerLock();
   
   try {
-    let ledger = readLedger();
+    ledger = readLedger();
     
     // Calculate total reserved (including watcher reservations)
     let totalReserved = 0;
@@ -369,6 +370,7 @@ const SMART_HANDLES = new Set();
 try { for (const e of JSON.parse(fs.readFileSync(path.join(ROOT, 'config/fomo-gmgn-kol-bridge.json'), 'utf8')).entries || []) if (e.fomoHandle && e.enabled !== false) SMART_HANDLES.add(String(e.fomoHandle).toLowerCase()); } catch {}
 // ---------- main ----------
 const t0 = Date.now();
+const ledger = readLedger();
 log(`start chains=${CHAINS} budget=${MONTHLY_BUDGET} ledgerSpent=${ledger.spent} holdersMax=${HOLDERS_MAX} statsMax=${STATS_MAX}`);
 const smart = await fomoSmart();
 for (const t of smart.traders) if (t.handle) SMART_HANDLES.add(t.handle.toLowerCase());
