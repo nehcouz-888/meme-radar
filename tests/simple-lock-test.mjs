@@ -10,7 +10,10 @@ import { spawn } from 'child_process';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const QUEUE_MODULE = path.join(__dirname, '../src/modules/alert-queue.mjs');
+// ✅ Support both workspace and package layouts
+const QUEUE_MODULE = fs.existsSync(path.join(__dirname, '../src/modules/alert-queue.mjs'))
+  ? path.join(__dirname, '../src/modules/alert-queue.mjs')
+  : path.join(__dirname, '../meme-radar-branch/src/modules/alert-queue.mjs');
 
 console.log('=== Simple Lock Test ===\n');
 
