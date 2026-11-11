@@ -76,6 +76,7 @@ function readLedger() {
 
 // Reclaim orphaned reservations (dead process or >5min timeout)
 // Call this while holding the ledger lock, before budget check
+// Use actualCost from failure log if available, otherwise reservation.amount
 function reclaimOrphans(ledger) {
   const now = Date.now();
   let reclaimed = false;
@@ -83,8 +84,31 @@ function reclaimOrphans(ledger) {
     const isDead = (() => { try { process.kill(res.pid, 0); return false; } catch { return true; } })();
     const isTimeout = (now - res.at) > 5 * 60 * 1000;
     if (isDead || isTimeout) {
-      ledger.spent += res.amount;
-      ledger.log.push({ at: now, path: res.path, cost: res.amount, remaining: null, ok: false, orphanReclaim: true, reason: isDead ? 'dead_pid' : 'timeout' });
+      // Check for failure log with actual incurred cost
+      const failureLogPath = path.join(STATE, `.ledger-failure-${id}.json`);
+      let costToReclaim = res.amount;
+      let failureLogFound = false;
+      try {
+        const failureLog = JSON.parse(fs.readFileSync(failureLogPath, 'utf8'));
+        if (failureLog.actualCost != null) {
+          costToReclaim = failureLog.actualCost;
+          failureLogFound = true;
+        }
+        // Clean up failure log after reading
+        try { fs.unlinkSync(failureLogPath); } catch {}
+      } catch {}
+      
+      ledger.spent += costToReclaim;
+      ledger.log.push({ 
+        at: now, 
+        path: res.path, 
+        cost: costToReclaim, 
+        remaining: null, 
+        ok: false, 
+        orphanReclaim: true, 
+        reason: isDead ? 'dead_pid' : 'timeout',
+        ...(failureLogFound && { actualCostRecovered: true })
+      });
       delete ledger.reservations[id];
       reclaimed = true;
     }
@@ -195,8 +219,21 @@ async function fomo(pathq, estCost = 250) {
         try { 
           saveLedger(cleanupLedger); 
         } catch (cleanupErr) {
-          // If cleanup save also fails, log observable failure and rethrow.
-          // Do NOT silently leave reservation occupying budget.
+          // If cleanup save also fails, persist actualCost to a failure log so successor can recover it.
+          // This provides a durable record even when the main ledger cannot be written.
+          const failureLogPath = path.join(STATE, `.ledger-failure-${reservationId}.json`);
+          try {
+            fs.writeFileSync(failureLogPath, JSON.stringify({
+              reservationId,
+              pid: process.pid,
+              at: STAMP,
+              path: pathq.split('?')[0],
+              reservedAmount,
+              actualCost,
+              reason: 'dual_save_failure'
+            }));
+          } catch {}
+          
           console.error(`[SETTLE_CLEANUP_FAILURE] path=${pathq} reserved=${reservedAmount} actual=${cost} cleanup_save_failed reservation_id=${reservationId}`);
           throw new Error(`Settle and cleanup both failed: ${settleErr.message}; cleanup: ${cleanupErr.message}`);
         }
