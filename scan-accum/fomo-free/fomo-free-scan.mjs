@@ -8,7 +8,7 @@
 // 2026-10-24: narrative-early smartMoney.scoreCurrentHoldersOnly — never bonus historical aggregates; Fomo 10-person watch lives at /workspace/meme-radar-run/fomo-trader-watch/.
 import fs from 'node:fs';
 import path from 'node:path';
-import properLockfile from 'proper-lockfile';
+import fsExt from 'fs-ext';
 import { washTemplateCheck } from '../../src/wash-template.mjs';
 import { spilloverConfig, isLeader, pickFollowers, spilloverBonus, hardFilterConfig, evaluateEvmFollower, volumeCheck, solBundleCheck } from '../../src/spillover.mjs';
 import { evaluateAgeWindow, ageWindowConfig } from '../../src/age-window.mjs';
@@ -70,28 +70,36 @@ function saveLedger(ledger) { ledger.log = ledger.log.slice(-200); fs.writeFileS
  * ✅ Atomic mkdir ledger lock (same as watcher)
  */
 function acquireLedgerLock(timeoutMs = 5000) {
+  const lockPath = LEDGER + '.lock';
   const startTime = Date.now();
-  let compromised = false;
-  const options = { stale: 10000, update: 4000, realpath: false, fs: fs, onCompromised: (err) => { compromised = true; console.error(`Ledger lock compromised:`, err.message); throw err; } };
   while (Date.now() - startTime < timeoutMs) {
     try {
-      const release = properLockfile.lockSync(LEDGER, options);
-      return { release, ledgerFile: LEDGER, compromised: () => compromised };
-    } catch (e) {
-      if (e.code === 'ELOCKED') {
-        const waitMs = Math.min(50 + Math.random() * 50, timeoutMs - (Date.now() - startTime));
-        if (waitMs > 0) {
-          const start = Date.now();
-          while (Date.now() - start < waitMs) {}
+      const fd = fs.openSync(lockPath, 'w');
+      try {
+        fsExt.flockSync(fd, 'ex');
+        const info = JSON.stringify({ pid: process.pid, at: Date.now() });
+        fs.writeSync(fd, info);
+        fs.fsyncSync(fd);
+        return { fd, lockPath };
+      } catch (lockErr) {
+        fs.closeSync(fd);
+        if (lockErr.code === 'EAGAIN' || lockErr.code === 'EWOULDBLOCK') {
+          const waitMs = Math.min(50 + Math.random() * 50, timeoutMs - (Date.now() - startTime));
+          if (waitMs > 0) {
+            const start = Date.now();
+            while (Date.now() - start < waitMs) {}
+          }
+          continue;
         }
-        continue;
+        throw lockErr;
       }
+    } catch (e) {
       throw e;
     }
   }
-  throw new Error(`Failed to acquire ledger lock after ${timeoutMs}ms`);
+  throw new Error(`Failed to acquire ledger flock after ${timeoutMs}ms`);
 }
-function releaseLedgerLock(lockObj) { try { lockObj.release(); } catch (e) { console.error(`Ledger lock release error:`, e.message); } }
+function releaseLedgerLock(lockObj) { try { try { fsExt.flockSync(lockObj.fd, 'un'); } catch {} fs.closeSync(lockObj.fd); } catch (e) { console.error(`Ledger lock release error:`, e.message); } }
 
 async function fomo(pathq, estCost = 250) {
   // ✅ Atomic budget check with shared lock

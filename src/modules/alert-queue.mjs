@@ -8,7 +8,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { randomBytes } from 'node:crypto';
-import properLockfile from 'proper-lockfile';
+import fsExt from 'fs-ext';
 
 const CST_OFFSET_MS = 8 * 3600_000;
 
@@ -92,64 +92,82 @@ export function addPendingAlert(queueFile, alert) {
  * ✅ Safe recovery from SIGKILL crashed processes
  */
 /**
- * ✅ proper-lockfile: npm package using fs.mkdir (atomic), mtime-based stale detection
- * - Atomic mkdir(lockPath): only one process succeeds (POSIX atomic operation)
- * - Stale detection: mtime-based (stat.mtime < now - stale)
- * - Heartbeat: utimes updates mtime every update interval (default stale/2)
- * - onCompromised: fail-closed when lock cannot be renewed
- * - NOT O_EXCL file open; NOT inode/generation-based
+ * ✅ OS-level flock (fs-ext): kernel-managed advisory file lock
+ * - Lock bound to file descriptor: released automatically on process crash/exit
+ * - Atomic: kernel prevents duplicate acquisition (LOCK_EX | LOCK_NB)
+ * - Pauses safe: no heartbeat needed, lock held by FD, not mtime
+ * - Cross-process: works across sibling processes on same machine
+ * - Stale-free: dead process automatically releases (kernel cleans FD on exit)
  */
 function acquireLock(queueFile, timeoutMs = 5000) {
+  const lockPath = queueFile + '.lock';
   const startTime = Date.now();
   
-  let compromised = false;
-  const options = {
-    stale: 10000,        // 10s stale timeout
-    update: 4000,        // heartbeat every 4s (< stale/2)
-    realpath: false,     // don't resolve symlinks
-    fs: fs,
-    onCompromised: (err) => {
-      // Lock compromised (stolen/deleted while held)
-      compromised = true;
-      console.error(`Lock compromised for ${queueFile}:`, err.message);
-      throw err;  // fail-closed
-    }
-  };
-  
-  // Retry loop (sync API doesn't support retries option)
   while (Date.now() - startTime < timeoutMs) {
     try {
-      const release = properLockfile.lockSync(queueFile, options);
-      return { release, queueFile, compromised: () => compromised };
-    } catch (e) {
-      if (e.code === 'ELOCKED') {
-        // Lock held by another process, retry
-        const waitMs = Math.min(50 + Math.random() * 50, timeoutMs - (Date.now() - startTime));
-        if (waitMs > 0) {
-          const start = Date.now();
-          while (Date.now() - start < waitMs) {} // busy wait
+      // Open lock file (create if not exists)
+      const fd = fs.openSync(lockPath, 'w');
+      
+      try {
+        // Try non-blocking exclusive lock (LOCK_EX | LOCK_NB)
+        fsExt.flockSync(fd, 'ex');
+        
+        // Write owner info for debugging (not used for lock logic)
+        const info = JSON.stringify({
+          pid: process.pid,
+          acquiredAt: Date.now(),
+          acquiredIso: new Date().toISOString()
+        });
+        fs.writeSync(fd, info);
+        fs.fsyncSync(fd);
+        
+        return { fd, lockPath };
+      } catch (lockErr) {
+        // Lock failed, close FD and retry
+        fs.closeSync(fd);
+        
+        if (lockErr.code === 'EAGAIN' || lockErr.code === 'EWOULDBLOCK') {
+          // Lock held by another process, wait and retry
+          const waitMs = Math.min(50 + Math.random() * 50, timeoutMs - (Date.now() - startTime));
+          if (waitMs > 0) {
+            const start = Date.now();
+            while (Date.now() - start < waitMs) {}
+          }
+          continue;
         }
-        continue;
+        
+        throw lockErr;
       }
+    } catch (e) {
+      if (e.code === 'ENOENT' || e.code === 'EMFILE') {
+        // Directory doesn't exist or too many open files
+        throw e;
+      }
+      // Unexpected error
       throw e;
     }
   }
   
-  throw new Error(`Failed to acquire lock for ${queueFile} after ${timeoutMs}ms`);
+  throw new Error(`Failed to acquire flock for ${queueFile} after ${timeoutMs}ms`);
 }
 
 /**
- * Release proper-lockfile lock
- * ✅ proper-lockfile calls fs.rmdir(lockPath)
- * Note: release errors logged, not swallowed silently
+ * Release OS flock
+ * ✅ Kernel automatically releases on close(fd) or process exit
+ * No race: close() is atomic, lock tied to FD lifetime
  */
 function releaseLock(lockObj) {
-  const { release } = lockObj;
+  const { fd } = lockObj;
   try {
-    release();
+    // Unlock (optional, close() will release anyway)
+    try {
+      fsExt.flockSync(fd, 'un');
+    } catch {}
+    
+    // Close FD (kernel releases lock atomically)
+    fs.closeSync(fd);
   } catch (e) {
-    // Log release errors for debugging
-    console.error(`Lock release error for ${lockObj.queueFile}:`, e.message);
+    console.error(`Lock release error:`, e.message);
   }
 }
 

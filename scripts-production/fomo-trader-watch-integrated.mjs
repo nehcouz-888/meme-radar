@@ -10,7 +10,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
 import { fileURLToPath } from 'node:url';
-import properLockfile from 'proper-lockfile';
+import fsExt from 'fs-ext';
 import { addPendingAlert } from '/workspace/meme-radar-run/meme-radar-branch/src/modules/alert-queue.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -642,49 +642,51 @@ function saveLedger(ledger) {
 }
 
 /**
- * ✅ proper-lockfile ledger lock (fs.mkdir atomic, mtime stale, heartbeat)
+ * ✅ OS-level flock ledger lock (same as queue)
  */
 function acquireLedgerLock(timeoutMs = 5000) {
+  const lockPath = LEDGER_FILE + '.lock';
   const startTime = Date.now();
-  let compromised = false;
-  const options = {
-    stale: 10000,
-    update: 4000,
-    realpath: false,
-    fs: fs,
-    onCompromised: (err) => {
-      compromised = true;
-      console.error(`Ledger lock compromised:`, err.message);
-      throw err;
-    }
-  };
   
   while (Date.now() - startTime < timeoutMs) {
     try {
-      const release = properLockfile.lockSync(LEDGER_FILE, options);
-      return { release, ledgerFile: LEDGER_FILE, compromised: () => compromised };
-    } catch (e) {
-      if (e.code === 'ELOCKED') {
-        const waitMs = Math.min(50 + Math.random() * 50, timeoutMs - (Date.now() - startTime));
-        if (waitMs > 0) {
-          const start = Date.now();
-          while (Date.now() - start < waitMs) {}
+      const fd = fs.openSync(lockPath, 'w');
+      
+      try {
+        fsExt.flockSync(fd, 'ex');
+        const info = JSON.stringify({ pid: process.pid, at: Date.now() });
+        fs.writeSync(fd, info);
+        fs.fsyncSync(fd);
+        return { fd, lockPath };
+      } catch (lockErr) {
+        fs.closeSync(fd);
+        
+        if (lockErr.code === 'EAGAIN' || lockErr.code === 'EWOULDBLOCK') {
+          const waitMs = Math.min(50 + Math.random() * 50, timeoutMs - (Date.now() - startTime));
+          if (waitMs > 0) {
+            const start = Date.now();
+            while (Date.now() - start < waitMs) {}
+          }
+          continue;
         }
-        continue;
+        
+        throw lockErr;
       }
+    } catch (e) {
       throw e;
     }
   }
   
-  throw new Error(`Failed to acquire ledger lock after ${timeoutMs}ms`);
+  throw new Error(`Failed to acquire ledger flock after ${timeoutMs}ms`);
 }
 
 /**
- * Release proper-lockfile ledger lock
+ * Release OS flock ledger lock
  */
 function releaseLedgerLock(lockObj) {
   try {
-    lockObj.release();
+    try { fsExt.flockSync(lockObj.fd, 'un'); } catch {}
+    fs.closeSync(lockObj.fd);
   } catch (e) {
     console.error(`Ledger lock release error:`, e.message);
   }

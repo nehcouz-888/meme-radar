@@ -27,7 +27,6 @@
     "test": "node --test"
   },
   "dependencies": {
-    "gmgn-cli": "1.5.7",
-    "proper-lockfile": "^4.1.2"
+    "fs-ext": "^2.1.1"
   }
 }
