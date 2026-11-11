@@ -340,8 +340,8 @@ function classifyBuyVsTransfer(ev) {
 async function verifyTradeIsSwapBuy(tradeId, key) {
   if (!tradeId) return { ok: true, skipped: 'no_tradeId' };
   try {
-    // ✅ Cache by tradeId (同一笔交易不重复请求)
-    const r = await restGet(`/v2/trades/${encodeURIComponent(tradeId)}`, key, 250, `trade:${tradeId}`);
+    // ✅ Cache by tradeId (immutable trade data)
+    const r = await restGet(`/v2/trades/${encodeURIComponent(tradeId)}`, key, 250, `trade:${tradeId}`, 'trade');
     if (!r.ok) return { ok: true, skipped: `trade_http_${r.status}`, cost: r.cost };
     const b = r.body || {};
     const bought = Number(b.boughtAmount ?? 0);
@@ -403,8 +403,8 @@ async function fetchPortfolioContext(handle, key, ev) {
   const pathTpl = CFG.portfolioPct?.balancesPath || '/v2/users/{handle}/balances';
   const apiPath = pathTpl.replace('{handle}', encodeURIComponent(handle));
   try {
-    // ✅ Cache by handle (同一账号短时间内不重复请求)
-    const r = await restGet(apiPath, key, 250, `balances:${handle}`);
+    // ✅ Cache by handle (dynamic balance with TTL)
+    const r = await restGet(apiPath, key, 250, `balances:${handle}`, 'balance');
     if (!r.ok) {
       return {
         ok: false,
@@ -631,7 +631,7 @@ function readLedger() {
     const l = JSON.parse(fs.readFileSync(LEDGER_FILE, 'utf8'));
     if (l.month === monthKey()) return l;
   } catch {}
-  return { month: monthKey(), spent: 0, calls: 0, lastRemaining: null, log: [], reserved: 0 };
+  return { month: monthKey(), spent: 0, calls: 0, lastRemaining: null, log: [], reserved: 0, reservations: {} };
 }
 
 function saveLedger(ledger) {
@@ -640,25 +640,110 @@ function saveLedger(ledger) {
   fs.renameSync(LEDGER_FILE + '.tmp', LEDGER_FILE);
 }
 
-// ✅ Request cache (同tradeId/handle去重)
-const requestCache = new Map(); // key: cacheKey, value: {promise, result}
+// ✅ Ledger lock for atomic budget operations
+function acquireLedgerLock(timeoutMs = 5000) {
+  const lockFile = LEDGER_FILE + '.lock';
+  const lockToken = Math.random().toString(36).slice(2);
+  const startTime = Date.now();
+  
+  while (Date.now() - startTime < timeoutMs) {
+    try {
+      const fd = fs.openSync(lockFile, 'wx');
+      const lockData = JSON.stringify({ pid: process.pid, token: lockToken, at: Date.now() });
+      fs.writeSync(fd, lockData);
+      fs.closeSync(fd);
+      return { lockFile, token: lockToken };
+    } catch (e) {
+      if (e.code !== 'EEXIST') throw e;
+      
+      try {
+        const stat = fs.statSync(lockFile);
+        if (stat.size === 0 && Date.now() - stat.mtimeMs > 100) {
+          fs.unlinkSync(lockFile);
+          continue;
+        }
+        
+        if (stat.size > 0) {
+          const content = fs.readFileSync(lockFile, 'utf8');
+          try {
+            const lockInfo = JSON.parse(content);
+            const lockAge = Date.now() - lockInfo.at;
+            let processAlive = false;
+            try {
+              process.kill(lockInfo.pid, 0);
+              processAlive = true;
+            } catch {}
+            
+            if (!processAlive && lockAge > 1000) {
+              fs.unlinkSync(lockFile);
+              continue;
+            }
+          } catch {
+            if (Date.now() - stat.mtimeMs > 1000) {
+              fs.unlinkSync(lockFile);
+              continue;
+            }
+          }
+        }
+      } catch {}
+      
+      const waitMs = Math.min(50 + Math.random() * 50, timeoutMs - (Date.now() - startTime));
+      if (waitMs > 0) {
+        const start = Date.now();
+        while (Date.now() - start < waitMs) {}
+      }
+    }
+  }
+  throw new Error(`Failed to acquire ledger lock after ${timeoutMs}ms`);
+}
+
+function releaseLedgerLock(lockObj) {
+  try {
+    const content = fs.readFileSync(lockObj.lockFile, 'utf8');
+    const lockInfo = JSON.parse(content);
+    if (lockInfo.token === lockObj.token) {
+      fs.unlinkSync(lockObj.lockFile);
+    }
+  } catch {}
+}
+
+// ✅ Request cache: separate immutable (trade) and dynamic (balances) with TTL
+const tradeCacheMap = new Map(); // Immutable: key → {result}
+const balanceCacheMap = new Map(); // Dynamic: key → {result, expiry}
+const BALANCE_TTL_MS = 30000; // 30s TTL for balance cache
+const MAX_CACHE_SIZE = 1000;
 
 /**
- * ✅ B8: Budget-guarded REST call with shared ledger + atomic reserve + cache
+ * ✅ B8: Budget-guarded REST call with shared ledger + atomic reserve + separated cache
  */
-async function restGet(apiPath, key, estCost = 250, cacheKey = null) {
-  // ✅ Cache check (同tradeId不重复请求)
-  if (cacheKey && requestCache.has(cacheKey)) {
-    const cached = requestCache.get(cacheKey);
-    if (cached.promise) {
-      return await cached.promise; // 等待进行中的请求
+async function restGet(apiPath, key, estCost = 250, cacheKey = null, cacheType = 'trade') {
+  // ✅ Cache check with type-aware TTL
+  if (cacheKey) {
+    const cacheMap = cacheType === 'balance' ? balanceCacheMap : tradeCacheMap;
+    if (cacheMap.has(cacheKey)) {
+      const cached = cacheMap.get(cacheKey);
+      
+      // Check expiry for dynamic cache
+      if (cacheType === 'balance' && cached.expiry && Date.now() > cached.expiry) {
+        cacheMap.delete(cacheKey);
+      } else {
+        if (cached.promise) {
+          return await cached.promise;
+        }
+        if (cached.result && cached.result.ok) { // ✅ Only cache successful results
+          return cached.result;
+        }
+      }
     }
-    if (cached.result) {
-      return cached.result; // 返回已完成的结果
+    
+    // ✅ Capacity limit
+    if (cacheMap.size > MAX_CACHE_SIZE) {
+      const firstKey = cacheMap.keys().next().value;
+      cacheMap.delete(firstKey);
     }
   }
   
-  // ✅ Create promise for concurrent dedup
+  // Create promise for concurrent dedup
   let resolvePromise, rejectPromise;
   const promise = new Promise((resolve, reject) => {
     resolvePromise = resolve;
@@ -666,26 +751,50 @@ async function restGet(apiPath, key, estCost = 250, cacheKey = null) {
   });
   
   if (cacheKey) {
-    requestCache.set(cacheKey, { promise });
+    const cacheMap = cacheType === 'balance' ? balanceCacheMap : tradeCacheMap;
+    cacheMap.set(cacheKey, { promise });
   }
   
+  // ✅ Atomic budget operation with shared lock
+  const reservationId = `${process.pid}-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  const ledgerLock = acquireLedgerLock();
+  
   try {
-    // ✅ Atomic reserve: 每次请求前重新读取最新账本，预留预算
     const currentLedger = readLedger();
-    const totalReserved = (currentLedger.reserved || 0) + estCost;
+    currentLedger.reservations = currentLedger.reservations || {};
     
-    if (currentLedger.spent + totalReserved > MONTHLY_BUDGET) {
-      log(`BUDGET SKIP ${apiPath} (spent=${currentLedger.spent}, reserved=${currentLedger.reserved || 0}, est=${estCost}, limit=${MONTHLY_BUDGET})`);
+    // Calculate total reserved
+    let totalReserved = 0;
+    for (const resId in currentLedger.reservations) {
+      const res = currentLedger.reservations[resId];
+      totalReserved += res.amount || 0;
+    }
+    
+    // Check budget
+    if (currentLedger.spent + totalReserved + estCost > MONTHLY_BUDGET) {
+      releaseLedgerLock(ledgerLock);
+      log(`BUDGET SKIP ${apiPath} (spent=${currentLedger.spent}, reserved=${totalReserved}, est=${estCost}, limit=${MONTHLY_BUDGET})`);
       const result = { ok: false, status: 0, cost: 0, rem: null, body: {}, budgetExceeded: true };
-      if (cacheKey) requestCache.set(cacheKey, { result });
+      // ✅ Don't cache budget rejections
+      if (cacheKey) {
+        const cacheMap = cacheType === 'balance' ? balanceCacheMap : tradeCacheMap;
+        cacheMap.delete(cacheKey);
+      }
       resolvePromise(result);
       return result;
     }
     
-    // ✅ Reserve budget atomically
-    currentLedger.reserved = totalReserved;
+    // ✅ Reserve with owner/TTL
+    currentLedger.reservations[reservationId] = {
+      amount: estCost,
+      pid: process.pid,
+      at: Date.now(),
+      path: apiPath.split('?')[0]
+    };
     saveLedger(currentLedger);
+    releaseLedgerLock(ledgerLock);
     
+    // Make request
     const url = `${CFG.apiBase}${apiPath}`;
     const res = await fetch(url, {
       headers: { authorization: `Bearer ${key}`, accept: 'application/json' },
@@ -693,42 +802,98 @@ async function restGet(apiPath, key, estCost = 250, cacheKey = null) {
     
     const costHeader = res.headers.get('x-credits-cost');
     const remHeader = res.headers.get('x-credits-remaining');
-    const cost = Number(costHeader) || (res.ok ? estCost : 0);
+    
+    // ✅ Conservative cost: if no header, assume full estimate (not 0)
+    let cost = estCost; // Default to estimate
+    if (costHeader !== null) {
+      cost = Number(costHeader);
+    } else if (!res.ok) {
+      cost = 0; // Only errors without headers are 0
+    }
+    
     const rem = remHeader !== null ? Number(remHeader) : null;
     
-    // ✅ Release reservation and record actual cost (重新读取避免覆盖其他调用)
-    const finalLedger = readLedger();
-    if (rem !== null) {
-      finalLedger.spent = Math.max(finalLedger.spent, Number(process.env.FOMO_PLAN_CREDITS || 250000) - rem - cost);
-      finalLedger.lastRemaining = rem;
+    // ✅ Settle reservation atomically
+    const settleLock = acquireLedgerLock();
+    try {
+      const finalLedger = readLedger();
+      
+      // Remove reservation
+      delete finalLedger.reservations[reservationId];
+      
+      // Record actual cost
+      if (rem !== null) {
+        finalLedger.spent = Math.max(finalLedger.spent, Number(process.env.FOMO_PLAN_CREDITS || 250000) - rem - cost);
+        finalLedger.lastRemaining = rem;
+      }
+      finalLedger.spent += cost;
+      finalLedger.calls++;
+      finalLedger.log.push({
+        at: new Date().toISOString(),
+        path: apiPath.split('?')[0],
+        cost,
+        remaining: rem,
+        ok: res.ok,
+        reservationId: reservationId.slice(0, 16)
+      });
+      saveLedger(finalLedger);
+      releaseLedgerLock(settleLock);
+    } catch (settleError) {
+      releaseLedgerLock(settleLock);
+      throw settleError;
     }
-    finalLedger.spent += cost;
-    finalLedger.reserved = Math.max(0, (finalLedger.reserved || 0) - estCost); // 释放预留
-    finalLedger.calls++;
-    finalLedger.log.push({
-      at: new Date().toISOString(),
-      path: apiPath.split('?')[0],
-      cost,
-      remaining: rem,
-      ok: res.ok
-    });
-    saveLedger(finalLedger);
     
     const body = await res.json().catch(() => ({}));
     const result = { ok: res.ok, status: res.status, cost, rem, body };
     
-    if (cacheKey) requestCache.set(cacheKey, { result });
+    // ✅ Cache only successful results with TTL
+    if (cacheKey && result.ok) {
+      const cacheMap = cacheType === 'balance' ? balanceCacheMap : tradeCacheMap;
+      const entry = { result };
+      if (cacheType === 'balance') {
+        entry.expiry = Date.now() + BALANCE_TTL_MS;
+      }
+      cacheMap.set(cacheKey, entry);
+    }
+    
     resolvePromise(result);
     return result;
   } catch (error) {
-    // ✅ Release reservation on error
-    const errorLedger = readLedger();
-    errorLedger.reserved = Math.max(0, (errorLedger.reserved || 0) - estCost);
-    saveLedger(errorLedger);
+    // ✅ Release reservation on error (conservative: mark spent if unknown)
+    try {
+      const errorLock = acquireLedgerLock();
+      const errorLedger = readLedger();
+      
+      if (errorLedger.reservations[reservationId]) {
+        const reservedAmount = errorLedger.reservations[reservationId].amount;
+        delete errorLedger.reservations[reservationId];
+        
+        // ✅ Conservative: if request sent but failed, assume cost unknown -> hold as spent
+        // Network errors mean we don't know if server processed it
+        errorLedger.spent += reservedAmount;
+        errorLedger.log.push({
+          at: new Date().toISOString(),
+          path: apiPath.split('?')[0],
+          cost: reservedAmount,
+          remaining: null,
+          ok: false,
+          error: String(error.message || error).slice(0, 100),
+          reservationId: reservationId.slice(0, 16)
+        });
+        
+        saveLedger(errorLedger);
+      }
+      
+      releaseLedgerLock(errorLock);
+    } catch {}
     
-    if (cacheKey) requestCache.delete(cacheKey);
-    rejectPromise(error);
-    throw error;
+    if (cacheKey) {
+      const cacheMap = cacheType === 'balance' ? balanceCacheMap : tradeCacheMap;
+      cacheMap.delete(cacheKey);
+    }
+    
+    resolvePromise({ ok: false, status: 0, cost: 0, rem: null, body: {}, error: true });
+    return { ok: false, status: 0, cost: 0, rem: null, body: {}, error: true };
   }
 }
 
@@ -748,8 +913,8 @@ async function seedNewTraders(seen, key, traders) {
   for (const t of traders) {
     if (seededSet.has(t.handle)) continue;
     const q = `/v2/alerts?userId=${encodeURIComponent(t.userId)}&type=buy&limit=50`;
-    // ✅ Cache by handle (同一账号seed不重复)
-    const r = await restGet(q, key, 250, `seed:${t.handle}`);
+    // ✅ Cache by handle (seed history immutable)
+    const r = await restGet(q, key, 250, `seed:${t.handle}`, 'trade');
     costSum += Number(r.cost || 0);
     log(`seed REST @${t.handle} status=${r.status} cost=${r.cost} rem=${r.rem} (key redacted)`);
     const alerts = r.body?.alerts || [];

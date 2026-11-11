@@ -115,43 +115,53 @@ function acquireLock(queueFile, timeoutMs = 5000) {
       try {
         const stat = fs.statSync(lockFile);
         
-        // ✅ 0-byte lock (crashed between wx and metadata write) → immediate reclaim
+        // ✅ 0-byte lock safety: distinguish healthy initialization vs crashed writer
+        // MUST NOT immediately delete 0-byte: healthy writer may be writing metadata
+        // Only reclaim if: (1) old enough to rule out init (2) owner dead
         if (stat.size === 0) {
-          fs.unlinkSync(lockFile);
-          continue;
-        }
-        
-        const lockContent = fs.readFileSync(lockFile, 'utf8');
-        let lockInfo;
-        try {
-          lockInfo = JSON.parse(lockContent);
-        } catch {
-          // ✅ Invalid JSON: if 0-byte or crash artifact, reclaim faster (1s instead of 10s)
           const lockAge = Date.now() - stat.mtimeMs;
-          if (stat.size === 0 || lockAge > 1000) {
+          // ✅ Initialization window: 100ms grace period for healthy writer
+          // Beyond 100ms, either crash or writer stalled -> reclaim
+          if (lockAge > 100) {
             fs.unlinkSync(lockFile);
             continue;
           }
-        }
-        
-        if (lockInfo) {
-          const lockAge = Date.now() - lockInfo.acquiredAt;
-          // Check if owner process still exists
-          let processAlive = false;
+          // ✅ Within init window: wait and retry (respect healthy owner)
+          // Fall through to retry delay below
+        } else {
+          // Non-empty lock: parse and validate
+          const lockContent = fs.readFileSync(lockFile, 'utf8');
+          let lockInfo;
           try {
-            process.kill(lockInfo.pid, 0); // signal 0 checks existence
-            processAlive = true;
-          } catch {}
-          
-          if (!processAlive && lockAge > 1000) {
-            // Process dead > 1s, safe to reclaim
-            fs.unlinkSync(lockFile);
-            continue;
+            lockInfo = JSON.parse(lockContent);
+          } catch {
+            // ✅ Invalid JSON: reclaim if old enough
+            const lockAge = Date.now() - stat.mtimeMs;
+            if (lockAge > 1000) {
+              fs.unlinkSync(lockFile);
+              continue;
+            }
           }
           
-          if (processAlive && lockAge > 30000) {
-            // Process alive but lock > 30s old, still respect it (healthy long op)
-            // Only timeout our own wait, don't steal
+          if (lockInfo) {
+            const lockAge = Date.now() - lockInfo.acquiredAt;
+            // Check if owner process still exists
+            let processAlive = false;
+            try {
+              process.kill(lockInfo.pid, 0); // signal 0 checks existence
+              processAlive = true;
+            } catch {}
+            
+            if (!processAlive && lockAge > 1000) {
+              // Process dead > 1s, safe to reclaim
+              fs.unlinkSync(lockFile);
+              continue;
+            }
+            
+            if (processAlive && lockAge > 30000) {
+              // Process alive but lock > 30s old, still respect it (healthy long op)
+              // Only timeout our own wait, don't steal
+            }
           }
         }
       } catch {}

@@ -60,23 +60,92 @@ async function getJson(src, url, { headers = {}, retries = 2, gap = FREE_GAP_MS 
 
 // ---------- FOMO with credit ledger ----------
 const monthKey = () => new Date().toISOString().slice(0, 7);
-function readLedger() { try { const l = JSON.parse(fs.readFileSync(LEDGER, 'utf8')); if (l.month === monthKey()) return l; } catch {} return { month: monthKey(), spent: 0, calls: 0, lastRemaining: null, log: [] }; }
-const ledger = readLedger();
+// ✅ Compatible with watcher reservation protocol
+function readLedger() { try { const l = JSON.parse(fs.readFileSync(LEDGER, 'utf8')); if (l.month === monthKey()) return l; } catch {} return { month: monthKey(), spent: 0, calls: 0, lastRemaining: null, log: [], reservations: {} }; }
 const fomoRun = { calls: 0, credits: 0, remainingBefore: null, remainingAfter: null, skipped: [] };
-function saveLedger() { ledger.log = ledger.log.slice(-200); fs.writeFileSync(LEDGER + '.tmp', JSON.stringify(ledger, null, 1)); fs.renameSync(LEDGER + '.tmp', LEDGER); }
+function saveLedger(ledger) { ledger.log = ledger.log.slice(-200); fs.writeFileSync(LEDGER + '.tmp', JSON.stringify(ledger, null, 1)); fs.renameSync(LEDGER + '.tmp', LEDGER); }
+
+// ✅ Shared ledger lock (same as watcher)
+function acquireLedgerLock(timeoutMs = 5000) {
+  const lockFile = LEDGER + '.lock';
+  const lockToken = Math.random().toString(36).slice(2);
+  const startTime = Date.now();
+  while (Date.now() - startTime < timeoutMs) {
+    try {
+      const fd = fs.openSync(lockFile, 'wx');
+      const lockData = JSON.stringify({ pid: process.pid, token: lockToken, at: Date.now() });
+      fs.writeSync(fd, lockData);
+      fs.closeSync(fd);
+      return { lockFile, token: lockToken };
+    } catch (e) {
+      if (e.code !== 'EEXIST') throw e;
+      try {
+        const stat = fs.statSync(lockFile);
+        if (stat.size === 0 && Date.now() - stat.mtimeMs > 100) { fs.unlinkSync(lockFile); continue; }
+        if (stat.size > 0) {
+          const content = fs.readFileSync(lockFile, 'utf8');
+          try {
+            const lockInfo = JSON.parse(content);
+            const lockAge = Date.now() - lockInfo.at;
+            let processAlive = false;
+            try { process.kill(lockInfo.pid, 0); processAlive = true; } catch {}
+            if (!processAlive && lockAge > 1000) { fs.unlinkSync(lockFile); continue; }
+          } catch { if (Date.now() - stat.mtimeMs > 1000) { fs.unlinkSync(lockFile); continue; } }
+        }
+      } catch {}
+      const waitMs = Math.min(50 + Math.random() * 50, timeoutMs - (Date.now() - startTime));
+      if (waitMs > 0) { const start = Date.now(); while (Date.now() - start < waitMs) {} }
+    }
+  }
+  throw new Error(`Failed to acquire ledger lock after ${timeoutMs}ms`);
+}
+function releaseLedgerLock(lockObj) { try { const content = fs.readFileSync(lockObj.lockFile, 'utf8'); const lockInfo = JSON.parse(content); if (lockInfo.token === lockObj.token) { fs.unlinkSync(lockObj.lockFile); } } catch {} }
+
 async function fomo(pathq, estCost = 250) {
-  if (ledger.spent + estCost > MONTHLY_BUDGET) { fomoRun.skipped.push(`${pathq} (monthly budget ${MONTHLY_BUDGET})`); return null; }
+  // ✅ Atomic budget check with shared lock
+  const reservationId = `scanner-${process.pid}-${Date.now()}`;
+  const ledgerLock = acquireLedgerLock();
+  let ledger = readLedger();
+  
+  // Calculate total reserved (including watcher reservations)
+  let totalReserved = 0;
+  for (const resId in ledger.reservations) {
+    totalReserved += ledger.reservations[resId]?.amount || 0;
+  }
+  
+  if (ledger.spent + totalReserved + estCost > MONTHLY_BUDGET) {
+    releaseLedgerLock(ledgerLock);
+    fomoRun.skipped.push(`${pathq} (monthly budget ${MONTHLY_BUDGET}, spent=${ledger.spent}, reserved=${totalReserved})`);
+    return null;
+  }
+  
+  // Reserve
+  ledger.reservations[reservationId] = { amount: estCost, pid: process.pid, at: Date.now(), path: pathq.split('?')[0] };
+  saveLedger(ledger);
+  releaseLedgerLock(ledgerLock);
+  
   let key = ''; try { key = fs.readFileSync(path.join(STATE, 'fomo-api-key'), 'utf8').trim(); } catch {}
   if (!key) { fomoRun.skipped.push(`${pathq} (no key file)`); return null; }
+  
   const r = await getJson('fomo', `https://api.fomoapi.io${pathq}`, { headers: { authorization: `Bearer ${key}` }, retries: 1, gap: 1500 });
   key = '';
+  
   const cost = num(r.headers?.get?.('x-credits-cost')) ?? (r.ok ? estCost : 0);
   const rem = num(r.headers?.get?.('x-credits-remaining'));
+  
+  // ✅ Settle reservation atomically
+  const settleLock = acquireLedgerLock();
+  ledger = readLedger();
+  delete ledger.reservations[reservationId];
+  
   if (rem !== null) { if (fomoRun.remainingBefore === null) fomoRun.remainingBefore = rem + cost; fomoRun.remainingAfter = rem; ledger.lastRemaining = rem; }
-  if (rem !== null) ledger.spent = Math.max(ledger.spent, Number(process.env.FOMO_PLAN_CREDITS || 250000) - rem - cost); // conservative: account usage outside this script
+  if (rem !== null) ledger.spent = Math.max(ledger.spent, Number(process.env.FOMO_PLAN_CREDITS || 250000) - rem - cost);
   if (r.status === 402) { fomoRun.skipped.push(`${pathq} (402 out of credits)`); }
   fomoRun.calls++; fomoRun.credits += cost; ledger.spent += cost; ledger.calls++;
-  ledger.log.push({ at: STAMP, path: pathq.split('?')[0], cost, remaining: rem, ok: !!r.ok }); saveLedger();
+  ledger.log.push({ at: STAMP, path: pathq.split('?')[0], cost, remaining: rem, ok: !!r.ok });
+  saveLedger(ledger);
+  releaseLedgerLock(settleLock);
+  
   return r.ok ? r.body : null;
 }
 
