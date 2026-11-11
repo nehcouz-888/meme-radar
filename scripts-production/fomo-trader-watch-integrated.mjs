@@ -641,73 +641,58 @@ function saveLedger(ledger) {
 }
 
 /**
- * ✅ PID-based ledger lock (same as queue lock)
- * - Lock file: {ledger}.lock.{pid}.{token}
- * - Atomic ownership: file creation = ownership established
- * - No age check: only PID liveness matters
- * - SIGKILL recovery: dead PID → reclaimable
- * - Old owner cannot delete new owner lock (different filename)
+ * ✅ Atomic mkdir ledger lock (same as queue lock)
+ * - Lock dir: {ledger}.lock (single shared arbitration point)
+ * - Metadata: owner.json with {pid, token, at}
+ * - Mutual exclusion: POSIX atomic mkdir
  */
 function acquireLedgerLock(timeoutMs = 5000) {
+  const lockDir = LEDGER_FILE + '.lock';
   const lockToken = Math.random().toString(36).slice(2, 10);
-  const myLockFile = `${LEDGER_FILE}.lock.${process.pid}.${lockToken}`;
+  const ownerFile = path.join(lockDir, 'owner.json');
   const startTime = Date.now();
   
   while (Date.now() - startTime < timeoutMs) {
-    // Scan existing locks
     try {
-      const lockDir = path.dirname(LEDGER_FILE);
-      const lockPattern = path.basename(LEDGER_FILE) + '.lock.';
-      const existingLocks = fs.readdirSync(lockDir).filter(f => f.startsWith(lockPattern));
+      // ✅ Atomic mkdir
+      fs.mkdirSync(lockDir, { recursive: false });
       
-      for (const lockName of existingLocks) {
-        const lockPath = path.join(lockDir, lockName);
+      // Write owner metadata
+      const lockData = JSON.stringify({ pid: process.pid, token: lockToken, at: Date.now() });
+      fs.writeFileSync(ownerFile, lockData);
+      
+      return { lockDir, token: lockToken };
+    } catch (e) {
+      if (e.code !== 'EEXIST') throw e;
+      
+      // Check if owner alive
+      try {
+        const ownerData = fs.readFileSync(ownerFile, 'utf8');
+        const owner = JSON.parse(ownerData);
         
-        // Parse PID from filename: {file}.lock.{pid}.{token}
-        const match = lockName.match(/\.lock\.(\d+)\./);
-        if (!match) {
-          // Malformed lock, remove if old
-          try {
-            const stat = fs.statSync(lockPath);
-            if (Date.now() - stat.mtimeMs > 10000) {
-              fs.unlinkSync(lockPath);
-            }
-          } catch {}
-          continue;
-        }
-        
-        const ownerPid = parseInt(match[1], 10);
-        
-        // Check if owner process alive
         let processAlive = false;
         try {
-          process.kill(ownerPid, 0); // signal 0: check existence
+          process.kill(owner.pid, 0);
           processAlive = true;
         } catch {}
         
         if (!processAlive) {
-          // Owner dead, reclaim
           try {
-            fs.unlinkSync(lockPath);
+            fs.rmSync(lockDir, { recursive: true, force: true });
+            continue;
           } catch {}
         }
-        // If alive, respect the lock (no age check)
+      } catch {
+        try {
+          const stat = fs.statSync(lockDir);
+          if (Date.now() - stat.mtimeMs > 10000) {
+            fs.rmSync(lockDir, { recursive: true, force: true });
+            continue;
+          }
+        } catch {}
       }
-    } catch {}
-    
-    // Try to create our lock
-    try {
-      const fd = fs.openSync(myLockFile, 'wx');
-      const lockData = JSON.stringify({ pid: process.pid, token: lockToken, at: Date.now() });
-      fs.writeSync(fd, lockData);
-      fs.closeSync(fd);
-      return { lockFile: myLockFile, token: lockToken };
-    } catch (e) {
-      if (e.code !== 'EEXIST') throw e;
-      // Lock exists (ours or another), wait and retry
     }
     
-    // Wait and retry
     const waitMs = Math.min(50 + Math.random() * 50, timeoutMs - (Date.now() - startTime));
     if (waitMs > 0) {
       const start = Date.now();
@@ -718,22 +703,16 @@ function acquireLedgerLock(timeoutMs = 5000) {
 }
 
 /**
- * Release PID-based ledger lock with token validation
- * ✅ Only delete our own lock file (PID+token match)
- * ✅ Old owner cannot delete new owner lock (different filename)
+ * Release atomic mkdir ledger lock with token validation
  */
 function releaseLedgerLock(lockObj) {
   try {
-    // PID-based lock: ensure filename contains our PID
-    if (!lockObj.lockFile.includes(`.lock.${process.pid}.`)) {
-      return; // Not our lock
-    }
+    const ownerFile = path.join(lockObj.lockDir, 'owner.json');
+    const ownerData = fs.readFileSync(ownerFile, 'utf8');
+    const owner = JSON.parse(ownerData);
     
-    // Verify we still own the lock (token match)
-    const content = fs.readFileSync(lockObj.lockFile, 'utf8');
-    const lockInfo = JSON.parse(content);
-    if (lockInfo.token === lockObj.token && lockInfo.pid === process.pid) {
-      fs.unlinkSync(lockObj.lockFile);
+    if (owner.token === lockObj.token && owner.pid === process.pid) {
+      fs.rmSync(lockObj.lockDir, { recursive: true, force: true });
     }
   } catch {}
 }

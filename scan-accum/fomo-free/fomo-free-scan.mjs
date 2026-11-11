@@ -66,51 +66,35 @@ const fomoRun = { calls: 0, credits: 0, remainingBefore: null, remainingAfter: n
 function saveLedger(ledger) { ledger.log = ledger.log.slice(-200); fs.writeFileSync(LEDGER + '.tmp', JSON.stringify(ledger, null, 1)); fs.renameSync(LEDGER + '.tmp', LEDGER); }
 
 /**
- * ✅ PID-based ledger lock (same as watcher)
- * - Lock file: {ledger}.lock.{pid}.{token}
- * - Atomic ownership: file creation = ownership established
- * - No age check: only PID liveness matters
+ * ✅ Atomic mkdir ledger lock (same as watcher)
  */
 function acquireLedgerLock(timeoutMs = 5000) {
+  const lockDir = LEDGER + '.lock';
   const lockToken = Math.random().toString(36).slice(2, 10);
-  const myLockFile = `${LEDGER}.lock.${process.pid}.${lockToken}`;
+  const ownerFile = path.join(lockDir, 'owner.json');
   const startTime = Date.now();
   while (Date.now() - startTime < timeoutMs) {
     try {
-      const lockDir = path.dirname(LEDGER);
-      const lockPattern = path.basename(LEDGER) + '.lock.';
-      const existingLocks = fs.readdirSync(lockDir).filter(f => f.startsWith(lockPattern));
-      for (const lockName of existingLocks) {
-        const lockPath = path.join(lockDir, lockName);
-        const match = lockName.match(/\.lock\.(\d+)\./);
-        if (!match) {
-          try {
-            const stat = fs.statSync(lockPath);
-            if (Date.now() - stat.mtimeMs > 10000) { fs.unlinkSync(lockPath); }
-          } catch {}
-          continue;
-        }
-        const ownerPid = parseInt(match[1], 10);
-        let processAlive = false;
-        try { process.kill(ownerPid, 0); processAlive = true; } catch {}
-        if (!processAlive) { try { fs.unlinkSync(lockPath); } catch {} }
-      }
-    } catch {}
-    try {
-      const fd = fs.openSync(myLockFile, 'wx');
+      fs.mkdirSync(lockDir, { recursive: false });
       const lockData = JSON.stringify({ pid: process.pid, token: lockToken, at: Date.now() });
-      fs.writeSync(fd, lockData);
-      fs.closeSync(fd);
-      return { lockFile: myLockFile, token: lockToken };
+      fs.writeFileSync(ownerFile, lockData);
+      return { lockDir, token: lockToken };
     } catch (e) {
       if (e.code !== 'EEXIST') throw e;
+      try {
+        const ownerData = fs.readFileSync(ownerFile, 'utf8');
+        const owner = JSON.parse(ownerData);
+        let processAlive = false;
+        try { process.kill(owner.pid, 0); processAlive = true; } catch {}
+        if (!processAlive) { try { fs.rmSync(lockDir, { recursive: true, force: true }); continue; } catch {} }
+      } catch { try { const stat = fs.statSync(lockDir); if (Date.now() - stat.mtimeMs > 10000) { fs.rmSync(lockDir, { recursive: true, force: true }); continue; } } catch {} }
     }
     const waitMs = Math.min(50 + Math.random() * 50, timeoutMs - (Date.now() - startTime));
     if (waitMs > 0) { const start = Date.now(); while (Date.now() - start < waitMs) {} }
   }
   throw new Error(`Failed to acquire ledger lock after ${timeoutMs}ms`);
 }
-function releaseLedgerLock(lockObj) { try { if (!lockObj.lockFile.includes(`.lock.${process.pid}.`)) { return; } const content = fs.readFileSync(lockObj.lockFile, 'utf8'); const lockInfo = JSON.parse(content); if (lockInfo.token === lockObj.token && lockInfo.pid === process.pid) { fs.unlinkSync(lockObj.lockFile); } } catch {} }
+function releaseLedgerLock(lockObj) { try { const ownerFile = path.join(lockObj.lockDir, 'owner.json'); const ownerData = fs.readFileSync(ownerFile, 'utf8'); const owner = JSON.parse(ownerData); if (owner.token === lockObj.token && owner.pid === process.pid) { fs.rmSync(lockObj.lockDir, { recursive: true, force: true }); } } catch {} }
 
 async function fomo(pathq, estCost = 250) {
   // ✅ Atomic budget check with shared lock
