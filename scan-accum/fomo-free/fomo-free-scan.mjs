@@ -76,7 +76,7 @@ function acquireLedgerLock(timeoutMs = 5000) {
     try {
       const fd = fs.openSync(lockPath, 'w');
       try {
-        fsExt.flockSync(fd, 'ex');
+        fsExt.flockSync(fd, 'exnb');
         const info = JSON.stringify({ pid: process.pid, at: Date.now() });
         fs.writeSync(fd, info);
         fs.fsyncSync(fd);

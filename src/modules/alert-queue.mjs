@@ -110,7 +110,7 @@ function acquireLock(queueFile, timeoutMs = 5000) {
       
       try {
         // Try non-blocking exclusive lock (LOCK_EX | LOCK_NB)
-        fsExt.flockSync(fd, 'ex');
+        fsExt.flockSync(fd, 'exnb');
         
         // Write owner info for debugging (not used for lock logic)
         const info = JSON.stringify({
