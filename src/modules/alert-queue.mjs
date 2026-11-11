@@ -59,7 +59,8 @@ export function saveQueue(queueFile, items) {
 }
 
 /**
- * Add pending alert to queue (原子追加)
+ * Add pending alert to queue (原子追加 + 跨进程锁)
+ * ✅ All writers must share same lock
  * @param {string} queueFile - 队列文件路径
  * @param {Object} alert - 待添加的alert
  */
@@ -70,6 +71,8 @@ export function addPendingAlert(queueFile, alert) {
     createdAt: alert.createdAt || new Date().toISOString()
   };
   
+  // ✅ Acquire lock before append
+  const lockObj = acquireLock(queueFile);
   try {
     const line = JSON.stringify(item) + '\n';
     fs.appendFileSync(queueFile, line, 'utf8');
@@ -77,33 +80,74 @@ export function addPendingAlert(queueFile, alert) {
   } catch (e) {
     console.error(`Failed to add pending alert: ${e.message}`);
     return false;
+  } finally {
+    releaseLock(lockObj);
   }
 }
 
 /**
- * Acquire exclusive file lock for queue operations
+ * Acquire exclusive file lock with owner/token validation
+ * ✅ Prevents healthy long operations from lock steal
+ * ✅ Safe recovery from SIGKILL crashed processes
  */
 function acquireLock(queueFile, timeoutMs = 5000) {
   const lockFile = queueFile + '.lock';
+  const lockToken = randomBytes(16).toString('hex');
   const startTime = Date.now();
   
   while (Date.now() - startTime < timeoutMs) {
     try {
       // Atomic exclusive creation
       const fd = fs.openSync(lockFile, 'wx');
-      fs.writeSync(fd, `${process.pid}\n${Date.now()}\n`);
+      const lockData = JSON.stringify({
+        pid: process.pid,
+        token: lockToken,
+        acquiredAt: Date.now(),
+        acquiredIso: new Date().toISOString()
+      });
+      fs.writeSync(fd, lockData);
       fs.closeSync(fd);
-      return lockFile;
+      return { lockFile, token: lockToken };
     } catch (e) {
       if (e.code !== 'EEXIST') throw e;
-      // Check stale lock (> 30s old)
+      
+      // Check if lock owner still alive and lock is fresh
       try {
         const stat = fs.statSync(lockFile);
-        if (Date.now() - stat.mtimeMs > 30000) {
-          fs.unlinkSync(lockFile);
-          continue;
+        const lockContent = fs.readFileSync(lockFile, 'utf8');
+        let lockInfo;
+        try {
+          lockInfo = JSON.parse(lockContent);
+        } catch {
+          // Legacy format or corrupted, treat as stale
+          if (Date.now() - stat.mtimeMs > 10000) {
+            fs.unlinkSync(lockFile);
+            continue;
+          }
+        }
+        
+        if (lockInfo) {
+          const lockAge = Date.now() - lockInfo.acquiredAt;
+          // Check if owner process still exists
+          let processAlive = false;
+          try {
+            process.kill(lockInfo.pid, 0); // signal 0 checks existence
+            processAlive = true;
+          } catch {}
+          
+          if (!processAlive && lockAge > 1000) {
+            // Process dead > 1s, safe to reclaim
+            fs.unlinkSync(lockFile);
+            continue;
+          }
+          
+          if (processAlive && lockAge > 30000) {
+            // Process alive but lock > 30s old, still respect it (healthy long op)
+            // Only timeout our own wait, don't steal
+          }
         }
       } catch {}
+      
       // Wait and retry
       const jitter = Math.random() * 50;
       const waitMs = Math.min(50 + jitter, timeoutMs - (Date.now() - startTime));
@@ -117,13 +161,22 @@ function acquireLock(queueFile, timeoutMs = 5000) {
 }
 
 /**
- * Release file lock
+ * Release file lock with token validation
+ * ✅ Prevents deleting another process's lock
  */
-function releaseLock(lockFile) {
+function releaseLock(lockObj) {
+  const { lockFile, token } = lockObj;
   try {
-    fs.unlinkSync(lockFile);
+    // Verify we still own the lock
+    const lockContent = fs.readFileSync(lockFile, 'utf8');
+    const lockInfo = JSON.parse(lockContent);
+    if (lockInfo.token === token) {
+      fs.unlinkSync(lockFile);
+    } else {
+      console.error(`Lock ${lockFile} token mismatch, not deleting (stolen or expired)`);
+    }
   } catch (e) {
-    console.error(`Failed to release lock ${lockFile}: ${e.message}`);
+    // Lock file already gone or unreadable, ok
   }
 }
 
@@ -285,7 +338,8 @@ export function acknowledgeDelivered(queueFile, eventIds, options = {}) {
 }
 
 /**
- * 清理过期和已delivered的旧记录
+ * 清理过期和已delivered的旧记录 (带跨进程锁)
+ * ✅ Must share lock with all writers/readers
  */
 export function cleanupQueue(queueFile, options = {}) {
   const {
@@ -294,36 +348,42 @@ export function cleanupQueue(queueFile, options = {}) {
     now = Date.now()
   } = options;
   
-  const items = loadQueue(queueFile);
-  const kept = [];
-  let removed = 0;
-  
-  for (const item of items) {
-    let shouldRemove = false;
+  // ✅ Acquire lock before cleanup
+  const lockObj = acquireLock(queueFile);
+  try {
+    const items = loadQueue(queueFile);
+    const kept = [];
+    let removed = 0;
     
-    if (item.status === 'delivered' && item.deliveredAt) {
-      const deliveredTime = new Date(item.deliveredAt).getTime();
-      if (now - deliveredTime > keepDeliveredHours * 3600_000) {
-        shouldRemove = true;
+    for (const item of items) {
+      let shouldRemove = false;
+      
+      if (item.status === 'delivered' && item.deliveredAt) {
+        const deliveredTime = new Date(item.deliveredAt).getTime();
+        if (now - deliveredTime > keepDeliveredHours * 3600_000) {
+          shouldRemove = true;
+        }
+      } else if (item.status === 'expired' && item.expiredAt) {
+        const expiredTime = new Date(item.expiredAt).getTime();
+        if (now - expiredTime > keepExpiredHours * 3600_000) {
+          shouldRemove = true;
+        }
       }
-    } else if (item.status === 'expired' && item.expiredAt) {
-      const expiredTime = new Date(item.expiredAt).getTime();
-      if (now - expiredTime > keepExpiredHours * 3600_000) {
-        shouldRemove = true;
+      
+      if (!shouldRemove) {
+        kept.push(item);
+      } else {
+        removed++;
       }
     }
     
-    if (!shouldRemove) {
-      kept.push(item);
+    if (saveQueue(queueFile, kept)) {
+      return { kept: kept.length, removed };
     } else {
-      removed++;
+      return { kept: items.length, removed: 0, error: 'failed_to_save' };
     }
-  }
-  
-  if (saveQueue(queueFile, kept)) {
-    return { kept: kept.length, removed };
-  } else {
-    return { kept: items.length, removed: 0, error: 'failed_to_save' };
+  } finally {
+    releaseLock(lockObj);
   }
 }
 
