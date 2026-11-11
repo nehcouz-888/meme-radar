@@ -3,7 +3,7 @@
  * Acknowledge delivered alerts CLI
  * Usage: node ack-delivered-alerts.mjs <queueFile> <leaseId> <eventId1> [eventId2...]
  */
-import { acknowledgeDelivered } from '../src/modules/alert-queue.mjs';
+import { acknowledgeDelivered } from '/workspace/meme-radar-run/meme-radar-branch/src/modules/alert-queue.mjs';
 import fs from 'node:fs';
 
 const args = process.argv.slice(2);

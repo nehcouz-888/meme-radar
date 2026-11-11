@@ -3,7 +3,7 @@
  * Claim pending alerts CLI
  * Usage: node claim-pending-alerts.mjs <queueFile> [--max=N] [--lease-min=N]
  */
-import { claimPendingAlerts } from '../src/modules/alert-queue.mjs';
+import { claimPendingAlerts } from '/workspace/meme-radar-run/meme-radar-branch/src/modules/alert-queue.mjs';
 import fs from 'node:fs';
 
 const args = process.argv.slice(2);

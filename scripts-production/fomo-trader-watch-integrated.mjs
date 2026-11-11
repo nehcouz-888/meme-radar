@@ -10,11 +10,10 @@ import fs from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
 import { fileURLToPath } from 'node:url';
-import { addPendingAlert } from '../src/modules/alert-queue.mjs';
+import { addPendingAlert } from '/workspace/meme-radar-run/meme-radar-branch/src/modules/alert-queue.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-// ✅ Support production deployment paths
-const ROOT = process.env.FOMO_WATCH_ROOT || __dirname;
+const ROOT = __dirname;
 const CFG = JSON.parse(fs.readFileSync(path.join(ROOT, 'config.json'), 'utf8'));
 const STATE = path.join(ROOT, 'state');
 const PENDING = path.join(ROOT, 'alerts', 'pending');

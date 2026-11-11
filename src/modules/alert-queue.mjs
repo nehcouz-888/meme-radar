@@ -81,7 +81,54 @@ export function addPendingAlert(queueFile, alert) {
 }
 
 /**
- * Claim pending alerts (带lease)
+ * Acquire exclusive file lock for queue operations
+ */
+function acquireLock(queueFile, timeoutMs = 5000) {
+  const lockFile = queueFile + '.lock';
+  const startTime = Date.now();
+  
+  while (Date.now() - startTime < timeoutMs) {
+    try {
+      // Atomic exclusive creation
+      const fd = fs.openSync(lockFile, 'wx');
+      fs.writeSync(fd, `${process.pid}\n${Date.now()}\n`);
+      fs.closeSync(fd);
+      return lockFile;
+    } catch (e) {
+      if (e.code !== 'EEXIST') throw e;
+      // Check stale lock (> 30s old)
+      try {
+        const stat = fs.statSync(lockFile);
+        if (Date.now() - stat.mtimeMs > 30000) {
+          fs.unlinkSync(lockFile);
+          continue;
+        }
+      } catch {}
+      // Wait and retry
+      const jitter = Math.random() * 50;
+      const waitMs = Math.min(50 + jitter, timeoutMs - (Date.now() - startTime));
+      if (waitMs > 0) {
+        const start = Date.now();
+        while (Date.now() - start < waitMs) {} // busy wait
+      }
+    }
+  }
+  throw new Error(`Failed to acquire lock for ${queueFile} after ${timeoutMs}ms`);
+}
+
+/**
+ * Release file lock
+ */
+function releaseLock(lockFile) {
+  try {
+    fs.unlinkSync(lockFile);
+  } catch (e) {
+    console.error(`Failed to release lock ${lockFile}: ${e.message}`);
+  }
+}
+
+/**
+ * Claim pending alerts (带lease + 跨进程锁)
  * @param {string} queueFile - 队列文件路径
  * @param {Object} options - 配置
  * @returns {Array} 已claim的alerts
@@ -99,7 +146,10 @@ export function claimPendingAlerts(queueFile, options = {}) {
     return { claimed: [], reason: 'quiet_hours', quietHours: '01:00-06:00 CST' };
   }
   
-  const items = loadQueue(queueFile);
+  // ✅ Acquire cross-process lock
+  const lockFile = acquireLock(queueFile);
+  try {
+    const items = loadQueue(queueFile);
   const claimed = [];
   const updated = [];
   
@@ -149,16 +199,19 @@ export function claimPendingAlerts(queueFile, options = {}) {
     }
   }
   
-  // 原子性保存
-  if (saveQueue(queueFile, updated)) {
-    return { claimed, total: items.length, updated: updated.length };
-  } else {
-    return { claimed: [], error: 'failed_to_save' };
+    // 原子性保存
+    if (saveQueue(queueFile, updated)) {
+      return { claimed, total: items.length, updated: updated.length };
+    } else {
+      return { claimed: [], error: 'failed_to_save' };
+    }
+  } finally {
+    releaseLock(lockFile);
   }
 }
 
 /**
- * Acknowledge delivered alerts
+ * Acknowledge delivered alerts (带跨进程锁)
  * @param {string} queueFile - 队列文件路径
  * @param {Array} eventIds - 要ack的eventId列表
  * @param {Object} options - 配置
@@ -166,7 +219,10 @@ export function claimPendingAlerts(queueFile, options = {}) {
 export function acknowledgeDelivered(queueFile, eventIds, options = {}) {
   const { now = Date.now(), leaseId } = options;
   
-  const items = loadQueue(queueFile);
+  // ✅ Acquire cross-process lock
+  const lockFile = acquireLock(queueFile);
+  try {
+    const items = loadQueue(queueFile);
   const acknowledged = [];
   const failed = [];
   const skipped = [];
@@ -176,9 +232,21 @@ export function acknowledgeDelivered(queueFile, eventIds, options = {}) {
   
   for (const item of items) {
     if (eventIdSet.has(item.eventId)) {
-      // ✅ claimed状态必须验证leaseId
+      // ✅ claimed状态必须验证leaseId和expiry
       if (item.status === 'claimed') {
-        if (leaseId && item.leaseId === leaseId) {
+        const leaseExpiry = item.leaseExpiry ? new Date(item.leaseExpiry).getTime() : 0;
+        const leaseExpired = leaseExpiry > 0 && now > leaseExpiry;
+        
+        if (!leaseId || item.leaseId !== leaseId) {
+          // leaseId不匹配，拒绝ack
+          failed.push({ eventId: item.eventId, reason: 'lease_mismatch', status: item.status, itemLeaseId: item.leaseId?.slice(0, 8), providedLeaseId: leaseId?.slice(0, 8) });
+          updated.push(item);
+        } else if (leaseExpired) {
+          // lease已过期，拒绝ack
+          failed.push({ eventId: item.eventId, reason: 'lease_expired', status: item.status, leaseExpiry: item.leaseExpiry, now: new Date(now).toISOString() });
+          updated.push(item);
+        } else {
+          // leaseId匹配且未过期，允许ack
           const deliveredItem = {
             ...item,
             status: 'delivered',
@@ -186,10 +254,6 @@ export function acknowledgeDelivered(queueFile, eventIds, options = {}) {
           };
           acknowledged.push(deliveredItem);
           updated.push(deliveredItem);
-        } else {
-          // leaseId不匹配，拒绝ack
-          failed.push({ eventId: item.eventId, reason: 'lease_mismatch', status: item.status, itemLeaseId: item.leaseId?.slice(0, 8), providedLeaseId: leaseId?.slice(0, 8) });
-          updated.push(item);
         }
       } else if (item.status === 'sent') {
         // sent状态可以直接ack（已通过之前的lease验证）
@@ -210,10 +274,13 @@ export function acknowledgeDelivered(queueFile, eventIds, options = {}) {
     }
   }
   
-  if (saveQueue(queueFile, updated)) {
-    return { acknowledged, failed, skipped, total: items.length };
-  } else {
-    return { acknowledged: [], failed, skipped, error: 'failed_to_save' };
+    if (saveQueue(queueFile, updated)) {
+      return { acknowledged, failed, skipped, total: items.length };
+    } else {
+      return { acknowledged: [], failed, skipped, error: 'failed_to_save' };
+    }
+  } finally {
+    releaseLock(lockFile);
   }
 }
 
