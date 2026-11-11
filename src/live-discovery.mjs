@@ -18,9 +18,11 @@ const safeUrl = value => {
 };
 
 export function liveRequestArgs(chain) {
+  // Market cap is for tiering/scoring, not hard exclusion (per 2026-11-12 audit acceptance).
+  // Removed --min/max-marketcap to allow all caps (1K-25M+) through; safety filters preserved.
   return ['market', 'trending', '--chain', chain, '--interval', '1m', '--limit', '100',
     '--order-by', 'volume', '--direction', 'desc', '--min-created', '5m',
-    '--min-marketcap', '10000', '--max-marketcap', '500000', '--min-liquidity', '3000', '--raw'];
+    '--min-liquidity', '3000', '--raw'];
 }
 
 // This is a discovery snapshot, never an audit verdict. No extra per-token reads.
@@ -31,7 +33,9 @@ export function normalizeLiveRows(input, chain, previous = [], at = Date.now(), 
     if (!raw || !addressValid(chain, raw.address) || (raw.chain && raw.chain !== chain)) continue;
     const address = identity(chain, raw.address);
     const mc = number(raw.market_cap), liquidity = number(raw.liquidity), created = number(raw.creation_timestamp);
-    if (mc === null || mc < 10000 || mc > 500000 || liquidity === null || liquidity < 3000
+    // Market cap is for tiering/scoring only (audit 2026-11-12), not hard exclusion.
+    // Safety filters (liquidity, age, rug/bundler/insider, wash, honeypot) still enforce.
+    if (mc === null || liquidity === null || liquidity < 3000
       || created === null || created <= 0 || at / 1000 - created < 300) continue;
     if (flag(raw.is_wash_trading) === true || (chain !== 'sol' && flag(raw.is_honeypot) === true)
       || [raw.rug_ratio, raw.bundler_rate, raw.rat_trader_amount_rate].some(value => rate(value) !== null && rate(value) > .3)) continue;

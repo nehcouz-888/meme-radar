@@ -1,0 +1,659 @@
+{
+  "version": 4,
+  "lastUpdated": "2026-09-16",
+  "minFollowers": 10000,
+  "followerNote": "KOL/community/meme_whale accounts require ≥10k followers. Official/founder accounts exempt from this rule.",
+  "chainAffinityNote": "chainAffinity tracks account's primary chain alignment: sol | bsc | base | eth | multi | null. Used for cross-chain competition detection.",
+  "accounts": [
+    {
+      "handle": "binance",
+      "displayName": "Binance",
+      "category": "official",
+      "tier": "official",
+      "chainAffinity": "bsc",
+      "followerCount": null,
+      "notes": "Binance main official account - BNB Chain founder",
+      "enabled": true
+    },
+    {
+      "handle": "BinanceWallet",
+      "displayName": "Binance Wallet",
+      "category": "official",
+      "tier": "official",
+      "chainAffinity": "multi",
+      "followerCount": null,
+      "notes": "Binance Web3 Wallet official - multi-chain",
+      "enabled": true
+    },
+    {
+      "handle": "BinanceResearch",
+      "displayName": "Binance Research",
+      "category": "official",
+      "tier": "official",
+      "chainAffinity": "multi",
+      "followerCount": null,
+      "notes": "Binance Research official - multi-chain coverage",
+      "enabled": true
+    },
+    {
+      "handle": "BinanceChinese",
+      "displayName": "币安中文",
+      "category": "official",
+      "tier": "official",
+      "chainAffinity": "bsc",
+      "followerCount": null,
+      "notes": "Binance Chinese official - verify handle if changed",
+      "enabled": true
+    },
+    {
+      "handle": "BinanceAcademy",
+      "displayName": "Binance Academy",
+      "category": "official",
+      "tier": "official",
+      "chainAffinity": "multi",
+      "followerCount": null,
+      "notes": "Binance Academy official - educational content",
+      "enabled": true
+    },
+    {
+      "handle": "cz_binance",
+      "displayName": "CZ",
+      "category": "founder",
+      "tier": "founder",
+      "chainAffinity": "bsc",
+      "followerCount": null,
+      "notes": "Changpeng Zhao - Binance founder, BNB Chain affinity",
+      "enabled": true
+    },
+    {
+      "handle": "heyibinance",
+      "displayName": "He Yi / 何一",
+      "category": "founder",
+      "tier": "founder",
+      "chainAffinity": "bsc",
+      "followerCount": null,
+      "notes": "He Yi - Binance Co-Founder, BNB Chain affinity",
+      "enabled": true
+    },
+    {
+      "handle": "solana",
+      "displayName": "Solana",
+      "category": "chain_lead",
+      "tier": "chain_lead",
+      "chainAffinity": "sol",
+      "followerCount": null,
+      "notes": "Solana official account",
+      "enabled": true
+    },
+    {
+      "handle": "aeyakovenko",
+      "displayName": "Anatoly Yakovenko",
+      "category": "chain_lead",
+      "tier": "chain_lead",
+      "chainAffinity": "sol",
+      "followerCount": null,
+      "notes": "Solana co-founder",
+      "enabled": true
+    },
+    {
+      "handle": "rajgokal",
+      "displayName": "Raj Gokal",
+      "category": "chain_lead",
+      "tier": "chain_lead",
+      "chainAffinity": "sol",
+      "followerCount": null,
+      "notes": "Solana co-founder",
+      "enabled": true
+    },
+    {
+      "handle": "bnbchain",
+      "displayName": "BNB Chain",
+      "category": "chain_lead",
+      "tier": "chain_lead",
+      "chainAffinity": "bsc",
+      "followerCount": null,
+      "notes": "BNB Chain official",
+      "enabled": true
+    },
+    {
+      "handle": "base",
+      "displayName": "Base",
+      "category": "chain_lead",
+      "tier": "chain_lead",
+      "chainAffinity": "base",
+      "followerCount": null,
+      "notes": "Base official (Coinbase L2)",
+      "enabled": true
+    },
+    {
+      "handle": "jessepollak",
+      "displayName": "Jesse Pollak",
+      "category": "chain_lead",
+      "tier": "chain_lead",
+      "chainAffinity": "base",
+      "followerCount": null,
+      "notes": "Base lead at Coinbase",
+      "enabled": true
+    },
+    {
+      "handle": "VitalikButerin",
+      "displayName": "Vitalik Buterin",
+      "category": "chain_lead",
+      "tier": "chain_lead",
+      "chainAffinity": "eth",
+      "followerCount": null,
+      "notes": "Ethereum founder",
+      "enabled": true
+    },
+    {
+      "handle": "Ansem",
+      "displayName": "Ansem",
+      "category": "meme_whale",
+      "tier": "meme_whale",
+      "chainAffinity": "sol",
+      "followerCount": 500000,
+      "notes": "Major SOL meme whale and caller",
+      "enabled": true
+    },
+    {
+      "handle": "thecryptodogs",
+      "displayName": "The Crypto Dog",
+      "category": "meme_whale",
+      "tier": "meme_whale",
+      "chainAffinity": "multi",
+      "followerCount": 450000,
+      "notes": "High-profile crypto trader, multi-chain meme focus",
+      "enabled": true
+    },
+    {
+      "handle": "hsaka",
+      "displayName": "Hsaka",
+      "category": "meme_whale",
+      "tier": "meme_whale",
+      "chainAffinity": "eth",
+      "followerCount": 200000,
+      "notes": "Veteran crypto trader, ETH/multi-chain early meme calls",
+      "enabled": true
+    },
+    {
+      "handle": "RunnerXBT",
+      "displayName": "RunnerXBT",
+      "category": "meme_whale",
+      "tier": "meme_whale",
+      "chainAffinity": "multi",
+      "followerCount": 150000,
+      "notes": "Active crypto trader, multi-chain meme plays",
+      "enabled": true
+    },
+    {
+      "handle": "ThinkingUSD",
+      "displayName": "Thinking",
+      "category": "meme_whale",
+      "tier": "meme_whale",
+      "chainAffinity": "sol",
+      "followerCount": 120000,
+      "notes": "Sol ecosystem meme whale",
+      "enabled": true
+    },
+    {
+      "handle": "CryptoCred",
+      "displayName": "Cred",
+      "category": "meme_whale",
+      "tier": "meme_whale",
+      "chainAffinity": "multi",
+      "followerCount": 380000,
+      "notes": "Technical trader, multi-chain occasional meme plays",
+      "enabled": true
+    },
+    {
+      "handle": "MilkRoadDaily",
+      "displayName": "Milk Road",
+      "category": "community",
+      "tier": "community",
+      "followerCount": 90000,
+      "notes": "Crypto news + meme narratives",
+      "enabled": true,
+      "chainAffinity": "multi"
+    },
+    {
+      "handle": "degenmfer",
+      "displayName": "Degen MFer",
+      "category": "community",
+      "tier": "community",
+      "followerCount": 45000,
+      "notes": "Solana meme community organizer",
+      "enabled": true,
+      "chainAffinity": "sol"
+    },
+    {
+      "handle": "SolJakey",
+      "displayName": "Sol Jakey",
+      "category": "community",
+      "tier": "community",
+      "followerCount": 35000,
+      "notes": "Solana meme calls and community",
+      "enabled": true,
+      "chainAffinity": "sol"
+    },
+    {
+      "handle": "Messiahbol",
+      "displayName": "Messiah",
+      "category": "community",
+      "tier": "community",
+      "followerCount": 40000,
+      "notes": "SOL meme narratives and CA posts",
+      "enabled": true,
+      "chainAffinity": "sol"
+    },
+    {
+      "handle": "thedefiedge",
+      "displayName": "The DeFi Edge",
+      "category": "community",
+      "tier": "community",
+      "followerCount": 55000,
+      "notes": "DeFi and memecoin educator",
+      "enabled": true,
+      "chainAffinity": "multi"
+    },
+    {
+      "handle": "Washigorira",
+      "displayName": "Washi",
+      "category": "community",
+      "tier": "community",
+      "followerCount": 28000,
+      "notes": "Solana meme community voice",
+      "enabled": true,
+      "chainAffinity": "sol"
+    },
+    {
+      "handle": "0xRacer",
+      "displayName": "Racer",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "followerCount": 65000,
+      "notes": "Known for early SOL meme calls",
+      "enabled": true,
+      "chainAffinity": "sol"
+    },
+    {
+      "handle": "blknoiz06",
+      "displayName": "Blknoiz",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "followerCount": 48000,
+      "notes": "Solana alpha caller",
+      "enabled": true,
+      "chainAffinity": "sol"
+    },
+    {
+      "handle": "TheRoaringKitty",
+      "displayName": "Roaring Kitty",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "followerCount": 1500000,
+      "notes": "Influential meme investor (GME/DFV)",
+      "enabled": true,
+      "chainAffinity": "multi"
+    },
+    {
+      "handle": "Murad_MHH",
+      "displayName": "Murad",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "followerCount": 280000,
+      "notes": "Memecoin philosopher and caller",
+      "enabled": true,
+      "chainAffinity": "sol"
+    },
+    {
+      "handle": "0xSisyphus",
+      "displayName": "Sisyphus",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "followerCount": 42000,
+      "notes": "Crypto alpha researcher",
+      "enabled": true,
+      "chainAffinity": "multi"
+    },
+    {
+      "handle": "DegenSpartan",
+      "displayName": "Degen Spartan",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "followerCount": 175000,
+      "notes": "DeFi and meme trader",
+      "enabled": true,
+      "chainAffinity": "eth"
+    },
+    {
+      "handle": "GiganticRebirth",
+      "displayName": "Gigantic Rebirth",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "followerCount": 95000,
+      "notes": "SOL ecosystem alpha",
+      "enabled": true,
+      "chainAffinity": "sol"
+    },
+    {
+      "handle": "TheDeFinvestor",
+      "displayName": "The DeFi Investor",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "followerCount": 32000,
+      "notes": "DeFi and memecoin analysis",
+      "enabled": true,
+      "chainAffinity": "multi"
+    },
+    {
+      "handle": "cobie",
+      "displayName": "Cobie",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "followerCount": 520000,
+      "notes": "Crypto trader and commentator",
+      "enabled": true,
+      "chainAffinity": "eth"
+    },
+    {
+      "handle": "DeFi_Cheetah",
+      "displayName": "DeFi Cheetah",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "followerCount": 78000,
+      "notes": "SOL memecoin tracker",
+      "enabled": true,
+      "chainAffinity": "sol"
+    },
+    {
+      "handle": "0xMert_",
+      "displayName": "Mert",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "followerCount": 130000,
+      "notes": "Crypto analyst and caller",
+      "enabled": true,
+      "chainAffinity": "multi"
+    },
+    {
+      "handle": "AltcoinGordon",
+      "displayName": "Altcoin Gordon",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "followerCount": 220000,
+      "notes": "Multi-chain meme caller",
+      "enabled": true,
+      "chainAffinity": "multi"
+    },
+    {
+      "handle": "CryptoGodJohn",
+      "displayName": "Crypto God John",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "followerCount": 88000,
+      "notes": "Memecoin researcher",
+      "enabled": true,
+      "chainAffinity": "sol"
+    },
+    {
+      "handle": "CryptoKaleo",
+      "displayName": "Kaleo",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "followerCount": 640000,
+      "notes": "Crypto analyst with meme calls",
+      "enabled": true,
+      "chainAffinity": "multi"
+    },
+    {
+      "handle": "ZssBecker",
+      "displayName": "Zach Becker",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "followerCount": 52000,
+      "notes": "SOL ecosystem early caller",
+      "enabled": true,
+      "chainAffinity": "sol"
+    },
+    {
+      "handle": "0xShinChan",
+      "displayName": "Shin Chan",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "followerCount": 38000,
+      "notes": "Asian crypto alpha (CN/EN)",
+      "enabled": true,
+      "chainAffinity": "multi"
+    },
+    {
+      "handle": "CryptoJelleNL",
+      "displayName": "Crypto Jelle",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "followerCount": 115000,
+      "notes": "Multi-chain analyst",
+      "enabled": true,
+      "chainAffinity": "multi"
+    },
+    {
+      "handle": "0x_Todd",
+      "displayName": "Todd",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "followerCount": 25000,
+      "notes": "SOL memecoin trader",
+      "enabled": true,
+      "chainAffinity": "sol"
+    },
+    {
+      "handle": "thetokenist",
+      "displayName": "The Tokenist",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "followerCount": 18000,
+      "notes": "Crypto and meme analysis",
+      "enabled": true,
+      "chainAffinity": "multi"
+    },
+    {
+      "handle": "GameOfTrades_",
+      "displayName": "Game of Trades",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "followerCount": 340000,
+      "notes": "Macro trader with crypto/meme exposure",
+      "enabled": true,
+      "chainAffinity": "multi"
+    },
+    {
+      "handle": "RookieXBT",
+      "displayName": "RookieXBT",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "followerCount": 160000,
+      "notes": "Crypto trader, occasional meme plays",
+      "enabled": true,
+      "chainAffinity": "multi"
+    },
+    {
+      "handle": "lookonchain",
+      "displayName": "Lookonchain",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "followerCount": 580000,
+      "notes": "On-chain tracking, whale movements",
+      "enabled": true,
+      "chainAffinity": "multi"
+    },
+    {
+      "handle": "Flip_Flippen",
+      "displayName": "Flip Flippen",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "followerCount": 95000,
+      "notes": "Solana ecosystem focus",
+      "enabled": true,
+      "chainAffinity": "sol"
+    },
+    {
+      "handle": "Pentosh1",
+      "displayName": "Pentoshi",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "followerCount": 720000,
+      "notes": "Crypto trader with meme exposure",
+      "enabled": true,
+      "chainAffinity": "eth"
+    },
+    {
+      "handle": "KaitoAI",
+      "displayName": "Kaito",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "followerCount": 92000,
+      "notes": "Crypto data and trending narratives",
+      "enabled": true,
+      "chainAffinity": "multi"
+    },
+    {
+      "handle": "CryptoHayes",
+      "displayName": "Arthur Hayes",
+      "category": "meme_whale",
+      "tier": "meme_whale",
+      "chainAffinity": "multi",
+      "followerCount": 380000,
+      "notes": "BitMEX founder, macro trader, influential meme calls",
+      "enabled": true
+    },
+    {
+      "handle": "DeFi_Made_Here",
+      "displayName": "DeFi Made Here",
+      "category": "community",
+      "tier": "community",
+      "chainAffinity": "multi",
+      "followerCount": 42000,
+      "notes": "DeFi and meme ecosystem coverage",
+      "enabled": true
+    },
+    {
+      "handle": "degenspartan",
+      "displayName": "Degen Spartan",
+      "category": "meme_whale",
+      "tier": "meme_whale",
+      "chainAffinity": "eth",
+      "followerCount": 175000,
+      "notes": "ETH/multi-chain degen trader, meme whale",
+      "enabled": true
+    },
+    {
+      "handle": "CryptoCobain",
+      "displayName": "Crypto Cobain",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "chainAffinity": "multi",
+      "followerCount": 320000,
+      "notes": "Macro trader, occasional meme plays with large following",
+      "enabled": true
+    },
+    {
+      "handle": "AltcoinPsycho",
+      "displayName": "Altcoin Psycho",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "chainAffinity": "multi",
+      "followerCount": 280000,
+      "notes": "Altcoin trader, meme coin coverage",
+      "enabled": true
+    },
+    {
+      "handle": "BlurCrypto",
+      "displayName": "Blur",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "chainAffinity": "sol",
+      "followerCount": 92000,
+      "notes": "Solana ecosystem trader, early meme positioning",
+      "enabled": true
+    },
+    {
+      "handle": "TraderXO",
+      "displayName": "TraderXO",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "chainAffinity": "multi",
+      "followerCount": 145000,
+      "notes": "Multi-chain trader, meme alpha",
+      "enabled": true
+    },
+    {
+      "handle": "CryptoMessiah",
+      "displayName": "Crypto Messiah",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "chainAffinity": "multi",
+      "followerCount": 210000,
+      "notes": "Crypto analyst with large Chinese following, multi-chain",
+      "enabled": true
+    },
+    {
+      "handle": "WuBlockchain",
+      "displayName": "Wu Blockchain",
+      "category": "community",
+      "tier": "community",
+      "chainAffinity": "multi",
+      "followerCount": 530000,
+      "notes": "Major Chinese crypto news source, Binance ecosystem coverage",
+      "enabled": true
+    },
+    {
+      "handle": "Colin_Wu",
+      "displayName": "Colin Wu",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "chainAffinity": "multi",
+      "followerCount": 420000,
+      "notes": "Wu Blockchain founder, Chinese crypto journalist, major influence",
+      "enabled": true
+    },
+    {
+      "handle": "BTCdayu",
+      "displayName": "BTC大宇",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "chainAffinity": "multi",
+      "followerCount": 180000,
+      "notes": "Major Chinese crypto KOL, proven track record",
+      "enabled": true
+    },
+    {
+      "handle": "bitouq",
+      "displayName": "比特币秋山君",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "chainAffinity": "multi",
+      "followerCount": 95000,
+      "notes": "Chinese crypto analyst, memecoin coverage",
+      "enabled": true
+    },
+    {
+      "handle": "8btcci",
+      "displayName": "8BTC",
+      "category": "community",
+      "tier": "community",
+      "chainAffinity": "multi",
+      "followerCount": 320000,
+      "notes": "Major Chinese crypto media platform",
+      "enabled": true
+    },
+    {
+      "handle": "CryptoWendyO",
+      "displayName": "Crypto Wendy O",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "chainAffinity": "multi",
+      "followerCount": 225000,
+      "notes": "Crypto analyst, bilingual CN/EN, Binance ecosystem",
+      "enabled": true
+    }
+  ]
+}

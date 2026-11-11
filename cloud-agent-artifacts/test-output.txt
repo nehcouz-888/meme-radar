@@ -1,0 +1,2284 @@
+
+> meme-radar-jindou@0.1.6 test
+> node --test
+
+TAP version 13
+# node:internal/modules/esm/resolve:275
+#     throw new ERR_MODULE_NOT_FOUND(
+#           ^
+# Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/workspace/deployment-package/src/chain-competition.mjs' imported from /workspace/deployment-package/test/chain-competition.test.mjs
+#     at finalizeResolution (node:internal/modules/esm/resolve:275:11)
+#     at moduleResolve (node:internal/modules/esm/resolve:865:10)
+#     at defaultResolve (node:internal/modules/esm/resolve:989:11)
+#     at \#cachedDefaultResolve (node:internal/modules/esm/loader:747:20)
+#     at ModuleLoader.resolve (node:internal/modules/esm/loader:724:38)
+#     at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:320:38)
+#     at ModuleJob._link (node:internal/modules/esm/module_job:182:49) {
+#   code: 'ERR_MODULE_NOT_FOUND',
+#   url: 'file:///workspace/deployment-package/src/chain-competition.mjs'
+# }
+# Node.js v22.23.4
+# Subtest: deployment-package/test/chain-competition.test.mjs
+not ok 1 - deployment-package/test/chain-competition.test.mjs
+  ---
+  duration_ms: 34.710184
+  type: 'test'
+  location: '/workspace/deployment-package/test/chain-competition.test.mjs:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# Subtest: community distribution has platform launchers and excludes private runtime data
+not ok 2 - community distribution has platform launchers and excludes private runtime data
+  ---
+  duration_ms: 1.19
+  type: 'test'
+  location: '/workspace/deployment-package/test/distribution.test.mjs:9:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    安装并启动.command should exist
+    
+    false !== true
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/deployment-package/test/distribution.test.mjs:12:12)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.start (node:internal/test_runner/test:944:17)
+    startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17)
+  ...
+# Subtest: Windows test launcher runs in foreground so it can be stopped cleanly
+not ok 3 - Windows test launcher runs in foreground so it can be stopped cleanly
+  ---
+  duration_ms: 0.157974
+  type: 'test'
+  location: '/workspace/deployment-package/test/distribution.test.mjs:18:1'
+  failureType: 'testCodeFailure'
+  error: "ENOENT: no such file or directory, open '/workspace/deployment-package/TEST-WINDOWS.bat'"
+  code: 'ENOENT'
+  stack: |-
+    Object.readFileSync (node:fs:440:20)
+    TestContext.<anonymous> (file:///workspace/deployment-package/test/distribution.test.mjs:19:23)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# Subtest: portable Windows launcher uses only its bundled runtime
+not ok 4 - portable Windows launcher uses only its bundled runtime
+  ---
+  duration_ms: 1.037355
+  type: 'test'
+  location: '/workspace/deployment-package/test/distribution.test.mjs:25:1'
+  failureType: 'testCodeFailure'
+  error: "ENOENT: no such file or directory, open '/workspace/deployment-package/packaging/windows-portable/OPEN-MEME-RADAR.bat'"
+  code: 'ENOENT'
+  stack: |-
+    Object.readFileSync (node:fs:440:20)
+    TestContext.<anonymous> (file:///workspace/deployment-package/test/distribution.test.mjs:26:23)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: portable EXE bootstrap only starts the bundled read-only application
+not ok 5 - portable EXE bootstrap only starts the bundled read-only application
+  ---
+  duration_ms: 0.114844
+  type: 'test'
+  location: '/workspace/deployment-package/test/distribution.test.mjs:31:1'
+  failureType: 'testCodeFailure'
+  error: "ENOENT: no such file or directory, open '/workspace/deployment-package/packaging/windows-portable/launcher.cjs'"
+  code: 'ENOENT'
+  stack: |-
+    Object.readFileSync (node:fs:440:20)
+    TestContext.<anonymous> (file:///workspace/deployment-package/test/distribution.test.mjs:32:23)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: Windows launcher stays local and does not require administrator privileges
+not ok 6 - Windows launcher stays local and does not require administrator privileges
+  ---
+  duration_ms: 0.202692
+  type: 'test'
+  location: '/workspace/deployment-package/test/distribution.test.mjs:38:1'
+  failureType: 'testCodeFailure'
+  error: "ENOENT: no such file or directory, open '/workspace/deployment-package/START-WINDOWS.bat'"
+  code: 'ENOENT'
+  stack: |-
+    Object.readFileSync (node:fs:440:20)
+    TestContext.<anonymous> (file:///workspace/deployment-package/test/distribution.test.mjs:39:23)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: open-source release metadata uses AGPL and remains blocked from accidental npm publishing
+not ok 7 - open-source release metadata uses AGPL and remains blocked from accidental npm publishing
+  ---
+  duration_ms: 0.271046
+  type: 'test'
+  location: '/workspace/deployment-package/test/distribution.test.mjs:45:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    false !== true
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/deployment-package/test/distribution.test.mjs:49:10)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: community entry point never inherits a global GMGN key
+not ok 8 - community entry point never inherits a global GMGN key
+  ---
+  duration_ms: 0.324286
+  type: 'test'
+  location: '/workspace/deployment-package/test/distribution.test.mjs:52:1'
+  failureType: 'testCodeFailure'
+  error: "ENOENT: no such file or directory, open '/workspace/deployment-package/src/main.mjs'"
+  code: 'ENOENT'
+  stack: |-
+    Object.readFileSync (node:fs:440:20)
+    TestContext.<anonymous> (file:///workspace/deployment-package/test/distribution.test.mjs:53:19)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: E2E: Watchlist auto-register → refresh → alert → dedupe
+ok 9 - E2E: Watchlist auto-register → refresh → alert → dedupe
+  ---
+  duration_ms: 2.666439
+  type: 'test'
+  ...
+# Subtest: E2E: Sample incomplete → cannot confirm exit
+ok 10 - E2E: Sample incomplete → cannot confirm exit
+  ---
+  duration_ms: 0.200334
+  type: 'test'
+  ...
+# Subtest: E2E: Contradictory samples from fixture
+ok 11 - E2E: Contradictory samples from fixture
+  ---
+  duration_ms: 0.118429
+  type: 'test'
+  ...
+# node:internal/modules/esm/resolve:275
+#     throw new ERR_MODULE_NOT_FOUND(
+#           ^
+# Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/workspace/deployment-package/src/scoring.mjs' imported from /workspace/deployment-package/test/embryonic.test.mjs
+#     at finalizeResolution (node:internal/modules/esm/resolve:275:11)
+#     at moduleResolve (node:internal/modules/esm/resolve:865:10)
+#     at defaultResolve (node:internal/modules/esm/resolve:989:11)
+#     at \#cachedDefaultResolve (node:internal/modules/esm/loader:747:20)
+#     at ModuleLoader.resolve (node:internal/modules/esm/loader:724:38)
+#     at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:320:38)
+#     at ModuleJob._link (node:internal/modules/esm/module_job:182:49) {
+#   code: 'ERR_MODULE_NOT_FOUND',
+#   url: 'file:///workspace/deployment-package/src/scoring.mjs'
+# }
+# Node.js v22.23.4
+# Subtest: deployment-package/test/embryonic.test.mjs
+not ok 4 - deployment-package/test/embryonic.test.mjs
+  ---
+  duration_ms: 29.904378
+  type: 'test'
+  location: '/workspace/deployment-package/test/embryonic.test.mjs:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# Subtest: autoRegisterToWatchlist - 新登记
+ok 13 - autoRegisterToWatchlist - 新登记
+  ---
+  duration_ms: 1.053076
+  type: 'test'
+  ...
+# Subtest: autoRegisterToWatchlist - 重复登记只更新
+ok 14 - autoRegisterToWatchlist - 重复登记只更新
+  ---
+  duration_ms: 0.173389
+  type: 'test'
+  ...
+# Subtest: createHoldingSnapshot - 完整样本
+ok 15 - createHoldingSnapshot - 完整样本
+  ---
+  duration_ms: 0.213365
+  type: 'test'
+  ...
+# Subtest: createHoldingSnapshot - 不完整样本
+ok 16 - createHoldingSnapshot - 不完整样本
+  ---
+  duration_ms: 0.102033
+  type: 'test'
+  ...
+# Subtest: analyzeHoldingChange - 样本不完整 → 无法确认清仓
+ok 17 - analyzeHoldingChange - 样本不完整 → 无法确认清仓
+  ---
+  duration_ms: 0.215093
+  type: 'test'
+  ...
+# Subtest: analyzeHoldingChange - 样本完整 → 确认全部清仓
+ok 18 - analyzeHoldingChange - 样本完整 → 确认全部清仓
+  ---
+  duration_ms: 0.119867
+  type: 'test'
+  ...
+# Subtest: analyzeHoldingChange - 净卖压
+ok 19 - analyzeHoldingChange - 净卖压
+  ---
+  duration_ms: 0.158163
+  type: 'test'
+  ...
+# Subtest: alertDedupeKey - 生成去重键
+ok 20 - alertDedupeKey - 生成去重键
+  ---
+  duration_ms: 0.129688
+  type: 'test'
+  ...
+# Subtest: shouldSendAlert - 去重窗口内不重复发送
+ok 21 - shouldSendAlert - 去重窗口内不重复发送
+  ---
+  duration_ms: 0.261142
+  type: 'test'
+  ...
+# Subtest: shouldSendAlert - 超出去重窗口可以发送
+ok 22 - shouldSendAlert - 超出去重窗口可以发送
+  ---
+  duration_ms: 0.259861
+  type: 'test'
+  ...
+# Subtest: NIHAO regression - 两个不同CA独立跟踪
+ok 23 - NIHAO regression - 两个不同CA独立跟踪
+  ---
+  duration_ms: 0.22192
+  type: 'test'
+  ...
+# node:internal/modules/esm/resolve:275
+#     throw new ERR_MODULE_NOT_FOUND(
+#           ^
+# Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/workspace/deployment-package/src/gmgn-key-store.mjs' imported from /workspace/deployment-package/test/gmgn-key-store.test.mjs
+#     at finalizeResolution (node:internal/modules/esm/resolve:275:11)
+#     at moduleResolve (node:internal/modules/esm/resolve:865:10)
+#     at defaultResolve (node:internal/modules/esm/resolve:989:11)
+#     at \#cachedDefaultResolve (node:internal/modules/esm/loader:747:20)
+#     at ModuleLoader.resolve (node:internal/modules/esm/loader:724:38)
+#     at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:320:38)
+#     at ModuleJob._link (node:internal/modules/esm/module_job:182:49) {
+#   code: 'ERR_MODULE_NOT_FOUND',
+#   url: 'file:///workspace/deployment-package/src/gmgn-key-store.mjs'
+# }
+# Node.js v22.23.4
+# Subtest: deployment-package/test/gmgn-key-store.test.mjs
+not ok 6 - deployment-package/test/gmgn-key-store.test.mjs
+  ---
+  duration_ms: 25.957133
+  type: 'test'
+  location: '/workspace/deployment-package/test/gmgn-key-store.test.mjs:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# node:internal/modules/esm/resolve:275
+#     throw new ERR_MODULE_NOT_FOUND(
+#           ^
+# Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/workspace/deployment-package/src/gmgn.mjs' imported from /workspace/deployment-package/test/gmgn-onboarding.test.mjs
+#     at finalizeResolution (node:internal/modules/esm/resolve:275:11)
+#     at moduleResolve (node:internal/modules/esm/resolve:865:10)
+#     at defaultResolve (node:internal/modules/esm/resolve:989:11)
+#     at \#cachedDefaultResolve (node:internal/modules/esm/loader:747:20)
+#     at ModuleLoader.resolve (node:internal/modules/esm/loader:724:38)
+#     at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:320:38)
+#     at ModuleJob._link (node:internal/modules/esm/module_job:182:49) {
+#   code: 'ERR_MODULE_NOT_FOUND',
+#   url: 'file:///workspace/deployment-package/src/gmgn.mjs'
+# }
+# Node.js v22.23.4
+# Subtest: deployment-package/test/gmgn-onboarding.test.mjs
+not ok 7 - deployment-package/test/gmgn-onboarding.test.mjs
+  ---
+  duration_ms: 41.115754
+  type: 'test'
+  location: '/workspace/deployment-package/test/gmgn-onboarding.test.mjs:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# node:internal/modules/esm/resolve:275
+#     throw new ERR_MODULE_NOT_FOUND(
+#           ^
+# Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/workspace/deployment-package/src/gmgn.mjs' imported from /workspace/deployment-package/test/gmgn.test.mjs
+#     at finalizeResolution (node:internal/modules/esm/resolve:275:11)
+#     at moduleResolve (node:internal/modules/esm/resolve:865:10)
+#     at defaultResolve (node:internal/modules/esm/resolve:989:11)
+#     at \#cachedDefaultResolve (node:internal/modules/esm/loader:747:20)
+#     at ModuleLoader.resolve (node:internal/modules/esm/loader:724:38)
+#     at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:320:38)
+#     at ModuleJob._link (node:internal/modules/esm/module_job:182:49) {
+#   code: 'ERR_MODULE_NOT_FOUND',
+#   url: 'file:///workspace/deployment-package/src/gmgn.mjs'
+# }
+# Node.js v22.23.4
+# Subtest: deployment-package/test/gmgn.test.mjs
+not ok 8 - deployment-package/test/gmgn.test.mjs
+  ---
+  duration_ms: 36.918219
+  type: 'test'
+  location: '/workspace/deployment-package/test/gmgn.test.mjs:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# Subtest: createHolderSample - 完整样本
+ok 27 - createHolderSample - 完整样本
+  ---
+  duration_ms: 0.726151
+  type: 'test'
+  ...
+# Subtest: createHolderSample - 不完整样本
+ok 28 - createHolderSample - 不完整样本
+  ---
+  duration_ms: 0.231799
+  type: 'test'
+  ...
+# Subtest: createHolderSample - 100个认定为足够代表性
+ok 29 - createHolderSample - 100个认定为足够代表性
+  ---
+  duration_ms: 0.143827
+  type: 'test'
+  ...
+# Subtest: determineTokenStatus - 三种状态
+ok 30 - determineTokenStatus - 三种状态
+  ---
+  duration_ms: 0.178268
+  type: 'test'
+  ...
+# Subtest: scoreSmartMoneyWithCompleteness - 完整样本0个
+ok 31 - scoreSmartMoneyWithCompleteness - 完整样本0个
+  ---
+  duration_ms: 0.337143
+  type: 'test'
+  ...
+# Subtest: scoreSmartMoneyWithCompleteness - 不完整样本无法加分
+ok 32 - scoreSmartMoneyWithCompleteness - 不完整样本无法加分
+  ---
+  duration_ms: 0.119144
+  type: 'test'
+  ...
+# Subtest: scoreSmartMoneyWithCompleteness - 完整样本3个
+ok 33 - scoreSmartMoneyWithCompleteness - 完整样本3个
+  ---
+  duration_ms: 0.177592
+  type: 'test'
+  ...
+# Subtest: Offline sample - holder_conflict 不混淆榜单与实时
+ok 34 - Offline sample - holder_conflict 不混淆榜单与实时
+  ---
+  duration_ms: 0.13447
+  type: 'test'
+  ...
+# Subtest: detectContradictorySamples - 检测榜单与实时不一致
+ok 35 - detectContradictorySamples - 检测榜单与实时不一致
+  ---
+  duration_ms: 0.657791
+  type: 'test'
+  ...
+# Subtest: detectContradictorySamples - 样本不完整无法判定矛盾
+ok 36 - detectContradictorySamples - 样本不完整无法判定矛盾
+  ---
+  duration_ms: 0.294256
+  type: 'test'
+  ...
+# Subtest: AURACAT regression - aggregate=36, live=0 应该使用live
+ok 37 - AURACAT regression - aggregate=36, live=0 应该使用live
+  ---
+  duration_ms: 0.179132
+  type: 'test'
+  ...
+# node:internal/modules/esm/resolve:275
+#     throw new ERR_MODULE_NOT_FOUND(
+#           ^
+# Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/workspace/deployment-package/src/config.mjs' imported from /workspace/deployment-package/test/improvements.test.mjs
+#     at finalizeResolution (node:internal/modules/esm/resolve:275:11)
+#     at moduleResolve (node:internal/modules/esm/resolve:865:10)
+#     at defaultResolve (node:internal/modules/esm/resolve:989:11)
+#     at \#cachedDefaultResolve (node:internal/modules/esm/loader:747:20)
+#     at ModuleLoader.resolve (node:internal/modules/esm/loader:724:38)
+#     at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:320:38)
+#     at ModuleJob._link (node:internal/modules/esm/module_job:182:49) {
+#   code: 'ERR_MODULE_NOT_FOUND',
+#   url: 'file:///workspace/deployment-package/src/config.mjs'
+# }
+# Node.js v22.23.4
+# Subtest: deployment-package/test/improvements.test.mjs
+not ok 10 - deployment-package/test/improvements.test.mjs
+  ---
+  duration_ms: 35.529569
+  type: 'test'
+  location: '/workspace/deployment-package/test/improvements.test.mjs:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# node:internal/modules/esm/resolve:275
+#     throw new ERR_MODULE_NOT_FOUND(
+#           ^
+# Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/workspace/deployment-package/src/config.mjs' imported from /workspace/deployment-package/test/live-discovery.test.mjs
+#     at finalizeResolution (node:internal/modules/esm/resolve:275:11)
+#     at moduleResolve (node:internal/modules/esm/resolve:865:10)
+#     at defaultResolve (node:internal/modules/esm/resolve:989:11)
+#     at \#cachedDefaultResolve (node:internal/modules/esm/loader:747:20)
+#     at ModuleLoader.resolve (node:internal/modules/esm/loader:724:38)
+#     at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:320:38)
+#     at ModuleJob._link (node:internal/modules/esm/module_job:182:49) {
+#   code: 'ERR_MODULE_NOT_FOUND',
+#   url: 'file:///workspace/deployment-package/src/config.mjs'
+# }
+# Node.js v22.23.4
+# Subtest: deployment-package/test/live-discovery.test.mjs
+not ok 11 - deployment-package/test/live-discovery.test.mjs
+  ---
+  duration_ms: 31.194842
+  type: 'test'
+  location: '/workspace/deployment-package/test/live-discovery.test.mjs:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# Subtest: MARKET_CAP_TIERS - 常量定义
+ok 40 - MARKET_CAP_TIERS - 常量定义
+  ---
+  duration_ms: 1.493156
+  type: 'test'
+  ...
+# Subtest: categorizeByMarketCap - EMBRYONIC <$50k
+ok 41 - categorizeByMarketCap - EMBRYONIC <$50k
+  ---
+  duration_ms: 0.22971
+  type: 'test'
+  ...
+# Subtest: categorizeByMarketCap - EARLY $50k-200k
+ok 42 - categorizeByMarketCap - EARLY $50k-200k
+  ---
+  duration_ms: 0.093317
+  type: 'test'
+  ...
+# Subtest: categorizeByMarketCap - GROWTH $200k-1M
+ok 43 - categorizeByMarketCap - GROWTH $200k-1M
+  ---
+  duration_ms: 0.080426
+  type: 'test'
+  ...
+# Subtest: categorizeByMarketCap - ESTABLISHED $1M-20M
+ok 44 - categorizeByMarketCap - ESTABLISHED $1M-20M
+  ---
+  duration_ms: 0.16392
+  type: 'test'
+  ...
+# Subtest: categorizeByMarketCap - LARGE_CAP >$20M
+ok 45 - categorizeByMarketCap - LARGE_CAP >$20M
+  ---
+  duration_ms: 0.073882
+  type: 'test'
+  ...
+# Subtest: marketCapScoreModifier - 分层调整系数
+ok 46 - marketCapScoreModifier - 分层调整系数
+  ---
+  duration_ms: 0.155799
+  type: 'test'
+  ...
+# Subtest: marketCapScoreModifier - 应用到评分
+ok 47 - marketCapScoreModifier - 应用到评分
+  ---
+  duration_ms: 0.080019
+  type: 'test'
+  ...
+# Subtest: checkTierEvidenceRequirements - ESTABLISHED需要跨源验证
+ok 48 - checkTierEvidenceRequirements - ESTABLISHED需要跨源验证
+  ---
+  duration_ms: 0.288994
+  type: 'test'
+  ...
+# Subtest: checkTierEvidenceRequirements - LARGE_CAP需要多源
+ok 49 - checkTierEvidenceRequirements - LARGE_CAP需要多源
+  ---
+  duration_ms: 0.262902
+  type: 'test'
+  ...
+# Subtest: checkTierEvidenceRequirements - GROWTH通过
+ok 50 - checkTierEvidenceRequirements - GROWTH通过
+  ---
+  duration_ms: 0.109268
+  type: 'test'
+  ...
+# Subtest: wouldHaveBeenRejectedUnderOldRules - >$200k被拒
+ok 51 - wouldHaveBeenRejectedUnderOldRules - >$200k被拒
+  ---
+  duration_ms: 0.06179
+  type: 'test'
+  ...
+# Subtest: Regression - 减贫脱贫案例
+ok 52 - Regression - 减贫脱贫案例
+  ---
+  duration_ms: 0.054172
+  type: 'test'
+  ...
+# Subtest: Regression - 高市值币不因市值被排除
+ok 53 - Regression - 高市值币不因市值被排除
+  ---
+  duration_ms: 0.049229
+  type: 'test'
+  ...
+# Subtest: 边界测试 - 各分层边界
+ok 54 - 边界测试 - 各分层边界
+  ---
+  duration_ms: 0.067472
+  type: 'test'
+  ...
+# Subtest: 政策变更验证 - 取消硬限制
+ok 55 - 政策变更验证 - 取消硬限制
+  ---
+  duration_ms: 0.07339
+  type: 'test'
+  ...
+# node:fs:440
+#     return binding.readFileUtf8(path, stringToFlags(options.flag));
+#                    ^
+# Error: ENOENT: no such file or directory, open '/workspace/deployment-package/public/index.html'
+#     at Object.readFileSync (node:fs:440:20)
+#     at file:///workspace/deployment-package/test/onboarding-ui.test.mjs:6:17
+#     at ModuleJob.run (node:internal/modules/esm/module_job:343:25)
+#     at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:681:26)
+#     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5) {
+#   errno: -2,
+#   code: 'ENOENT',
+#   syscall: 'open',
+#   path: '/workspace/deployment-package/public/index.html'
+# }
+# Node.js v22.23.4
+# Subtest: deployment-package/test/onboarding-ui.test.mjs
+not ok 13 - deployment-package/test/onboarding-ui.test.mjs
+  ---
+  duration_ms: 24.787942
+  type: 'test'
+  location: '/workspace/deployment-package/test/onboarding-ui.test.mjs:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# Subtest: analyzeTransaction - 正常case有成交额和总资产
+ok 57 - analyzeTransaction - 正常case有成交额和总资产
+  ---
+  duration_ms: 1.80417
+  type: 'test'
+  ...
+# Subtest: analyzePositionSize - 无成交额 → 无法判定
+ok 58 - analyzePositionSize - 无成交额 → 无法判定
+  ---
+  duration_ms: 0.277372
+  type: 'test'
+  ...
+# Subtest: analyzePositionSize - 成交额>总资产 异常
+ok 59 - analyzePositionSize - 成交额>总资产 异常
+  ---
+  duration_ms: 0.188662
+  type: 'test'
+  ...
+# Subtest: analyzePositionSize - Fallback $3000
+ok 60 - analyzePositionSize - Fallback $3000
+  ---
+  duration_ms: 0.110098
+  type: 'test'
+  ...
+# Subtest: analyzePositionSize - 小于fallback且无总资产
+ok 61 - analyzePositionSize - 小于fallback且无总资产
+  ---
+  duration_ms: 0.165723
+  type: 'test'
+  ...
+# Subtest: detectPositionAnomalies - 持仓超过总资产
+ok 62 - detectPositionAnomalies - 持仓超过总资产
+  ---
+  duration_ms: 0.139158
+  type: 'test'
+  ...
+# Subtest: detectPositionAnomalies - 缺成交额
+ok 63 - detectPositionAnomalies - 缺成交额
+  ---
+  duration_ms: 0.131424
+  type: 'test'
+  ...
+# Subtest: detectPositionAnomalies - 成交与持仓差异大
+ok 64 - detectPositionAnomalies - 成交与持仓差异大
+  ---
+  duration_ms: 0.092365
+  type: 'test'
+  ...
+# Subtest: formatAnomalies - 格式化显示
+ok 65 - formatAnomalies - 格式化显示
+  ---
+  duration_ms: 0.279914
+  type: 'test'
+  ...
+# Subtest: wouldHaveUsedPositionValueAsTrade - 检测旧逻辑bug
+ok 66 - wouldHaveUsedPositionValueAsTrade - 检测旧逻辑bug
+  ---
+  duration_ms: 0.277832
+  type: 'test'
+  ...
+# Subtest: MASK regression - positionValue 102.8% of assets
+ok 67 - MASK regression - positionValue 102.8% of assets
+  ---
+  duration_ms: 0.247044
+  type: 'test'
+  ...
+# Subtest: MASK regression - 旧逻辑会误用positionValue
+ok 68 - MASK regression - 旧逻辑会误用positionValue
+  ---
+  duration_ms: 0.064687
+  type: 'test'
+  ...
+# Subtest: 正确case - 有成交额且合理
+ok 69 - 正确case - 有成交额且合理
+  ---
+  duration_ms: 0.076696
+  type: 'test'
+  ...
+# node:internal/modules/esm/resolve:275
+#     throw new ERR_MODULE_NOT_FOUND(
+#           ^
+# Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/workspace/deployment-package/src/scanner.mjs' imported from /workspace/deployment-package/test/scanner.test.mjs
+#     at finalizeResolution (node:internal/modules/esm/resolve:275:11)
+#     at moduleResolve (node:internal/modules/esm/resolve:865:10)
+#     at defaultResolve (node:internal/modules/esm/resolve:989:11)
+#     at \#cachedDefaultResolve (node:internal/modules/esm/loader:747:20)
+#     at ModuleLoader.resolve (node:internal/modules/esm/loader:724:38)
+#     at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:320:38)
+#     at ModuleJob._link (node:internal/modules/esm/module_job:182:49) {
+#   code: 'ERR_MODULE_NOT_FOUND',
+#   url: 'file:///workspace/deployment-package/src/scanner.mjs'
+# }
+# Node.js v22.23.4
+# Subtest: deployment-package/test/scanner.test.mjs
+not ok 15 - deployment-package/test/scanner.test.mjs
+  ---
+  duration_ms: 29.24634
+  type: 'test'
+  location: '/workspace/deployment-package/test/scanner.test.mjs:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# node:internal/modules/esm/resolve:275
+#     throw new ERR_MODULE_NOT_FOUND(
+#           ^
+# Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/workspace/deployment-package/src/config.mjs' imported from /workspace/deployment-package/test/scoring.test.mjs
+#     at finalizeResolution (node:internal/modules/esm/resolve:275:11)
+#     at moduleResolve (node:internal/modules/esm/resolve:865:10)
+#     at defaultResolve (node:internal/modules/esm/resolve:989:11)
+#     at \#cachedDefaultResolve (node:internal/modules/esm/loader:747:20)
+#     at ModuleLoader.resolve (node:internal/modules/esm/loader:724:38)
+#     at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:320:38)
+#     at ModuleJob._link (node:internal/modules/esm/module_job:182:49) {
+#   code: 'ERR_MODULE_NOT_FOUND',
+#   url: 'file:///workspace/deployment-package/src/config.mjs'
+# }
+# Node.js v22.23.4
+# Subtest: deployment-package/test/scoring.test.mjs
+not ok 16 - deployment-package/test/scoring.test.mjs
+  ---
+  duration_ms: 28.384727
+  type: 'test'
+  location: '/workspace/deployment-package/test/scoring.test.mjs:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# node:internal/modules/esm/resolve:275
+#     throw new ERR_MODULE_NOT_FOUND(
+#           ^
+# Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/workspace/deployment-package/src/secondary.mjs' imported from /workspace/deployment-package/test/secondary.test.mjs
+#     at finalizeResolution (node:internal/modules/esm/resolve:275:11)
+#     at moduleResolve (node:internal/modules/esm/resolve:865:10)
+#     at defaultResolve (node:internal/modules/esm/resolve:989:11)
+#     at \#cachedDefaultResolve (node:internal/modules/esm/loader:747:20)
+#     at ModuleLoader.resolve (node:internal/modules/esm/loader:724:38)
+#     at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:320:38)
+#     at ModuleJob._link (node:internal/modules/esm/module_job:182:49) {
+#   code: 'ERR_MODULE_NOT_FOUND',
+#   url: 'file:///workspace/deployment-package/src/secondary.mjs'
+# }
+# Node.js v22.23.4
+# Subtest: deployment-package/test/secondary.test.mjs
+not ok 17 - deployment-package/test/secondary.test.mjs
+  ---
+  duration_ms: 28.843218
+  type: 'test'
+  location: '/workspace/deployment-package/test/secondary.test.mjs:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# node:internal/modules/esm/resolve:275
+#     throw new ERR_MODULE_NOT_FOUND(
+#           ^
+# Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/workspace/deployment-package/src/server.mjs' imported from /workspace/deployment-package/test/server.test.mjs
+#     at finalizeResolution (node:internal/modules/esm/resolve:275:11)
+#     at moduleResolve (node:internal/modules/esm/resolve:865:10)
+#     at defaultResolve (node:internal/modules/esm/resolve:989:11)
+#     at \#cachedDefaultResolve (node:internal/modules/esm/loader:747:20)
+#     at ModuleLoader.resolve (node:internal/modules/esm/loader:724:38)
+#     at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:320:38)
+#     at ModuleJob._link (node:internal/modules/esm/module_job:182:49) {
+#   code: 'ERR_MODULE_NOT_FOUND',
+#   url: 'file:///workspace/deployment-package/src/server.mjs'
+# }
+# Node.js v22.23.4
+# Subtest: deployment-package/test/server.test.mjs
+not ok 18 - deployment-package/test/server.test.mjs
+  ---
+  duration_ms: 31.398741
+  type: 'test'
+  location: '/workspace/deployment-package/test/server.test.mjs:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# node:internal/modules/esm/resolve:275
+#     throw new ERR_MODULE_NOT_FOUND(
+#           ^
+# Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/workspace/deployment-package/src/x-monitor.mjs' imported from /workspace/deployment-package/test/soft-mention.test.mjs
+#     at finalizeResolution (node:internal/modules/esm/resolve:275:11)
+#     at moduleResolve (node:internal/modules/esm/resolve:865:10)
+#     at defaultResolve (node:internal/modules/esm/resolve:989:11)
+#     at \#cachedDefaultResolve (node:internal/modules/esm/loader:747:20)
+#     at ModuleLoader.resolve (node:internal/modules/esm/loader:724:38)
+#     at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:320:38)
+#     at ModuleJob._link (node:internal/modules/esm/module_job:182:49) {
+#   code: 'ERR_MODULE_NOT_FOUND',
+#   url: 'file:///workspace/deployment-package/src/x-monitor.mjs'
+# }
+# Node.js v22.23.4
+# Subtest: deployment-package/test/soft-mention.test.mjs
+not ok 19 - deployment-package/test/soft-mention.test.mjs
+  ---
+  duration_ms: 28.299521
+  type: 'test'
+  location: '/workspace/deployment-package/test/soft-mention.test.mjs:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# node:fs:440
+#     return binding.readFileUtf8(path, stringToFlags(options.flag));
+#                    ^
+# Error: ENOENT: no such file or directory, open '/workspace/deployment-package/public/index.html'
+#     at Object.readFileSync (node:fs:440:20)
+#     at file:///workspace/deployment-package/test/ui.test.mjs:9:17
+#     at ModuleJob.run (node:internal/modules/esm/module_job:343:25)
+#     at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:681:26)
+#     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5) {
+#   errno: -2,
+#   code: 'ENOENT',
+#   syscall: 'open',
+#   path: '/workspace/deployment-package/public/index.html'
+# }
+# Node.js v22.23.4
+# Subtest: deployment-package/test/ui.test.mjs
+not ok 20 - deployment-package/test/ui.test.mjs
+  ---
+  duration_ms: 30.981998
+  type: 'test'
+  location: '/workspace/deployment-package/test/ui.test.mjs:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# node:internal/modules/esm/resolve:275
+#     throw new ERR_MODULE_NOT_FOUND(
+#           ^
+# Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/workspace/deployment-package/src/windows-proxy.mjs' imported from /workspace/deployment-package/test/windows-proxy.test.mjs
+#     at finalizeResolution (node:internal/modules/esm/resolve:275:11)
+#     at moduleResolve (node:internal/modules/esm/resolve:865:10)
+#     at defaultResolve (node:internal/modules/esm/resolve:989:11)
+#     at \#cachedDefaultResolve (node:internal/modules/esm/loader:747:20)
+#     at ModuleLoader.resolve (node:internal/modules/esm/loader:724:38)
+#     at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:320:38)
+#     at ModuleJob._link (node:internal/modules/esm/module_job:182:49) {
+#   code: 'ERR_MODULE_NOT_FOUND',
+#   url: 'file:///workspace/deployment-package/src/windows-proxy.mjs'
+# }
+# Node.js v22.23.4
+# Subtest: deployment-package/test/windows-proxy.test.mjs
+not ok 21 - deployment-package/test/windows-proxy.test.mjs
+  ---
+  duration_ms: 26.725957
+  type: 'test'
+  location: '/workspace/deployment-package/test/windows-proxy.test.mjs:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# node:internal/modules/esm/resolve:275
+#     throw new ERR_MODULE_NOT_FOUND(
+#           ^
+# Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/workspace/deployment-package/src/x-monitor.mjs' imported from /workspace/deployment-package/test/x-monitor.test.mjs
+#     at finalizeResolution (node:internal/modules/esm/resolve:275:11)
+#     at moduleResolve (node:internal/modules/esm/resolve:865:10)
+#     at defaultResolve (node:internal/modules/esm/resolve:989:11)
+#     at \#cachedDefaultResolve (node:internal/modules/esm/loader:747:20)
+#     at ModuleLoader.resolve (node:internal/modules/esm/loader:724:38)
+#     at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:320:38)
+#     at ModuleJob._link (node:internal/modules/esm/module_job:182:49) {
+#   code: 'ERR_MODULE_NOT_FOUND',
+#   url: 'file:///workspace/deployment-package/src/x-monitor.mjs'
+# }
+# Node.js v22.23.4
+# Subtest: deployment-package/test/x-monitor.test.mjs
+not ok 22 - deployment-package/test/x-monitor.test.mjs
+  ---
+  duration_ms: 28.197006
+  type: 'test'
+  location: '/workspace/deployment-package/test/x-monitor.test.mjs:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# node:internal/modules/esm/resolve:275
+#     throw new ERR_MODULE_NOT_FOUND(
+#           ^
+# Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/workspace/deployment-package/src/x-providers.mjs' imported from /workspace/deployment-package/test/x-providers.test.mjs
+#     at finalizeResolution (node:internal/modules/esm/resolve:275:11)
+#     at moduleResolve (node:internal/modules/esm/resolve:865:10)
+#     at defaultResolve (node:internal/modules/esm/resolve:989:11)
+#     at \#cachedDefaultResolve (node:internal/modules/esm/loader:747:20)
+#     at ModuleLoader.resolve (node:internal/modules/esm/loader:724:38)
+#     at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:320:38)
+#     at ModuleJob._link (node:internal/modules/esm/module_job:182:49) {
+#   code: 'ERR_MODULE_NOT_FOUND',
+#   url: 'file:///workspace/deployment-package/src/x-providers.mjs'
+# }
+# Node.js v22.23.4
+# Subtest: deployment-package/test/x-providers.test.mjs
+not ok 23 - deployment-package/test/x-providers.test.mjs
+  ---
+  duration_ms: 27.989817
+  type: 'test'
+  location: '/workspace/deployment-package/test/x-providers.test.mjs:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# Subtest: detectChainCompetition: no recent hits
+ok 79 - detectChainCompetition: no recent hits
+  ---
+  duration_ms: 1.833898
+  type: 'test'
+  ...
+# Subtest: detectChainCompetition: single chain with high-tier activity
+not ok 80 - detectChainCompetition: single chain with high-tier activity
+  ---
+  duration_ms: 0.813635
+  type: 'test'
+  location: '/workspace/test/chain-competition.test.mjs:18:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    false !== true
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/test/chain-competition.test.mjs:46:10)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# Subtest: detectChainCompetition: cross-chain competition
+not ok 81 - detectChainCompetition: cross-chain competition
+  ---
+  duration_ms: 0.27205
+  type: 'test'
+  location: '/workspace/test/chain-competition.test.mjs:53:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    false !== true
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/test/chain-competition.test.mjs:90:10)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: detectChainCompetition: old hits excluded
+ok 82 - detectChainCompetition: old hits excluded
+  ---
+  duration_ms: 0.186083
+  type: 'test'
+  ...
+# Subtest: detectChainCompetition: multi-chain accounts contribute to all chains
+ok 83 - detectChainCompetition: multi-chain accounts contribute to all chains
+  ---
+  duration_ms: 0.178298
+  type: 'test'
+  ...
+# Subtest: computeChainAffinityBonus: no competition
+ok 84 - computeChainAffinityBonus: no competition
+  ---
+  duration_ms: 0.112197
+  type: 'test'
+  ...
+# Subtest: computeChainAffinityBonus: competition but below threshold
+ok 85 - computeChainAffinityBonus: competition but below threshold
+  ---
+  duration_ms: 0.14597
+  type: 'test'
+  ...
+# Subtest: computeChainAffinityBonus: token chain matches elevated competition
+ok 86 - computeChainAffinityBonus: token chain matches elevated competition
+  ---
+  duration_ms: 0.102037
+  type: 'test'
+  ...
+# Subtest: computeChainAffinityBonus: token chain does not match
+ok 87 - computeChainAffinityBonus: token chain does not match
+  ---
+  duration_ms: 0.24507
+  type: 'test'
+  ...
+# Subtest: computeChainAffinityBonus: high intensity grants larger bonus
+ok 88 - computeChainAffinityBonus: high intensity grants larger bonus
+  ---
+  duration_ms: 0.259251
+  type: 'test'
+  ...
+# Subtest: community distribution has platform launchers and excludes private runtime data
+ok 89 - community distribution has platform launchers and excludes private runtime data
+  ---
+  duration_ms: 1.038611
+  type: 'test'
+  ...
+# Subtest: Windows test launcher runs in foreground so it can be stopped cleanly
+ok 90 - Windows test launcher runs in foreground so it can be stopped cleanly
+  ---
+  duration_ms: 0.861164
+  type: 'test'
+  ...
+# Subtest: portable Windows launcher uses only its bundled runtime
+ok 91 - portable Windows launcher uses only its bundled runtime
+  ---
+  duration_ms: 0.262436
+  type: 'test'
+  ...
+# Subtest: portable EXE bootstrap only starts the bundled read-only application
+ok 92 - portable EXE bootstrap only starts the bundled read-only application
+  ---
+  duration_ms: 0.181119
+  type: 'test'
+  ...
+# Subtest: Windows launcher stays local and does not require administrator privileges
+ok 93 - Windows launcher stays local and does not require administrator privileges
+  ---
+  duration_ms: 0.244593
+  type: 'test'
+  ...
+# Subtest: open-source release metadata uses AGPL and remains blocked from accidental npm publishing
+ok 94 - open-source release metadata uses AGPL and remains blocked from accidental npm publishing
+  ---
+  duration_ms: 0.171038
+  type: 'test'
+  ...
+# Subtest: community entry point never inherits a global GMGN key
+ok 95 - community entry point never inherits a global GMGN key
+  ---
+  duration_ms: 0.191229
+  type: 'test'
+  ...
+# Subtest: E2E: Watchlist auto-register → refresh → alert → dedupe
+ok 96 - E2E: Watchlist auto-register → refresh → alert → dedupe
+  ---
+  duration_ms: 2.931067
+  type: 'test'
+  ...
+# Subtest: E2E: Sample incomplete → cannot confirm exit
+ok 97 - E2E: Sample incomplete → cannot confirm exit
+  ---
+  duration_ms: 0.199547
+  type: 'test'
+  ...
+# Subtest: E2E: Contradictory samples from fixture
+ok 98 - E2E: Contradictory samples from fixture
+  ---
+  duration_ms: 0.11792
+  type: 'test'
+  ...
+# Subtest: embryonicScore: optimal early stage token should score hot
+ok 99 - embryonicScore: optimal early stage token should score hot
+  ---
+  duration_ms: 1.000304
+  type: 'test'
+  ...
+# Subtest: embryonicScore: borderline token should score watch
+ok 100 - embryonicScore: borderline token should score watch
+  ---
+  duration_ms: 0.162378
+  type: 'test'
+  ...
+# Subtest: embryonicScore: poor quality token should score ignore
+ok 101 - embryonicScore: poor quality token should score ignore
+  ---
+  duration_ms: 0.156877
+  type: 'test'
+  ...
+# Subtest: embryonicScore: very fresh token gets bonus
+ok 102 - embryonicScore: very fresh token gets bonus
+  ---
+  duration_ms: 0.118615
+  type: 'test'
+  ...
+# Subtest: embryonicScore: smart money multiplier
+ok 103 - embryonicScore: smart money multiplier
+  ---
+  duration_ms: 0.182461
+  type: 'test'
+  ...
+# Subtest: embryonicScore: handles missing fields gracefully
+ok 104 - embryonicScore: handles missing fields gracefully
+  ---
+  duration_ms: 0.104353
+  type: 'test'
+  ...
+# Subtest: embryonicScore: AURACAT fix - prefers live still-holding over historical aggregate
+ok 105 - embryonicScore: AURACAT fix - prefers live still-holding over historical aggregate
+  ---
+  duration_ms: 0.575022
+  type: 'test'
+  ...
+# Subtest: autoRegisterToWatchlist - 新登记
+ok 106 - autoRegisterToWatchlist - 新登记
+  ---
+  duration_ms: 1.435373
+  type: 'test'
+  ...
+# Subtest: autoRegisterToWatchlist - 重复登记只更新
+ok 107 - autoRegisterToWatchlist - 重复登记只更新
+  ---
+  duration_ms: 0.202135
+  type: 'test'
+  ...
+# Subtest: createHoldingSnapshot - 完整样本
+ok 108 - createHoldingSnapshot - 完整样本
+  ---
+  duration_ms: 0.212231
+  type: 'test'
+  ...
+# Subtest: createHoldingSnapshot - 不完整样本
+ok 109 - createHoldingSnapshot - 不完整样本
+  ---
+  duration_ms: 0.096405
+  type: 'test'
+  ...
+# Subtest: analyzeHoldingChange - 样本不完整 → 无法确认清仓
+ok 110 - analyzeHoldingChange - 样本不完整 → 无法确认清仓
+  ---
+  duration_ms: 0.208022
+  type: 'test'
+  ...
+# Subtest: analyzeHoldingChange - 样本完整 → 确认全部清仓
+ok 111 - analyzeHoldingChange - 样本完整 → 确认全部清仓
+  ---
+  duration_ms: 0.107269
+  type: 'test'
+  ...
+# Subtest: analyzeHoldingChange - 净卖压
+ok 112 - analyzeHoldingChange - 净卖压
+  ---
+  duration_ms: 0.165213
+  type: 'test'
+  ...
+# Subtest: alertDedupeKey - 生成去重键
+ok 113 - alertDedupeKey - 生成去重键
+  ---
+  duration_ms: 0.128536
+  type: 'test'
+  ...
+# Subtest: shouldSendAlert - 去重窗口内不重复发送
+ok 114 - shouldSendAlert - 去重窗口内不重复发送
+  ---
+  duration_ms: 0.268656
+  type: 'test'
+  ...
+# Subtest: shouldSendAlert - 超出去重窗口可以发送
+ok 115 - shouldSendAlert - 超出去重窗口可以发送
+  ---
+  duration_ms: 0.256406
+  type: 'test'
+  ...
+# Subtest: NIHAO regression - 两个不同CA独立跟踪
+ok 116 - NIHAO regression - 两个不同CA独立跟踪
+  ---
+  duration_ms: 0.209136
+  type: 'test'
+  ...
+# Subtest: GMGN key store validates the key and keeps it in a private state file
+ok 117 - GMGN key store validates the key and keeps it in a private state file
+  ---
+  duration_ms: 2.75945
+  type: 'test'
+  ...
+# Subtest: GMGN key validation rejects whitespace, wrong prefixes and unsafe characters
+ok 118 - GMGN key validation rejects whitespace, wrong prefixes and unsafe characters
+  ---
+  duration_ms: 0.12034
+  type: 'test'
+  ...
+# Subtest: each new GMGN API setup gets a fresh pending Ed25519 key without exposing the private key
+ok 119 - each new GMGN API setup gets a fresh pending Ed25519 key without exposing the private key
+  ---
+  duration_ms: 5.960016
+  type: 'test'
+  ...
+# Subtest: UI key overrides both legacy configuration and environment, with no mutation of either
+ok 120 - UI key overrides both legacy configuration and environment, with no mutation of either
+  ---
+  duration_ms: 2.960499
+  type: 'test'
+  ...
+# Subtest: production GMGN worker ignores project/global dotenv and sends exactly the submitted key
+not ok 121 - production GMGN worker ignores project/global dotenv and sends exactly the submitted key
+  ---
+  duration_ms: 31.18234
+  type: 'test'
+  location: '/workspace/test/gmgn-onboarding.test.mjs:39:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Command failed: /exec-daemon/node --import /workspace/scripts/testing/gmgn-fixture.mjs /workspace/src/gmgn-readonly-worker.mjs market trending --chain bsc --interval 5m --limit 1 --raw
+    {"code":"GMGN_DEPENDENCY_MISSING","retryAfterMs":0}
+    
+  code: 1
+  stack: |-
+    genericNodeError (node:internal/errors:983:15)
+    wrappedFn (node:internal/errors:537:14)
+    ChildProcess.exithandler (node:child_process:417:12)
+    ChildProcess.emit (node:events:519:28)
+    maybeClose (node:internal/child_process:1101:16)
+    ChildProcess._handle.onexit (node:internal/child_process:304:5)
+  ...
+# Subtest: adapter preserves discovery filters and candle milliseconds while forbidding trading
+ok 122 - adapter preserves discovery filters and candle milliseconds while forbidding trading
+  ---
+  duration_ms: 1.989565
+  type: 'test'
+  ...
+# Subtest: API connection verifies read access without consuming signed follow-wallet quota
+ok 123 - API connection verifies read access without consuming signed follow-wallet quota
+  ---
+  duration_ms: 0.393098
+  type: 'test'
+  ...
+# Subtest: first launch stays unconfigured; failed validation preserves key and successful validation requests a scan
+ok 124 - first launch stays unconfigured; failed validation preserves key and successful validation requests a scan
+  ---
+  duration_ms: 5.281732
+  type: 'test'
+  ...
+# Subtest: concurrent key submissions cannot overwrite a key under validation
+ok 125 - concurrent key submissions cannot overwrite a key under validation
+  ---
+  duration_ms: 0.266345
+  type: 'test'
+  ...
+# Subtest: runtime check rejects Node versions without the proxy flag used by the scanner
+ok 126 - runtime check rejects Node versions without the proxy flag used by the scanner
+  ---
+  duration_ms: 0.221942
+  type: 'test'
+  ...
+# Subtest: an authenticated empty discovery is an empty scan, not a connection failure
+ok 127 - an authenticated empty discovery is an empty scan, not a connection failure
+  ---
+  duration_ms: 0.326455
+  type: 'test'
+  ...
+# Subtest: normalizes nested GMGN list shapes without guessing token fields
+ok 128 - normalizes nested GMGN list shapes without guessing token fields
+  ---
+  duration_ms: 0.958486
+  type: 'test'
+  ...
+# Subtest: translates GMGN rate limit errors without leaking the raw command
+ok 129 - translates GMGN rate limit errors without leaking the raw command
+  ---
+  duration_ms: 0.474086
+  type: 'test'
+  ...
+# Subtest: discovery uses the duration form accepted by both GMGN market commands
+ok 130 - discovery uses the duration form accepted by both GMGN market commands
+  ---
+  duration_ms: 0.219888
+  type: 'test'
+  ...
+# Subtest: GMGN child environment keeps network proxy settings without forwarding unrelated secrets
+ok 131 - GMGN child environment keeps network proxy settings without forwarding unrelated secrets
+  ---
+  duration_ms: 0.243083
+  type: 'test'
+  ...
+# Subtest: stored GMGN key is injected through the child environment and never command arguments
+ok 132 - stored GMGN key is injected through the child environment and never command arguments
+  ---
+  duration_ms: 0.525132
+  type: 'test'
+  ...
+# Subtest: createHolderSample - 完整样本
+ok 133 - createHolderSample - 完整样本
+  ---
+  duration_ms: 0.82723
+  type: 'test'
+  ...
+# Subtest: createHolderSample - 不完整样本
+ok 134 - createHolderSample - 不完整样本
+  ---
+  duration_ms: 1.375791
+  type: 'test'
+  ...
+# Subtest: createHolderSample - 100个认定为足够代表性
+ok 135 - createHolderSample - 100个认定为足够代表性
+  ---
+  duration_ms: 0.171667
+  type: 'test'
+  ...
+# Subtest: determineTokenStatus - 三种状态
+ok 136 - determineTokenStatus - 三种状态
+  ---
+  duration_ms: 0.132442
+  type: 'test'
+  ...
+# Subtest: scoreSmartMoneyWithCompleteness - 完整样本0个
+ok 137 - scoreSmartMoneyWithCompleteness - 完整样本0个
+  ---
+  duration_ms: 0.317824
+  type: 'test'
+  ...
+# Subtest: scoreSmartMoneyWithCompleteness - 不完整样本无法加分
+ok 138 - scoreSmartMoneyWithCompleteness - 不完整样本无法加分
+  ---
+  duration_ms: 0.111386
+  type: 'test'
+  ...
+# Subtest: scoreSmartMoneyWithCompleteness - 完整样本3个
+ok 139 - scoreSmartMoneyWithCompleteness - 完整样本3个
+  ---
+  duration_ms: 0.182901
+  type: 'test'
+  ...
+# Subtest: Offline sample - holder_conflict 不混淆榜单与实时
+ok 140 - Offline sample - holder_conflict 不混淆榜单与实时
+  ---
+  duration_ms: 0.157492
+  type: 'test'
+  ...
+# Subtest: detectContradictorySamples - 检测榜单与实时不一致
+ok 141 - detectContradictorySamples - 检测榜单与实时不一致
+  ---
+  duration_ms: 0.711805
+  type: 'test'
+  ...
+# Subtest: detectContradictorySamples - 样本不完整无法判定矛盾
+ok 142 - detectContradictorySamples - 样本不完整无法判定矛盾
+  ---
+  duration_ms: 0.387102
+  type: 'test'
+  ...
+# Subtest: AURACAT regression - aggregate=36, live=0 应该使用live
+ok 143 - AURACAT regression - aggregate=36, live=0 应该使用live
+  ---
+  duration_ms: 0.248535
+  type: 'test'
+  ...
+# Subtest: weighted request pacing, bounded cache and credential invalidation
+ok 144 - weighted request pacing, bounded cache and credential invalidation
+  ---
+  duration_ms: 1.369786
+  type: 'test'
+  ...
+# Subtest: confirmed static rejection skips expensive wallet and candle reads
+ok 145 - confirmed static rejection skips expensive wallet and candle reads
+  ---
+  duration_ms: 0.778056
+  type: 'test'
+  ...
+# Subtest: historical samples survive delisting; missing prices stay missing and retries back off
+ok 146 - historical samples survive delisting; missing prices stay missing and retries back off
+  ---
+  duration_ms: 0.678593
+  type: 'test'
+  ...
+# Subtest: priceAt selects timestamped closed candles, not current price or future bars
+ok 147 - priceAt selects timestamped closed candles, not current price or future bars
+  ---
+  duration_ms: 0.267226
+  type: 'test'
+  ...
+# Subtest: rejection cohort is deterministic and separated from passed outcomes
+ok 148 - rejection cohort is deterministic and separated from passed outcomes
+  ---
+  duration_ms: 1.054291
+  type: 'test'
+  ...
+# Subtest: local store recovers last good JSON; unrecoverable data is not silently reset
+ok 149 - local store recovers last good JSON; unrecoverable data is not silently reset
+  ---
+  duration_ms: 3.110965
+  type: 'test'
+  ...
+# Subtest: favorites and notes persist with exact Solana keys, bounded input and safe chain selection
+ok 150 - favorites and notes persist with exact Solana keys, bounded input and safe chain selection
+  ---
+  duration_ms: 3.134571
+  type: 'test'
+  ...
+# Subtest: disconnect survives reload and never falls back to legacy credentials; verification races cannot restore it
+ok 151 - disconnect survives reload and never falls back to legacy credentials; verification races cannot restore it
+  ---
+  duration_ms: 9.179005
+  type: 'test'
+  ...
+# Subtest: UI approval is case-sensitive on Solana and expires on risk revision changes
+ok 152 - UI approval is case-sensitive on Solana and expires on risk revision changes
+  ---
+  duration_ms: 2.266063
+  type: 'test'
+  ...
+# Subtest: scanner batch audits multiple candidates, saves per-chain history, and multi-chain view does not interrupt work
+ok 153 - scanner batch audits multiple candidates, saves per-chain history, and multi-chain view does not interrupt work
+  ---
+  duration_ms: 8.513153
+  type: 'test'
+  ...
+# Subtest: settings endpoints validate origin/schema; view/export exposes whitelisted records only
+ok 154 - settings endpoints validate origin/schema; view/export exposes whitelisted records only
+  ---
+  duration_ms: 8.466286
+  type: 'test'
+  ...
+# Subtest: live requests use a one-minute read with no deep-audit or trading calls
+ok 155 - live requests use a one-minute read with no deep-audit or trading calls
+  ---
+  duration_ms: 1.175851
+  type: 'test'
+  ...
+# Subtest: quick discovery drops explicit hazards and newborns, preserves unknowns and case-sensitive Solana addresses
+ok 156 - quick discovery drops explicit hazards and newborns, preserves unknowns and case-sensitive Solana addresses
+  ---
+  duration_ms: 1.588492
+  type: 'test'
+  ...
+# Subtest: snapshot changes use actual elapsed time; first load is not a stream of fake new arrivals
+ok 157 - snapshot changes use actual elapsed time; first load is not a stream of fake new arrivals
+  ---
+  duration_ms: 0.434411
+  type: 'test'
+  ...
+# Subtest: visible-client leases share one in-flight request and one global cadence across chains
+ok 158 - visible-client leases share one in-flight request and one global cadence across chains
+  ---
+  duration_ms: 4.876948
+  type: 'test'
+  ...
+# Subtest: global rate-limit cooldown is honored; failed responses preserve old timestamps and stale flags
+ok 159 - global rate-limit cooldown is honored; failed responses preserve old timestamps and stale flags
+  ---
+  duration_ms: 0.766083
+  type: 'test'
+  ...
+# Subtest: credential changes discard in-flight data; unconfigured feed never requests upstream
+ok 160 - credential changes discard in-flight data; unconfigured feed never requests upstream
+  ---
+  duration_ms: 1.428773
+  type: 'test'
+  ...
+# Subtest: malformed successful payloads are errors, not fake empty live updates; audit input has no mislabeled 1m counters
+ok 161 - malformed successful payloads are errors, not fake empty live updates; audit input has no mislabeled 1m counters
+  ---
+  duration_ms: 0.523555
+  type: 'test'
+  ...
+# Subtest: manual review uses original safety gates, one priority slot, unchanged batch budget and no chain switch
+ok 162 - manual review uses original safety gates, one priority slot, unchanged batch budget and no chain switch
+  ---
+  duration_ms: 14.931816
+  type: 'test'
+  ...
+# Subtest: live endpoints require same-origin exact schema and return no raw data or trade authority
+ok 163 - live endpoints require same-origin exact schema and return no raw data or trade authority
+  ---
+  duration_ms: 5.054125
+  type: 'test'
+  ...
+# Subtest: MARKET_CAP_TIERS - 常量定义
+ok 164 - MARKET_CAP_TIERS - 常量定义
+  ---
+  duration_ms: 1.487508
+  type: 'test'
+  ...
+# Subtest: categorizeByMarketCap - EMBRYONIC <$50k
+ok 165 - categorizeByMarketCap - EMBRYONIC <$50k
+  ---
+  duration_ms: 0.229305
+  type: 'test'
+  ...
+# Subtest: categorizeByMarketCap - EARLY $50k-200k
+ok 166 - categorizeByMarketCap - EARLY $50k-200k
+  ---
+  duration_ms: 0.085427
+  type: 'test'
+  ...
+# Subtest: categorizeByMarketCap - GROWTH $200k-1M
+ok 167 - categorizeByMarketCap - GROWTH $200k-1M
+  ---
+  duration_ms: 0.078826
+  type: 'test'
+  ...
+# Subtest: categorizeByMarketCap - ESTABLISHED $1M-20M
+ok 168 - categorizeByMarketCap - ESTABLISHED $1M-20M
+  ---
+  duration_ms: 0.19614
+  type: 'test'
+  ...
+# Subtest: categorizeByMarketCap - LARGE_CAP >$20M
+ok 169 - categorizeByMarketCap - LARGE_CAP >$20M
+  ---
+  duration_ms: 0.078973
+  type: 'test'
+  ...
+# Subtest: marketCapScoreModifier - 分层调整系数
+ok 170 - marketCapScoreModifier - 分层调整系数
+  ---
+  duration_ms: 0.164287
+  type: 'test'
+  ...
+# Subtest: marketCapScoreModifier - 应用到评分
+ok 171 - marketCapScoreModifier - 应用到评分
+  ---
+  duration_ms: 0.081031
+  type: 'test'
+  ...
+# Subtest: checkTierEvidenceRequirements - ESTABLISHED需要跨源验证
+ok 172 - checkTierEvidenceRequirements - ESTABLISHED需要跨源验证
+  ---
+  duration_ms: 0.314337
+  type: 'test'
+  ...
+# Subtest: checkTierEvidenceRequirements - LARGE_CAP需要多源
+ok 173 - checkTierEvidenceRequirements - LARGE_CAP需要多源
+  ---
+  duration_ms: 0.355077
+  type: 'test'
+  ...
+# Subtest: checkTierEvidenceRequirements - GROWTH通过
+ok 174 - checkTierEvidenceRequirements - GROWTH通过
+  ---
+  duration_ms: 0.123435
+  type: 'test'
+  ...
+# Subtest: wouldHaveBeenRejectedUnderOldRules - >$200k被拒
+ok 175 - wouldHaveBeenRejectedUnderOldRules - >$200k被拒
+  ---
+  duration_ms: 0.088889
+  type: 'test'
+  ...
+# Subtest: Regression - 减贫脱贫案例
+ok 176 - Regression - 减贫脱贫案例
+  ---
+  duration_ms: 0.055782
+  type: 'test'
+  ...
+# Subtest: Regression - 高市值币不因市值被排除
+ok 177 - Regression - 高市值币不因市值被排除
+  ---
+  duration_ms: 0.050723
+  type: 'test'
+  ...
+# Subtest: 边界测试 - 各分层边界
+ok 178 - 边界测试 - 各分层边界
+  ---
+  duration_ms: 0.059221
+  type: 'test'
+  ...
+# Subtest: 政策变更验证 - 取消硬限制
+ok 179 - 政策变更验证 - 取消硬限制
+  ---
+  duration_ms: 0.076814
+  type: 'test'
+  ...
+# Subtest: key form waits for actual verification, clears input and displays only translated error codes
+ok 180 - key form waits for actual verification, clears input and displays only translated error codes
+  ---
+  duration_ms: 4.39906
+  type: 'test'
+  ...
+# Subtest: analyzeTransaction - 正常case有成交额和总资产
+ok 181 - analyzeTransaction - 正常case有成交额和总资产
+  ---
+  duration_ms: 1.776665
+  type: 'test'
+  ...
+# Subtest: analyzePositionSize - 无成交额 → 无法判定
+ok 182 - analyzePositionSize - 无成交额 → 无法判定
+  ---
+  duration_ms: 0.226406
+  type: 'test'
+  ...
+# Subtest: analyzePositionSize - 成交额>总资产 异常
+ok 183 - analyzePositionSize - 成交额>总资产 异常
+  ---
+  duration_ms: 0.214172
+  type: 'test'
+  ...
+# Subtest: analyzePositionSize - Fallback $3000
+ok 184 - analyzePositionSize - Fallback $3000
+  ---
+  duration_ms: 0.109078
+  type: 'test'
+  ...
+# Subtest: analyzePositionSize - 小于fallback且无总资产
+ok 185 - analyzePositionSize - 小于fallback且无总资产
+  ---
+  duration_ms: 0.151434
+  type: 'test'
+  ...
+# Subtest: detectPositionAnomalies - 持仓超过总资产
+ok 186 - detectPositionAnomalies - 持仓超过总资产
+  ---
+  duration_ms: 0.167375
+  type: 'test'
+  ...
+# Subtest: detectPositionAnomalies - 缺成交额
+ok 187 - detectPositionAnomalies - 缺成交额
+  ---
+  duration_ms: 0.137865
+  type: 'test'
+  ...
+# Subtest: detectPositionAnomalies - 成交与持仓差异大
+ok 188 - detectPositionAnomalies - 成交与持仓差异大
+  ---
+  duration_ms: 0.091487
+  type: 'test'
+  ...
+# Subtest: formatAnomalies - 格式化显示
+ok 189 - formatAnomalies - 格式化显示
+  ---
+  duration_ms: 0.292816
+  type: 'test'
+  ...
+# Subtest: wouldHaveUsedPositionValueAsTrade - 检测旧逻辑bug
+ok 190 - wouldHaveUsedPositionValueAsTrade - 检测旧逻辑bug
+  ---
+  duration_ms: 0.275399
+  type: 'test'
+  ...
+# Subtest: MASK regression - positionValue 102.8% of assets
+ok 191 - MASK regression - positionValue 102.8% of assets
+  ---
+  duration_ms: 0.236003
+  type: 'test'
+  ...
+# Subtest: MASK regression - 旧逻辑会误用positionValue
+ok 192 - MASK regression - 旧逻辑会误用positionValue
+  ---
+  duration_ms: 0.061952
+  type: 'test'
+  ...
+# Subtest: 正确case - 有成交额且合理
+ok 193 - 正确case - 有成交额且合理
+  ---
+  duration_ms: 0.115346
+  type: 'test'
+  ...
+# Subtest: manual rescan requests run immediately or queue behind the active cycle
+ok 194 - manual rescan requests run immediately or queue behind the active cycle
+  ---
+  duration_ms: 5.533448
+  type: 'test'
+  ...
+# Subtest: X链接只接受真实用户名并拒绝站内功能路径
+ok 195 - X链接只接受真实用户名并拒绝站内功能路径
+  ---
+  duration_ms: 0.371061
+  type: 'test'
+  ...
+# Subtest: scanner separates permanent safety failures from dynamic rechecks
+ok 196 - scanner separates permanent safety failures from dynamic rechecks
+  ---
+  duration_ms: 0.320883
+  type: 'test'
+  ...
+# Subtest: persistent audit scheduler prioritizes fresh priority-band candidates and reserves fairness and recheck slots
+ok 197 - persistent audit scheduler prioritizes fresh priority-band candidates and reserves fairness and recheck slots
+  ---
+  duration_ms: 0.317533
+  type: 'test'
+  ...
+# Subtest: secondary safety is a one-vote veto while unsupported coverage remains manual-only
+ok 198 - secondary safety is a one-vote veto while unsupported coverage remains manual-only
+  ---
+  duration_ms: 0.2901
+  type: 'test'
+  ...
+# Subtest: shadow outcomes sample each requested horizon on time without late backfill
+ok 199 - shadow outcomes sample each requested horizon on time without late backfill
+  ---
+  duration_ms: 0.383417
+  type: 'test'
+  ...
+# Subtest: only X_REVIEW creates a shadow cohort while later decisions still update its audit trail
+ok 200 - only X_REVIEW creates a shadow cohort while later decisions still update its audit trail
+  ---
+  duration_ms: 0.256658
+  type: 'test'
+  ...
+# Subtest: calibration readiness requires 50 completed samples at all three declared horizons
+ok 201 - calibration readiness requires 50 completed samples at all three declared horizons
+  ---
+  duration_ms: 1.261766
+  type: 'test'
+  ...
+# Subtest: Solana outcome matching preserves base58 address case while EVM keys remain case-insensitive
+ok 202 - Solana outcome matching preserves base58 address case while EVM keys remain case-insensitive
+  ---
+  duration_ms: 0.339329
+  type: 'test'
+  ...
+# Subtest: discovery waits five minutes and prioritizes 20k-80k market cap
+ok 203 - discovery waits five minutes and prioritizes 20k-80k market cap
+  ---
+  duration_ms: 1.138185
+  type: 'test'
+  ...
+# Subtest: discovery recognizes boolean variants and fails closed on malformed safety fields
+ok 204 - discovery recognizes boolean variants and fails closed on malformed safety fields
+  ---
+  duration_ms: 0.361912
+  type: 'test'
+  ...
+# Subtest: discovery validates Solana and EVM addresses according to chain
+ok 205 - discovery validates Solana and EVM addresses according to chain
+  ---
+  duration_ms: 0.194996
+  type: 'test'
+  ...
+# Subtest: discovery ranking rewards multiple smart-money wallets but never rewards KOL-only interest
+ok 206 - discovery ranking rewards multiple smart-money wallets but never rewards KOL-only interest
+  ---
+  duration_ms: 0.279276
+  type: 'test'
+  ...
+# Subtest: wallet proxy rejects bot-heavy and linked-funding holder sets
+ok 207 - wallet proxy rejects bot-heavy and linked-funding holder sets
+  ---
+  duration_ms: 1.744104
+  type: 'test'
+  ...
+# Subtest: wallet proxy deduplicates addresses, normalizes risk tags and parses explicit percentages
+ok 208 - wallet proxy deduplicates addresses, normalizes risk tags and parses explicit percentages
+  ---
+  duration_ms: 0.364815
+  type: 'test'
+  ...
+# Subtest: market behavior deduplicates wallet evidence and requires multiple smart wallets for strength
+ok 209 - market behavior deduplicates wallet evidence and requires multiple smart wallets for strength
+  ---
+  duration_ms: 0.905749
+  type: 'test'
+  ...
+# Subtest: market behavior prefers live still-holding smart money over historical aggregate (AURACAT fix)
+ok 210 - market behavior prefers live still-holding smart money over historical aggregate (AURACAT fix)
+  ---
+  duration_ms: 0.304915
+  type: 'test'
+  ...
+# Subtest: market behavior sends KOL-only, inconsistent activity and old sudden pumps to recheck
+ok 211 - market behavior sends KOL-only, inconsistent activity and old sudden pumps to recheck
+  ---
+  duration_ms: 0.453678
+  type: 'test'
+  ...
+# Subtest: market behavior identifies distribution flow and corroborated repeat-launcher risk
+ok 212 - market behavior identifies distribution flow and corroborated repeat-launcher risk
+  ---
+  duration_ms: 0.351291
+  type: 'test'
+  ...
+# Subtest: five-minute observation rejects single-candle machine volume pulse
+ok 213 - five-minute observation rejects single-candle machine volume pulse
+  ---
+  duration_ms: 0.575179
+  type: 'test'
+  ...
+# Subtest: five-minute observation waits on gapped or stale candles
+ok 214 - five-minute observation waits on gapped or stale candles
+  ---
+  duration_ms: 0.183204
+  type: 'test'
+  ...
+# Subtest: sellability aligns seller evidence to a recent activity window and states its limitation
+ok 215 - sellability aligns seller evidence to a recent activity window and states its limitation
+  ---
+  duration_ms: 0.258236
+  type: 'test'
+  ...
+# Subtest: deep screen accepts strict chain data with empirical sell evidence
+ok 216 - deep screen accepts strict chain data with empirical sell evidence
+  ---
+  duration_ms: 1.103136
+  type: 'test'
+  ...
+# Subtest: deep screen reuses nested token-info dev and stat fields without another request
+ok 217 - deep screen reuses nested token-info dev and stat fields without another request
+  ---
+  duration_ms: 0.41897
+  type: 'test'
+  ...
+# Subtest: deep screen rejects malformed taxes instead of coercing them to zero
+ok 218 - deep screen rejects malformed taxes instead of coercing them to zero
+  ---
+  duration_ms: 0.646157
+  type: 'test'
+  ...
+# Subtest: deep screen rejects materially asymmetric buy and sell taxes
+ok 219 - deep screen rejects materially asymmetric buy and sell taxes
+  ---
+  duration_ms: 0.407399
+  type: 'test'
+  ...
+# Subtest: Solana deep screen uses mint and freeze renouncement instead of EVM owner and honeypot fields
+ok 220 - Solana deep screen uses mint and freeze renouncement instead of EVM owner and honeypot fields
+  ---
+  duration_ms: 0.44699
+  type: 'test'
+  ...
+# Subtest: deep screen hard-fails unrenounced ownership and unlocked LP
+ok 221 - deep screen hard-fails unrenounced ownership and unlocked LP
+  ---
+  duration_ms: 0.146568
+  type: 'test'
+  ...
+# Subtest: BSC validation selects the highest-liquidity matching pair and exposes only allowlisted fields
+ok 222 - BSC validation selects the highest-liquidity matching pair and exposes only allowlisted fields
+  ---
+  duration_ms: 3.577542
+  type: 'test'
+  ...
+# Subtest: GoPlus fatal flags are not softened, and conflicting primary market/security data is reported
+ok 223 - GoPlus fatal flags are not softened, and conflicting primary market/security data is reported
+  ---
+  duration_ms: 0.759686
+  type: 'test'
+  ...
+# Subtest: missing or malformed GoPlus safety fields stay UNKNOWN and degrade the result
+ok 224 - missing or malformed GoPlus safety fields stay UNKNOWN and degrade the result
+  ---
+  duration_ms: 0.421245
+  type: 'test'
+  ...
+# Subtest: unsupported chains never make external requests
+ok 225 - unsupported chains never make external requests
+  ---
+  duration_ms: 0.207371
+  type: 'test'
+  ...
+# Subtest: invalid addresses fail before either supported source is called
+ok 226 - invalid addresses fail before either supported source is called
+  ---
+  duration_ms: 0.189119
+  type: 'test'
+  ...
+# Subtest: timeouts and upstream parse failures degrade without rejecting the validation call
+ok 227 - timeouts and upstream parse failures degrade without rejecting the validation call
+  ---
+  duration_ms: 9.702794
+  type: 'test'
+  ...
+# Subtest: Solana uses its verified endpoints, preserves address case, and evaluates mint/freeze authority
+ok 228 - Solana uses its verified endpoints, preserves address case, and evaluates mint/freeze authority
+  ---
+  duration_ms: 0.674035
+  type: 'test'
+  ...
+# Subtest: exported support map contains only verified chain identifiers
+ok 229 - exported support map contains only verified chain identifiers
+  ---
+  duration_ms: 0.202615
+  type: 'test'
+  ...
+# Subtest: local request gate rejects foreign host, origin, fetch site and remote address
+ok 230 - local request gate rejects foreign host, origin, fetch site and remote address
+  ---
+  duration_ms: 0.687256
+  type: 'test'
+  ...
+# Subtest: public status is a field allowlist and removes raw provider and queue details
+ok 231 - public status is a field allowlist and removes raw provider and queue details
+  ---
+  duration_ms: 2.079934
+  type: 'test'
+  ...
+# Subtest: health separates service liveness from scanner readiness and freshness
+ok 232 - health separates service liveness from scanner readiness and freshness
+  ---
+  duration_ms: 0.420253
+  type: 'test'
+  ...
+# Subtest: HTTP handler enforces local boundary, strong CSP and only safe local configuration writes
+ok 233 - HTTP handler enforces local boundary, strong CSP and only safe local configuration writes
+  ---
+  duration_ms: 6.290517
+  type: 'test'
+  ...
+# Subtest: GMGN onboarding returns only a local public key and official creation URL
+ok 234 - GMGN onboarding returns only a local public key and official creation URL
+  ---
+  duration_ms: 2.412797
+  type: 'test'
+  ...
+# Subtest: key verification errors are allowlisted and never expose upstream messages
+ok 235 - key verification errors are allowlisted and never expose upstream messages
+  ---
+  duration_ms: 14.684733
+  type: 'test'
+  ...
+# Subtest: connection status exposes only readiness and saving alone cannot be reported as verified
+ok 236 - connection status exposes only readiness and saving alone cannot be reported as verified
+  ---
+  duration_ms: 1.972055
+  type: 'test'
+  ...
+# Subtest: loadTriggerKeywords: loads and parses keyword config
+ok 237 - loadTriggerKeywords: loads and parses keyword config
+  ---
+  duration_ms: 6.391669
+  type: 'test'
+  ...
+# Trigger keywords file not found, using empty defaults
+# Subtest: loadTriggerKeywords: returns defaults when file not found
+ok 238 - loadTriggerKeywords: returns defaults when file not found
+  ---
+  duration_ms: 0.585484
+  type: 'test'
+  ...
+# Subtest: matchesTriggerKeywords: matches global keywords
+ok 239 - matchesTriggerKeywords: matches global keywords
+  ---
+  duration_ms: 0.181821
+  type: 'test'
+  ...
+# Subtest: matchesTriggerKeywords: case insensitive matching
+ok 240 - matchesTriggerKeywords: case insensitive matching
+  ---
+  duration_ms: 0.085749
+  type: 'test'
+  ...
+# Subtest: matchesTriggerKeywords: matches account-specific keywords
+ok 241 - matchesTriggerKeywords: matches account-specific keywords
+  ---
+  duration_ms: 0.181153
+  type: 'test'
+  ...
+# Subtest: matchesTriggerKeywords: combines global and account-specific
+ok 242 - matchesTriggerKeywords: combines global and account-specific
+  ---
+  duration_ms: 0.090869
+  type: 'test'
+  ...
+# Subtest: matchesTriggerKeywords: deduplicates keywords
+not ok 243 - matchesTriggerKeywords: deduplicates keywords
+  ---
+  duration_ms: 0.663322
+  type: 'test'
+  location: '/workspace/test/soft-mention.test.mjs:129:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    2 !== 1
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 1
+  actual: 2
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/test/soft-mention.test.mjs:145:10)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: matchesTriggerKeywords: handles disabled account-specific keywords
+ok 244 - matchesTriggerKeywords: handles disabled account-specific keywords
+  ---
+  duration_ms: 0.15481
+  type: 'test'
+  ...
+# Subtest: matchesTriggerKeywords: returns no match for empty text
+ok 245 - matchesTriggerKeywords: returns no match for empty text
+  ---
+  duration_ms: 0.195713
+  type: 'test'
+  ...
+# Subtest: 所有内联脚本均可通过语法解析
+ok 246 - 所有内联脚本均可通过语法解析
+  ---
+  duration_ms: 3.470018
+  type: 'test'
+  ...
+# Subtest: 所有显式像素字号均不小于14像素
+ok 247 - 所有显式像素字号均不小于14像素
+  ---
+  duration_ms: 0.327533
+  type: 'test'
+  ...
+# Subtest: 看板明确区分累计、本轮和近30分钟口径
+ok 248 - 看板明确区分累计、本轮和近30分钟口径
+  ---
+  duration_ms: 0.597073
+  type: 'test'
+  ...
+# Subtest: 人工复核仅保存本地标记且不包含交易入口
+ok 249 - 人工复核仅保存本地标记且不包含交易入口
+  ---
+  duration_ms: 0.457676
+  type: 'test'
+  ...
+# Subtest: 前端X入口拒绝站内功能页并只生成单层用户名链接
+ok 250 - 前端X入口拒绝站内功能页并只生成单层用户名链接
+  ---
+  duration_ms: 1.037702
+  type: 'test'
+  ...
+# Subtest: 六语切换持久化并支持阿拉伯语RTL
+ok 251 - 六语切换持久化并支持阿拉伯语RTL
+  ---
+  duration_ms: 0.263437
+  type: 'test'
+  ...
+# Subtest: 语言下拉使用地球图标和深色高对比选项
+ok 252 - 语言下拉使用地球图标和深色高对比选项
+  ---
+  duration_ms: 0.419704
+  type: 'test'
+  ...
+# Subtest: 翻译词典完整覆盖静态挂点和动态文案键
+ok 253 - 翻译词典完整覆盖静态挂点和动态文案键
+  ---
+  duration_ms: 3.063528
+  type: 'test'
+  ...
+# Subtest: 多链切换仅向本地后端提交白名单链标识
+ok 254 - 多链切换仅向本地后端提交白名单链标识
+  ---
+  duration_ms: 0.696894
+  type: 'test'
+  ...
+# Subtest: 页面不再公开展示严格筛选规则
+ok 255 - 页面不再公开展示严格筛选规则
+  ---
+  duration_ms: 0.549185
+  type: 'test'
+  ...
+# Subtest: GMGN密钥仅提交给同源接口且不会持久化或回显
+ok 256 - GMGN密钥仅提交给同源接口且不会持久化或回显
+  ---
+  duration_ms: 0.299983
+  type: 'test'
+  ...
+# Subtest: 新用户无需Agent即可生成GMGN公钥且页面绝不请求私钥
+ok 257 - 新用户无需Agent即可生成GMGN公钥且页面绝不请求私钥
+  ---
+  duration_ms: 0.29275
+  type: 'test'
+  ...
+# Subtest: 看板包含新鲜度、运行进度和动态降级支持
+ok 258 - 看板包含新鲜度、运行进度和动态降级支持
+  ---
+  duration_ms: 0.195994
+  type: 'test'
+  ...
+# Subtest: 候选表明确展示GoPlus与DexScreener交叉验证
+ok 259 - 候选表明确展示GoPlus与DexScreener交叉验证
+  ---
+  duration_ms: 0.210198
+  type: 'test'
+  ...
+# Subtest: Windows proxy parsing supports ordinary and protocol-specific system proxy values
+ok 260 - Windows proxy parsing supports ordinary and protocol-specific system proxy values
+  ---
+  duration_ms: 1.051906
+  type: 'test'
+  ...
+# Subtest: existing proxy environment always wins and non-Windows never executes probes
+ok 261 - existing proxy environment always wins and non-Windows never executes probes
+  ---
+  duration_ms: 0.267179
+  type: 'test'
+  ...
+# Subtest: portable Windows startup mirrors the effective system proxy without exposing it to UI
+ok 262 - portable Windows startup mirrors the effective system proxy without exposing it to UI
+  ---
+  duration_ms: 0.21746
+  type: 'test'
+  ...
+# Subtest: registry fallback is used when PowerShell proxy discovery is unavailable
+ok 263 - registry fallback is used when PowerShell proxy discovery is unavailable
+  ---
+  duration_ms: 0.694025
+  type: 'test'
+  ...
+# Subtest: loadWatchlist: loads and filters enabled accounts with follower requirements
+ok 264 - loadWatchlist: loads and filters enabled accounts with follower requirements
+  ---
+  duration_ms: 6.10083
+  type: 'test'
+  ...
+# Subtest: loadWatchlist: returns empty array for missing file
+ok 265 - loadWatchlist: returns empty array for missing file
+  ---
+  duration_ms: 1.091417
+  type: 'test'
+  ...
+# Subtest: extractContractAddresses: extracts Solana addresses
+ok 266 - extractContractAddresses: extracts Solana addresses
+  ---
+  duration_ms: 0.279396
+  type: 'test'
+  ...
+# Subtest: extractContractAddresses: extracts EVM addresses
+ok 267 - extractContractAddresses: extracts EVM addresses
+  ---
+  duration_ms: 0.128355
+  type: 'test'
+  ...
+# Subtest: extractContractAddresses: handles mixed addresses
+ok 268 - extractContractAddresses: handles mixed addresses
+  ---
+  duration_ms: 0.090358
+  type: 'test'
+  ...
+# Subtest: extractContractAddresses: deduplicates addresses
+ok 269 - extractContractAddresses: deduplicates addresses
+  ---
+  duration_ms: 0.06728
+  type: 'test'
+  ...
+# Subtest: extractCashtags: extracts ticker symbols
+ok 270 - extractCashtags: extracts ticker symbols
+  ---
+  duration_ms: 0.177479
+  type: 'test'
+  ...
+# Subtest: extractCashtags: deduplicates cashtags
+ok 271 - extractCashtags: deduplicates cashtags
+  ---
+  duration_ms: 0.07736
+  type: 'test'
+  ...
+# Subtest: inferChain: identifies Solana addresses
+ok 272 - inferChain: identifies Solana addresses
+  ---
+  duration_ms: 0.238542
+  type: 'test'
+  ...
+# Subtest: inferChain: identifies EVM addresses
+ok 273 - inferChain: identifies EVM addresses
+  ---
+  duration_ms: 0.270726
+  type: 'test'
+  ...
+# Subtest: inferChain: returns null for invalid addresses
+ok 274 - inferChain: returns null for invalid addresses
+  ---
+  duration_ms: 0.099759
+  type: 'test'
+  ...
+# Sorsa provider not yet implemented for testuser
+# Subtest: createXProvider: returns StubProvider when no credentials
+ok 275 - createXProvider: returns StubProvider when no credentials
+  ---
+  duration_ms: 0.755991
+  type: 'test'
+  ...
+# Subtest: createXProvider: prefers SocialData when API key is set
+ok 276 - createXProvider: prefers SocialData when API key is set
+  ---
+  duration_ms: 0.149318
+  type: 'test'
+  ...
+# Subtest: createXProvider: uses official when only X_BEARER_TOKEN is set
+ok 277 - createXProvider: uses official when only X_BEARER_TOKEN is set
+  ---
+  duration_ms: 0.082952
+  type: 'test'
+  ...
+# Subtest: createXProvider: respects explicit X_PROVIDER=official
+ok 278 - createXProvider: respects explicit X_PROVIDER=official
+  ---
+  duration_ms: 0.076993
+  type: 'test'
+  ...
+# Subtest: createXProvider: respects explicit X_PROVIDER=socialdata
+ok 279 - createXProvider: respects explicit X_PROVIDER=socialdata
+  ---
+  duration_ms: 0.098304
+  type: 'test'
+  ...
+# Subtest: createXProvider: returns Sorsa when X_PROVIDER=sorsa
+ok 280 - createXProvider: returns Sorsa when X_PROVIDER=sorsa
+  ---
+  duration_ms: 0.080169
+  type: 'test'
+  ...
+# Subtest: createXProvider: returns Stub when X_PROVIDER=stub
+ok 281 - createXProvider: returns Stub when X_PROVIDER=stub
+  ---
+  duration_ms: 0.064567
+  type: 'test'
+  ...
+# Subtest: StubProvider: always available and returns demo tweets
+ok 282 - StubProvider: always available and returns demo tweets
+  ---
+  duration_ms: 0.159067
+  type: 'test'
+  ...
+# Subtest: OfficialProvider: isAvailable only when bearer token set
+ok 283 - OfficialProvider: isAvailable only when bearer token set
+  ---
+  duration_ms: 0.216451
+  type: 'test'
+  ...
+# Subtest: SocialDataProvider: isAvailable only when API key set
+ok 284 - SocialDataProvider: isAvailable only when API key set
+  ---
+  duration_ms: 0.314412
+  type: 'test'
+  ...
+# Subtest: SorsaProvider: isAvailable only when API key set
+ok 285 - SorsaProvider: isAvailable only when API key set
+  ---
+  duration_ms: 0.129071
+  type: 'test'
+  ...
+# Subtest: SocialDataProvider: constructs correct URL and headers
+ok 286 - SocialDataProvider: constructs correct URL and headers
+  ---
+  duration_ms: 0.241373
+  type: 'test'
+  ...
+# Subtest: SocialDataProvider: handles 404 gracefully
+ok 287 - SocialDataProvider: handles 404 gracefully
+  ---
+  duration_ms: 0.094457
+  type: 'test'
+  ...
+# Subtest: SocialDataProvider: adapts various response formats
+ok 288 - SocialDataProvider: adapts various response formats
+  ---
+  duration_ms: 0.207569
+  type: 'test'
+  ...
+# Subtest: SorsaProvider: returns not_implemented error
+ok 289 - SorsaProvider: returns not_implemented error
+  ---
+  duration_ms: 0.458757
+  type: 'test'
+  ...
+1..289
+# tests 289
+# suites 0
+# pass 261
+# fail 28
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 720.181106

@@ -1,0 +1,5768 @@
+{
+  "generatedAt": "2026-09-24T01:05:00+08:00",
+  "purpose": "handle↔wallet bridge for X post ↔ on-chain cross-check (research/alert only, NEVER trade)",
+  "minFollowersKol": 10000,
+  "socialDataConfigured": false,
+  "socialDataNote": "SOCIALDATA_API_KEY is NOT configured — live tweet polling unavailable; watchlist+bridge prepared only.",
+  "gmgnCliNote": "gmgn-cli track kol returns maker_info.twitter_username (+ tags) but NOT follower counts. Niuren days120 result is address-only (no twitter). Do not call swap/multi-swap/order/cooking.",
+  "stats": {
+    "bridgeEntries": 168,
+    "fomo": {
+      "candidates": 74,
+      "confirmed": 10,
+      "likely": 59,
+      "ambiguous": 5,
+      "already": 1,
+      "addedEnabled": 68,
+      "addedDisabled": 5
+    },
+    "gmgnEbookInBridge": 32,
+    "gmgnTrack": {
+      "harvested": 65,
+      "already": 2,
+      "addedEnabled": 21,
+      "addedDisabled": 42
+    },
+    "enabled": 121,
+    "disabled": 47
+  },
+  "entries": [
+    {
+      "xHandle": "unipcs",
+      "fomoHandle": "unipcs",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "Unipcs",
+      "followers": 704286,
+      "priority": "P0",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 7262166,
+          "value": 7329882
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": 3834827,
+          "value": 4670682
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 56,
+          "pnl": 2205695,
+          "value": 3170757
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "likely",
+      "enabled": true
+    },
+    {
+      "xHandle": "DumbCrayonEater",
+      "fomoHandle": "DumbCrayonEater",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "DumbCrayonEater",
+      "followers": 619665,
+      "priority": "P0",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 6956298,
+          "value": 6977504
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": 842438,
+          "value": 1587
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 103182,
+          "value": 135531
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "likely",
+      "enabled": true
+    },
+    {
+      "xHandle": "poorgoat_",
+      "fomoHandle": "PoorGoat_",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "PoorGoat💛🐈",
+      "followers": 568321,
+      "priority": "P0",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": 2460308,
+          "value": 2506466
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": 595865,
+          "value": 595936
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 56,
+          "pnl": 57035,
+          "value": 66006
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "confirmed",
+      "enabled": true
+    },
+    {
+      "xHandle": "ether_monk",
+      "fomoHandle": "ether_monk",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "Ethermonk 📿",
+      "followers": 328543,
+      "priority": "P1",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": -337005,
+          "value": 116920
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 56,
+          "pnl": -149194,
+          "value": 156668
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 113364,
+          "value": 365872
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "likely",
+      "enabled": true
+    },
+    {
+      "xHandle": "pointfarmcap",
+      "fomoHandle": "pointfarmcap",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "point farm capital",
+      "followers": 309699,
+      "priority": "P0",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": 10644883,
+          "value": 11992191
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": 565289,
+          "value": 24361
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": 415771,
+          "value": 479774
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "likely",
+      "enabled": true
+    },
+    {
+      "xHandle": "Aurelius0121",
+      "fomoHandle": "Aurelius0121",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "Aurelius",
+      "followers": 305399,
+      "priority": "P0",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": 1480938,
+          "value": 849932
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": -398277,
+          "value": 818264
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": -277084,
+          "value": 747
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "confirmed",
+      "enabled": true
+    },
+    {
+      "xHandle": "The__Solstice",
+      "fomoHandle": "The__Solstice",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "TheS◎Lstice",
+      "followers": 305047,
+      "priority": "P0",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": 6226499,
+          "value": 6368483
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": 266659,
+          "value": 3
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 8453,
+          "pnl": 134074,
+          "value": 138821
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "likely",
+      "enabled": true
+    },
+    {
+      "xHandle": "frankdegods",
+      "fomoHandle": "frankdegods",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "frank 🎒",
+      "followers": 280385,
+      "priority": "P0",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": 127023,
+          "value": 804812
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 122541,
+          "value": 271897
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": 28744,
+          "value": 48657
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "likely",
+      "enabled": true
+    },
+    {
+      "xHandle": "Quanterty",
+      "fomoHandle": "Quanterty",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "Qwerty",
+      "followers": 276765,
+      "priority": "P1",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 56,
+          "pnl": 1938933,
+          "value": 1362825
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 56,
+          "pnl": -222208,
+          "value": 139280
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 56,
+          "pnl": -40093,
+          "value": 8906
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "likely",
+      "enabled": true
+    },
+    {
+      "xHandle": "Salem1299534",
+      "fomoHandle": "Salem1299534",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "Salem",
+      "followers": 271747,
+      "priority": "P0",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 5890400,
+          "value": 4164246
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 211829,
+          "value": 7
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 8453,
+          "pnl": 86621,
+          "value": 94386
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "confirmed",
+      "enabled": true
+    },
+    {
+      "xHandle": "theveeman",
+      "fomoHandle": "theveeman",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "Vee",
+      "followers": 261336,
+      "priority": "P0",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": 5336041,
+          "value": 5516333
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 730443,
+          "value": 868995
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": 527532,
+          "value": 400129
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "likely",
+      "enabled": true
+    },
+    {
+      "xHandle": "Natan_benish",
+      "fomoHandle": "Natan_benish",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "Nate",
+      "followers": 164867,
+      "priority": "P0",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 4344040,
+          "value": 4394901
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 30998,
+          "value": 31773
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 13012,
+          "value": 14044
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "likely",
+      "enabled": true
+    },
+    {
+      "xHandle": "Binkieee",
+      "fomoHandle": "Binkieee",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "Binkieee",
+      "followers": 160358,
+      "priority": "P1",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 56,
+          "pnl": 1114829,
+          "value": 1025172
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": -31831,
+          "value": 1317
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 24262,
+          "value": 74482
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "likely",
+      "enabled": true
+    },
+    {
+      "xHandle": "AvgJoesCrypto",
+      "fomoHandle": "AvgJoesCrypto",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "AJC",
+      "followers": 141822,
+      "priority": "P0",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 3577973,
+          "value": 2805810
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 261746,
+          "value": 220852
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 245010,
+          "value": 299558
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "confirmed",
+      "enabled": true
+    },
+    {
+      "xHandle": "jotagezin",
+      "fomoHandle": "jotagezin",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "jg",
+      "followers": 128516,
+      "priority": "P1",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 1668583,
+          "value": 1738297
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": -26778,
+          "value": 14594
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 8453,
+          "pnl": -14737,
+          "value": 21
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "likely",
+      "enabled": true
+    },
+    {
+      "xHandle": "Pasterniq",
+      "fomoHandle": "Pasterniq",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "Pasterniq",
+      "followers": 121271,
+      "priority": "P2",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 56,
+          "pnl": 328810,
+          "value": 243334
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": -7208,
+          "value": 2564
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 56,
+          "pnl": -3570,
+          "value": 286
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "likely",
+      "enabled": true
+    },
+    {
+      "xHandle": "brrrgrrrz",
+      "fomoHandle": "brrrgrrrz",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "Burgz",
+      "followers": 107702,
+      "priority": "P0",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 3867906,
+          "value": 3146833
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 91973,
+          "value": 172031
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": -60796,
+          "value": 9565
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "likely",
+      "enabled": true
+    },
+    {
+      "xHandle": "DipWheeler",
+      "fomoHandle": "DipWheeler",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "Dip Wheeler",
+      "followers": 98095,
+      "priority": "P2",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 131107,
+          "value": 132825
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": -69283,
+          "value": 42523
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": 29024,
+          "value": 43866
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "likely",
+      "enabled": true
+    },
+    {
+      "xHandle": "0xleo",
+      "fomoHandle": "0xleo",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "leo",
+      "followers": 93475,
+      "priority": "P0",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1337,
+          "pnl": 1842922,
+          "value": null
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 8453,
+          "pnl": 187228,
+          "value": 462026
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1337,
+          "pnl": 74810,
+          "value": null
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "likely",
+      "enabled": true
+    },
+    {
+      "xHandle": "rasmr",
+      "fomoHandle": "rasmr",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "rasmr",
+      "followers": 84166,
+      "priority": "P0",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": 171743,
+          "value": 491331
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": -41298,
+          "value": 23467
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": -26760,
+          "value": 200963
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "likely",
+      "enabled": true
+    },
+    {
+      "xHandle": "econoar",
+      "fomoHandle": "econoar",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "eric.eth",
+      "followers": 82941,
+      "priority": "P0",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 1546142,
+          "value": 1781254
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 117417,
+          "value": 89870
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": -69909,
+          "value": 27276
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "confirmed",
+      "enabled": true
+    },
+    {
+      "xHandle": "DopamineFeenFr1",
+      "fomoHandle": "DopamineFeenFr1",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "DopamineFeenFr1",
+      "followers": 78621,
+      "priority": "P2",
+      "category": "kol_traffic",
+      "wallets": [],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": 1061621,
+          "value": 456958
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 54714,
+          "value": 114144
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 56,
+          "pnl": -47395,
+          "value": 12107
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "likely",
+      "enabled": true
+    },
+    {
+      "xHandle": "notanicecat69",
+      "fomoHandle": "notanicecat69",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "Wood",
+      "followers": 77749,
+      "priority": "P0",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 2751824,
+          "value": 2293888
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": 126104,
+          "value": 77531
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": -4138,
+          "value": 20524
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "likely",
+      "enabled": true
+    },
+    {
+      "xHandle": "boosteryting",
+      "fomoHandle": "boosteryting",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "Jack",
+      "followers": 71659,
+      "priority": "P0",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": 888296,
+          "value": 944352
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 56,
+          "pnl": 163506,
+          "value": 92998
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": 140426,
+          "value": 93537
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "likely",
+      "enabled": true
+    },
+    {
+      "xHandle": "SolSwizzle",
+      "fomoHandle": "SolSwizzle",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "Swizzle",
+      "followers": 68738,
+      "priority": "P1",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 2543423,
+          "value": 2619531
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": 343602,
+          "value": 270285
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": 84033,
+          "value": 140841
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "likely",
+      "enabled": true
+    },
+    {
+      "xHandle": "bigbabba",
+      "fomoHandle": "bigbabba",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "big babba johnson",
+      "followers": 66983,
+      "priority": "P0",
+      "category": "kol_traffic",
+      "wallets": [],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": 36156,
+          "value": 79089
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": 29873,
+          "value": 26858
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": 20172,
+          "value": 62408
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "likely",
+      "enabled": true
+    },
+    {
+      "xHandle": "0xdetweiler",
+      "fomoHandle": "0xdetweiler",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "Theo",
+      "followers": 59404,
+      "priority": "P0",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": 2671411,
+          "value": 2356181
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 151414,
+          "value": 101364
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 90571,
+          "value": 103228
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "likely",
+      "enabled": true
+    },
+    {
+      "xHandle": "0xnobi",
+      "fomoHandle": "0xnobi",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "nobi",
+      "followers": 52465,
+      "priority": "P0",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 2133528,
+          "value": 2073756
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": -11531,
+          "value": 17977
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": -3093,
+          "value": 667
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "likely",
+      "enabled": true
+    },
+    {
+      "xHandle": "FartmanSacks",
+      "fomoHandle": "FartmanSacks",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "Fartman Sacks",
+      "followers": 52173,
+      "priority": "P2",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 696216,
+          "value": 707572
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": -483971,
+          "value": 2395007
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 232368,
+          "value": 231138
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "likely",
+      "enabled": true
+    },
+    {
+      "xHandle": "smokey0x",
+      "fomoHandle": "smokey0x",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "SmokΞy",
+      "followers": 46704,
+      "priority": "P1",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 56,
+          "pnl": 764902,
+          "value": 767262
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 158534,
+          "value": 237422
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 8453,
+          "pnl": -33055,
+          "value": 25901
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "likely",
+      "enabled": true
+    },
+    {
+      "xHandle": "MINHxDYNASTY",
+      "fomoHandle": "MINHxDYNASTY",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "MXD",
+      "followers": 44575,
+      "priority": "P2",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": 50864,
+          "value": 54894
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": 23873,
+          "value": 10986
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": 15609,
+          "value": 28738
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "likely",
+      "enabled": true
+    },
+    {
+      "xHandle": "kyle",
+      "fomoHandle": "kyle",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "kyle",
+      "followers": 42929,
+      "priority": "P0",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 1022574,
+          "value": 1008476
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 570776,
+          "value": 421146
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 8453,
+          "pnl": 219772,
+          "value": 196369
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "confirmed",
+      "enabled": true
+    },
+    {
+      "xHandle": "0xFalcs",
+      "fomoHandle": "0xFalcs",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "Falcs",
+      "followers": 41449,
+      "priority": "P2",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 56,
+          "pnl": 93794,
+          "value": 151038
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 8453,
+          "pnl": 86204,
+          "value": 168146
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 8453,
+          "pnl": 7640,
+          "value": 9638
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "likely",
+      "enabled": true
+    },
+    {
+      "xHandle": "RugDalio",
+      "fomoHandle": "RugDalio",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "RugDalio✨",
+      "followers": 40713,
+      "priority": "P1",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 2299879,
+          "value": 2273421
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": 190513,
+          "value": 276205
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 85412,
+          "value": 150692
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "likely",
+      "enabled": true
+    },
+    {
+      "xHandle": "cryptolyxe",
+      "fomoHandle": "cryptolyxe",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "lyxe",
+      "followers": 38808,
+      "priority": "P1",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": 1062296,
+          "value": 1438751
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 8453,
+          "pnl": 129640,
+          "value": 343071
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": -46030,
+          "value": 7
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "likely",
+      "enabled": true
+    },
+    {
+      "xHandle": "kv4rl",
+      "fomoHandle": "kv4rl",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "k4rl",
+      "followers": 37130,
+      "priority": "P0",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1337,
+          "pnl": 1996996,
+          "value": null
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "confirmed",
+      "enabled": true
+    },
+    {
+      "xHandle": "boosted",
+      "fomoHandle": "boosted",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "mk4",
+      "followers": 36938,
+      "priority": "P2",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 8453,
+          "pnl": 64607,
+          "value": 236055
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 64143,
+          "value": 72156
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 8453,
+          "pnl": 55852,
+          "value": 94151
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "likely",
+      "enabled": true
+    },
+    {
+      "xHandle": "cryptoalbus",
+      "fomoHandle": "cryptoalbus",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "Albus",
+      "followers": 34001,
+      "priority": "P1",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 611608,
+          "value": 171456
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": 503044,
+          "value": 509908
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": -126718,
+          "value": 128191
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "likely",
+      "enabled": true
+    },
+    {
+      "xHandle": "metaversejoji",
+      "fomoHandle": "metaversejoji",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "joji",
+      "followers": 31779,
+      "priority": "P2",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 613378,
+          "value": 448555
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 56,
+          "pnl": 110412,
+          "value": 94219
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 8453,
+          "pnl": 93266,
+          "value": 27419
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "likely",
+      "enabled": true
+    },
+    {
+      "xHandle": "Samisa_btc",
+      "fomoHandle": "Samisa_btc",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "samisa",
+      "followers": 30742,
+      "priority": "P0",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 1314089,
+          "value": 657673
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1337,
+          "pnl": 3792,
+          "value": null
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 3467,
+          "value": 2110
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "likely",
+      "enabled": true
+    },
+    {
+      "xHandle": "Bull_Path",
+      "fomoHandle": "Bull_Path",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "Bull.Path 🫵😹",
+      "followers": 30413,
+      "priority": "P1",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": 580802,
+          "value": 815183
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": -46558,
+          "value": 6783
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 56,
+          "pnl": 21203,
+          "value": 15275
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "likely",
+      "enabled": true
+    },
+    {
+      "xHandle": "LP1111",
+      "fomoHandle": "LP1111",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "LP 1",
+      "followers": 27043,
+      "priority": "P0",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 1941216,
+          "value": 1966559
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 56,
+          "pnl": -16629,
+          "value": 11645
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 7371,
+          "value": 16992
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "likely",
+      "enabled": true
+    },
+    {
+      "xHandle": "CardinalSaint2",
+      "fomoHandle": "CardinalSaint2",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "Cardinal Saint",
+      "followers": 27029,
+      "priority": "P0",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": -1371,
+          "value": 122
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": -841,
+          "value": 430
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": -423,
+          "value": 85
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "likely",
+      "enabled": true
+    },
+    {
+      "xHandle": "NotARandomUser",
+      "fomoHandle": "NotARandomUser",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "User",
+      "followers": 25604,
+      "priority": "P1",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": 201,
+          "value": 310
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": 131,
+          "value": 248
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": 89,
+          "value": 195
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "likely",
+      "enabled": true
+    },
+    {
+      "xHandle": "dylansdegens",
+      "fomoHandle": "dylansdegens",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "Dylan.Eth",
+      "followers": 25353,
+      "priority": "P2",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": 526868,
+          "value": 856578
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": 23806,
+          "value": 19116
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": 153,
+          "value": 281
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "likely",
+      "enabled": true
+    },
+    {
+      "xHandle": "lordarbiter",
+      "fomoHandle": "lordarbiter",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "lordarbiter",
+      "followers": 24480,
+      "priority": "P0",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 2244929,
+          "value": 2222341
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 122395,
+          "value": 154710
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": -9580,
+          "value": 3884
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "likely",
+      "enabled": true
+    },
+    {
+      "xHandle": "FullPinkYak",
+      "fomoHandle": "FullPinkYak",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "FullPinkYak",
+      "followers": 22944,
+      "priority": "P0",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": 1230119,
+          "value": 1471888
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 56,
+          "pnl": 490769,
+          "value": 969835
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": 155,
+          "value": 349
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "confirmed",
+      "enabled": true
+    },
+    {
+      "xHandle": "GuavaGuy2001",
+      "fomoHandle": "GuavaGuy2001",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "Guava Guy 🎀",
+      "followers": 22780,
+      "priority": "P2",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 56,
+          "pnl": 670835,
+          "value": 508276
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": -13756,
+          "value": 18165
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": -10354,
+          "value": 4589
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "likely",
+      "enabled": true
+    },
+    {
+      "xHandle": "aki11a",
+      "fomoHandle": "aki11a",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "aki",
+      "followers": 22172,
+      "priority": "P0",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 1821382,
+          "value": 1776467
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": -24544,
+          "value": 137
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": -6368,
+          "value": 211
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "likely",
+      "enabled": true
+    },
+    {
+      "xHandle": "seralberttrades",
+      "fomoHandle": "seralberttrades",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "Ser Albert",
+      "followers": 22003,
+      "priority": "P0",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 845654,
+          "value": 898244
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 57489,
+          "value": 40163
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 8453,
+          "pnl": 44587,
+          "value": 171411
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "likely",
+      "enabled": true
+    },
+    {
+      "xHandle": "NachSOL",
+      "fomoHandle": "NachSOL",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "Nach",
+      "followers": 19482,
+      "priority": "P1",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 988138,
+          "value": 405118
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": 104248,
+          "value": 42488
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 72619,
+          "value": 33149
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "likely",
+      "enabled": true
+    },
+    {
+      "xHandle": "macdegods",
+      "fomoHandle": "macdegods",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "333",
+      "followers": 16844,
+      "priority": "P2",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": 54179,
+          "value": 85688
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": 42193,
+          "value": 243732
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": -40448,
+          "value": 47790
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "likely",
+      "enabled": true
+    },
+    {
+      "xHandle": "carlwheezor",
+      "fomoHandle": "carlwheezor",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "Carl Wheezor",
+      "followers": 16574,
+      "priority": "P0",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 1227903,
+          "value": 1230901
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 8453,
+          "pnl": 3798,
+          "value": 13293
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": -2547,
+          "value": 1661
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "likely",
+      "enabled": true
+    },
+    {
+      "xHandle": "RunningClam",
+      "fomoHandle": "RunningClam",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "Clam",
+      "followers": 15688,
+      "priority": "P0",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 1444386,
+          "value": 1341149
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 213071,
+          "value": 319401
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": -26284,
+          "value": 18997
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "likely",
+      "enabled": true
+    },
+    {
+      "xHandle": "rzdxbt",
+      "fomoHandle": "RZDxbt",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "RZD",
+      "followers": 15003,
+      "priority": "P0",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": 1636001,
+          "value": 889848
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": -1586,
+          "value": 126
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": 6,
+          "value": 3
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "confirmed",
+      "enabled": true
+    },
+    {
+      "xHandle": "xbrazilzz",
+      "fomoHandle": "xbrazilzz",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "BrazilZZ🇧🇷",
+      "followers": 14565,
+      "priority": "P2",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 236719,
+          "value": 204662
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 30020,
+          "value": 33241
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": -12719,
+          "value": 20070
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "likely",
+      "enabled": true
+    },
+    {
+      "xHandle": "0xdedrater",
+      "fomoHandle": "0xdedrater",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "Dedrater",
+      "followers": 14192,
+      "priority": "P2",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 106103,
+          "value": 12905
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 75347,
+          "value": 319073
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 74330,
+          "value": 10601
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "likely",
+      "enabled": true
+    },
+    {
+      "xHandle": "TheDazzleNovak",
+      "fomoHandle": "TheDazzleNovak",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "Dazzle Novak",
+      "followers": 12552,
+      "priority": "P0",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": 1495434,
+          "value": 875511
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 75629,
+          "value": 77022
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": 37856,
+          "value": 55766
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "likely",
+      "enabled": true
+    },
+    {
+      "xHandle": "corleonefnf",
+      "fomoHandle": "corleonefnf",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "CORLEONE888",
+      "followers": 12194,
+      "priority": "P0",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 573403,
+          "value": 449949
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": -14154,
+          "value": 18592
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": -12654,
+          "value": 12922
+        }
+      ],
+      "source": "fomo-leaderboard+GMGN-meme-guide",
+      "sources": [
+        "fomo-leaderboard",
+        "GMGN-meme-guide"
+      ],
+      "confidence": "confirmed",
+      "enabled": true
+    },
+    {
+      "xHandle": "Visi235",
+      "fomoHandle": "Visi235",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "Visionary",
+      "followers": 11843,
+      "priority": "P1",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": -39408,
+          "value": 1207
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": -9499,
+          "value": 482
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": -8694,
+          "value": 812
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "likely",
+      "enabled": true
+    },
+    {
+      "xHandle": "yeon__",
+      "fomoHandle": "yeon__",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "Yeon",
+      "followers": 11835,
+      "priority": "P2",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "base"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 8453,
+          "pnl": -9433,
+          "value": 0
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 56,
+          "pnl": 4967,
+          "value": 40172
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 8453,
+          "pnl": 4311,
+          "value": 29074
+        }
+      ],
+      "source": "fomo-leaderboard+gmgn-track-kol",
+      "sources": [
+        "fomo-leaderboard",
+        "gmgn-track-kol"
+      ],
+      "confidence": "likely",
+      "enabled": true,
+      "gmgnTags": [
+        "kol",
+        "fomo",
+        "gmgn_go",
+        "gmgn"
+      ]
+    },
+    {
+      "xHandle": "0xangeryy",
+      "fomoHandle": "0xangeryy",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "angery",
+      "followers": 11756,
+      "priority": "P2",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 276991,
+          "value": 113553
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": -112422,
+          "value": 137888
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 8453,
+          "pnl": 77807,
+          "value": 82286
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "likely",
+      "enabled": true
+    },
+    {
+      "xHandle": "Tekkerrss",
+      "fomoHandle": "Tekkerrss",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "Tekkerrss",
+      "followers": 11350,
+      "priority": "P1",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": 285922,
+          "value": 21971
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": 180538,
+          "value": 112067
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 48848,
+          "value": 41513
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "likely",
+      "enabled": true
+    },
+    {
+      "xHandle": "workethic",
+      "fomoHandle": "workethic",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "workethic",
+      "followers": 10971,
+      "priority": "P2",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 655765,
+          "value": 682079
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": -72716,
+          "value": 48141
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": -47406,
+          "value": 4471
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "likely",
+      "enabled": true
+    },
+    {
+      "xHandle": "figaro",
+      "fomoHandle": "figaro",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "figaro",
+      "followers": 10726,
+      "priority": "P1",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 637877,
+          "value": 652894
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": 88592,
+          "value": 104077
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 53457,
+          "value": 69459
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "likely",
+      "enabled": true
+    },
+    {
+      "xHandle": "dpricedin",
+      "fomoHandle": "pricedin",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "pricedin",
+      "followers": 10615,
+      "priority": "P0",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 1289985,
+          "value": 1201681
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 51822,
+          "value": 82508
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": -16866,
+          "value": 24471
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "confirmed",
+      "enabled": true
+    },
+    {
+      "xHandle": "justtesting",
+      "fomoHandle": "justtesting",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "Test Account",
+      "followers": 10310,
+      "priority": "P1",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "likely",
+      "enabled": true
+    },
+    {
+      "xHandle": "BitmanTW",
+      "fomoHandle": "BitmanTW",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "Bitman",
+      "followers": 10286,
+      "priority": "P0",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 279261,
+          "value": 240795
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 226779,
+          "value": 8
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1,
+          "pnl": 80674,
+          "value": 114853
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "likely",
+      "enabled": true
+    },
+    {
+      "xHandle": "LehmanFarters",
+      "fomoHandle": "LehmanFarters",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "Lehman Farters",
+      "followers": 10163,
+      "priority": "P1",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 853340,
+          "value": 601024
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 337377,
+          "value": 427668
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 272162,
+          "value": 272528
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "likely",
+      "enabled": true
+    },
+    {
+      "xHandle": "0xcryptowizzard",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "主编",
+      "followers": null,
+      "priority": "P0",
+      "category": "kol_alpha",
+      "wallets": [],
+      "topTokens": [],
+      "source": "GMGN-meme-guide",
+      "sources": [
+        "GMGN-meme-guide"
+      ],
+      "confidence": "confirmed",
+      "enabled": true,
+      "gmgnTags": []
+    },
+    {
+      "xHandle": "0xSunNFT",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "荣誉主编",
+      "followers": null,
+      "priority": "P0",
+      "category": "kol_alpha",
+      "wallets": [],
+      "topTokens": [],
+      "source": "GMGN-meme-guide",
+      "sources": [
+        "GMGN-meme-guide"
+      ],
+      "confidence": "confirmed",
+      "enabled": true,
+      "gmgnTags": []
+    },
+    {
+      "xHandle": "BTCdayu",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "荣誉主编",
+      "followers": null,
+      "priority": "P0",
+      "category": "kol_alpha",
+      "wallets": [],
+      "topTokens": [],
+      "source": "GMGN-meme-guide",
+      "sources": [
+        "GMGN-meme-guide"
+      ],
+      "confidence": "confirmed",
+      "enabled": true,
+      "gmgnTags": []
+    },
+    {
+      "xHandle": "CryptoDevinL",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "荣誉主编",
+      "followers": null,
+      "priority": "P0",
+      "category": "kol_alpha",
+      "wallets": [],
+      "topTokens": [],
+      "source": "GMGN-meme-guide",
+      "sources": [
+        "GMGN-meme-guide"
+      ],
+      "confidence": "confirmed",
+      "enabled": true,
+      "gmgnTags": []
+    },
+    {
+      "xHandle": "hexiecs",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "荣誉主编",
+      "followers": null,
+      "priority": "P0",
+      "category": "kol_alpha",
+      "wallets": [],
+      "topTokens": [],
+      "source": "GMGN-meme-guide",
+      "sources": [
+        "GMGN-meme-guide"
+      ],
+      "confidence": "confirmed",
+      "enabled": true,
+      "gmgnTags": []
+    },
+    {
+      "xHandle": "Unipioneer",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "荣誉主编",
+      "followers": null,
+      "priority": "P0",
+      "category": "kol_alpha",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "bsc"
+        }
+      ],
+      "topTokens": [],
+      "source": "GMGN-meme-guide+gmgn-track-kol",
+      "sources": [
+        "GMGN-meme-guide",
+        "gmgn-track-kol"
+      ],
+      "confidence": "confirmed",
+      "enabled": true,
+      "gmgnTags": [
+        "kol",
+        "arbitrager",
+        "top_followed",
+        "top_renamed",
+        "gmgn"
+      ]
+    },
+    {
+      "xHandle": "yuyue_chris",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "荣誉主编",
+      "followers": null,
+      "priority": "P0",
+      "category": "kol_alpha",
+      "wallets": [],
+      "topTokens": [],
+      "source": "GMGN-meme-guide",
+      "sources": [
+        "GMGN-meme-guide"
+      ],
+      "confidence": "confirmed",
+      "enabled": true,
+      "gmgnTags": []
+    },
+    {
+      "xHandle": "0xleff",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "0xleff",
+      "followers": null,
+      "priority": "P1",
+      "category": "kol_alpha",
+      "wallets": [],
+      "topTokens": [],
+      "source": "GMGN-meme-guide",
+      "sources": [
+        "GMGN-meme-guide"
+      ],
+      "confidence": "confirmed",
+      "enabled": true,
+      "gmgnTags": []
+    },
+    {
+      "xHandle": "0xmagnolia",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "0xmagnolia",
+      "followers": null,
+      "priority": "P1",
+      "category": "kol_alpha",
+      "wallets": [],
+      "topTokens": [],
+      "source": "GMGN-meme-guide",
+      "sources": [
+        "GMGN-meme-guide"
+      ],
+      "confidence": "confirmed",
+      "enabled": true,
+      "gmgnTags": []
+    },
+    {
+      "xHandle": "0xseven1",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "0xseven1",
+      "followers": null,
+      "priority": "P1",
+      "category": "kol_alpha",
+      "wallets": [],
+      "topTokens": [],
+      "source": "GMGN-meme-guide",
+      "sources": [
+        "GMGN-meme-guide"
+      ],
+      "confidence": "confirmed",
+      "enabled": true,
+      "gmgnTags": []
+    },
+    {
+      "xHandle": "cryptocishanjia",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "cryptocishanjia",
+      "followers": null,
+      "priority": "P1",
+      "category": "kol_alpha",
+      "wallets": [],
+      "topTokens": [],
+      "source": "GMGN-meme-guide",
+      "sources": [
+        "GMGN-meme-guide"
+      ],
+      "confidence": "confirmed",
+      "enabled": true,
+      "gmgnTags": []
+    },
+    {
+      "xHandle": "CryptoHtdi",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "CryptoHtdi",
+      "followers": null,
+      "priority": "P1",
+      "category": "kol_alpha",
+      "wallets": [],
+      "topTokens": [],
+      "source": "GMGN-meme-guide",
+      "sources": [
+        "GMGN-meme-guide"
+      ],
+      "confidence": "confirmed",
+      "enabled": true,
+      "gmgnTags": []
+    },
+    {
+      "xHandle": "DekuKing1",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "DekuKing1",
+      "followers": null,
+      "priority": "P1",
+      "category": "kol_alpha",
+      "wallets": [],
+      "topTokens": [],
+      "source": "GMGN-meme-guide",
+      "sources": [
+        "GMGN-meme-guide"
+      ],
+      "confidence": "confirmed",
+      "enabled": true,
+      "gmgnTags": []
+    },
+    {
+      "xHandle": "haventseenyou_",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "haventseenyou_",
+      "followers": null,
+      "priority": "P1",
+      "category": "kol_alpha",
+      "wallets": [],
+      "topTokens": [],
+      "source": "GMGN-meme-guide",
+      "sources": [
+        "GMGN-meme-guide"
+      ],
+      "confidence": "confirmed",
+      "enabled": true,
+      "gmgnTags": []
+    },
+    {
+      "xHandle": "hellosuoha",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "hellosuoha",
+      "followers": null,
+      "priority": "P1",
+      "category": "kol_alpha",
+      "wallets": [],
+      "topTokens": [],
+      "source": "GMGN-meme-guide",
+      "sources": [
+        "GMGN-meme-guide"
+      ],
+      "confidence": "confirmed",
+      "enabled": true,
+      "gmgnTags": []
+    },
+    {
+      "xHandle": "keyahayek",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "keyahayek",
+      "followers": null,
+      "priority": "P1",
+      "category": "kol_alpha",
+      "wallets": [],
+      "topTokens": [],
+      "source": "GMGN-meme-guide",
+      "sources": [
+        "GMGN-meme-guide"
+      ],
+      "confidence": "confirmed",
+      "enabled": true,
+      "gmgnTags": []
+    },
+    {
+      "xHandle": "lijiuer1",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "lijiuer1",
+      "followers": null,
+      "priority": "P1",
+      "category": "kol_alpha",
+      "wallets": [],
+      "topTokens": [],
+      "source": "GMGN-meme-guide",
+      "sources": [
+        "GMGN-meme-guide"
+      ],
+      "confidence": "confirmed",
+      "enabled": true,
+      "gmgnTags": []
+    },
+    {
+      "xHandle": "MetaHunter168",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "MetaHunter168",
+      "followers": null,
+      "priority": "P1",
+      "category": "kol_alpha",
+      "wallets": [],
+      "topTokens": [],
+      "source": "GMGN-meme-guide",
+      "sources": [
+        "GMGN-meme-guide"
+      ],
+      "confidence": "confirmed",
+      "enabled": true,
+      "gmgnTags": []
+    },
+    {
+      "xHandle": "Michael_Liu93",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "Michael_Liu93",
+      "followers": null,
+      "priority": "P1",
+      "category": "kol_alpha",
+      "wallets": [],
+      "topTokens": [],
+      "source": "GMGN-meme-guide+P-xiajiang-handbook",
+      "sources": [
+        "GMGN-meme-guide+P-xiajiang-handbook"
+      ],
+      "confidence": "confirmed",
+      "enabled": true,
+      "gmgnTags": []
+    },
+    {
+      "xHandle": "Mirro7777",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "Mirro7777",
+      "followers": null,
+      "priority": "P1",
+      "category": "kol_alpha",
+      "wallets": [],
+      "topTokens": [],
+      "source": "GMGN-meme-guide",
+      "sources": [
+        "GMGN-meme-guide"
+      ],
+      "confidence": "confirmed",
+      "enabled": true,
+      "gmgnTags": []
+    },
+    {
+      "xHandle": "Nyenchenpepe",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "Nyenchenpepe",
+      "followers": null,
+      "priority": "P1",
+      "category": "kol_alpha",
+      "wallets": [],
+      "topTokens": [],
+      "source": "GMGN-meme-guide",
+      "sources": [
+        "GMGN-meme-guide"
+      ],
+      "confidence": "confirmed",
+      "enabled": true,
+      "gmgnTags": []
+    },
+    {
+      "xHandle": "Rocky_Bitcoin",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "Rocky_Bitcoin",
+      "followers": null,
+      "priority": "P1",
+      "category": "kol_alpha",
+      "wallets": [],
+      "topTokens": [],
+      "source": "GMGN-meme-guide",
+      "sources": [
+        "GMGN-meme-guide"
+      ],
+      "confidence": "confirmed",
+      "enabled": true,
+      "gmgnTags": []
+    },
+    {
+      "xHandle": "SatoshiNobility",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "SatoshiNobility",
+      "followers": null,
+      "priority": "P1",
+      "category": "kol_alpha",
+      "wallets": [],
+      "topTokens": [],
+      "source": "GMGN-meme-guide",
+      "sources": [
+        "GMGN-meme-guide"
+      ],
+      "confidence": "confirmed",
+      "enabled": true,
+      "gmgnTags": []
+    },
+    {
+      "xHandle": "silverfang88",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "silverfang88",
+      "followers": null,
+      "priority": "P1",
+      "category": "kol_alpha",
+      "wallets": [],
+      "topTokens": [],
+      "source": "GMGN-meme-guide",
+      "sources": [
+        "GMGN-meme-guide"
+      ],
+      "confidence": "confirmed",
+      "enabled": true,
+      "gmgnTags": []
+    },
+    {
+      "xHandle": "timotimo007",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "timotimo007",
+      "followers": null,
+      "priority": "P1",
+      "category": "kol_alpha",
+      "wallets": [],
+      "topTokens": [],
+      "source": "GMGN-meme-guide",
+      "sources": [
+        "GMGN-meme-guide"
+      ],
+      "confidence": "confirmed",
+      "enabled": true,
+      "gmgnTags": []
+    },
+    {
+      "xHandle": "Tintinx2021",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "Tintinx2021",
+      "followers": null,
+      "priority": "P1",
+      "category": "kol_alpha",
+      "wallets": [],
+      "topTokens": [],
+      "source": "GMGN-meme-guide",
+      "sources": [
+        "GMGN-meme-guide"
+      ],
+      "confidence": "confirmed",
+      "enabled": true,
+      "gmgnTags": []
+    },
+    {
+      "xHandle": "V1JeromeLoo",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "V1JeromeLoo",
+      "followers": null,
+      "priority": "P1",
+      "category": "kol_alpha",
+      "wallets": [],
+      "topTokens": [],
+      "source": "GMGN-meme-guide",
+      "sources": [
+        "GMGN-meme-guide"
+      ],
+      "confidence": "confirmed",
+      "enabled": true,
+      "gmgnTags": []
+    },
+    {
+      "xHandle": "Wolfy_XBT",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "Wolfy_XBT",
+      "followers": null,
+      "priority": "P1",
+      "category": "kol_alpha",
+      "wallets": [],
+      "topTokens": [],
+      "source": "GMGN-meme-guide",
+      "sources": [
+        "GMGN-meme-guide"
+      ],
+      "confidence": "confirmed",
+      "enabled": true,
+      "gmgnTags": []
+    },
+    {
+      "xHandle": "xunle111",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "xunle111",
+      "followers": null,
+      "priority": "P1",
+      "category": "kol_alpha",
+      "wallets": [],
+      "topTokens": [],
+      "source": "GMGN-meme-guide",
+      "sources": [
+        "GMGN-meme-guide"
+      ],
+      "confidence": "confirmed",
+      "enabled": true,
+      "gmgnTags": []
+    },
+    {
+      "xHandle": "YeruiZhang",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "YeruiZhang",
+      "followers": null,
+      "priority": "P1",
+      "category": "kol_alpha",
+      "wallets": [],
+      "topTokens": [],
+      "source": "GMGN-meme-guide",
+      "sources": [
+        "GMGN-meme-guide"
+      ],
+      "confidence": "confirmed",
+      "enabled": true,
+      "gmgnTags": []
+    },
+    {
+      "xHandle": "gmgnai",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "GMGN",
+      "followers": null,
+      "priority": "P2",
+      "category": "official",
+      "wallets": [],
+      "topTokens": [],
+      "source": "GMGN-meme-guide",
+      "sources": [
+        "GMGN-meme-guide"
+      ],
+      "confidence": "confirmed",
+      "enabled": true,
+      "gmgnTags": []
+    },
+    {
+      "xHandle": "aa_AFeng",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "阿峰_Afeng",
+      "followers": null,
+      "priority": "P1",
+      "category": "kol_alpha",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "bsc"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "base"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "eth"
+        }
+      ],
+      "topTokens": [],
+      "source": "gmgn-track-kol",
+      "sources": [
+        "gmgn-track-kol"
+      ],
+      "confidence": "likely",
+      "enabled": true,
+      "gmgnTags": [
+        "kol",
+        "wash_trader",
+        "gmgn_go",
+        "top_followed",
+        "top_renamed",
+        "gmgn",
+        "fomo",
+        "smart_degen"
+      ],
+      "note": "twitter from gmgn-cli track kol maker_info; followerCount unavailable from API"
+    },
+    {
+      "xHandle": "ZephyrTrading",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "Zephyr",
+      "followers": null,
+      "priority": "P1",
+      "category": "kol_alpha",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "bsc"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "base"
+        }
+      ],
+      "topTokens": [],
+      "source": "gmgn-track-kol",
+      "sources": [
+        "gmgn-track-kol"
+      ],
+      "confidence": "likely",
+      "enabled": true,
+      "gmgnTags": [
+        "kol",
+        "wash_trader",
+        "gmgn_go",
+        "top_followed",
+        "top_renamed",
+        "gmgn"
+      ],
+      "note": "twitter from gmgn-cli track kol maker_info; followerCount unavailable from API"
+    },
+    {
+      "xHandle": "fnmilito",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "milito",
+      "followers": null,
+      "priority": "P1",
+      "category": "kol_alpha",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "bsc"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "eth"
+        }
+      ],
+      "topTokens": [],
+      "source": "gmgn-track-kol",
+      "sources": [
+        "gmgn-track-kol"
+      ],
+      "confidence": "likely",
+      "enabled": true,
+      "gmgnTags": [
+        "kol",
+        "wash_trader",
+        "smart_degen",
+        "launchpad_smart",
+        "gmgn_go",
+        "top_followed",
+        "top_renamed",
+        "gmgn"
+      ],
+      "note": "twitter from gmgn-cli track kol maker_info; followerCount unavailable from API"
+    },
+    {
+      "xHandle": "notdecu",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "decu",
+      "followers": null,
+      "priority": "P1",
+      "category": "kol_alpha",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        }
+      ],
+      "topTokens": [],
+      "source": "gmgn-track-kol",
+      "sources": [
+        "gmgn-track-kol"
+      ],
+      "confidence": "likely",
+      "enabled": true,
+      "gmgnTags": [
+        "photon",
+        "kol",
+        "wash_trader",
+        "arbitrager",
+        "padre",
+        "top_followed",
+        "top_renamed",
+        "axiom"
+      ],
+      "note": "twitter from gmgn-cli track kol maker_info; followerCount unavailable from API"
+    },
+    {
+      "xHandle": "jijo_exe",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "jijo",
+      "followers": null,
+      "priority": "P1",
+      "category": "kol_alpha",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        }
+      ],
+      "topTokens": [],
+      "source": "gmgn-track-kol",
+      "sources": [
+        "gmgn-track-kol"
+      ],
+      "confidence": "likely",
+      "enabled": true,
+      "gmgnTags": [
+        "kol",
+        "photon",
+        "launchpad_smart",
+        "arbitrager",
+        "top_followed",
+        "top_renamed",
+        "padre"
+      ],
+      "note": "twitter from gmgn-cli track kol maker_info; followerCount unavailable from API"
+    },
+    {
+      "xHandle": "Limfork",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "Limfork",
+      "followers": null,
+      "priority": "P1",
+      "category": "kol_alpha",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        }
+      ],
+      "topTokens": [],
+      "source": "gmgn-track-kol",
+      "sources": [
+        "gmgn-track-kol"
+      ],
+      "confidence": "likely",
+      "enabled": true,
+      "gmgnTags": [
+        "kol",
+        "bullx",
+        "launchpad_smart",
+        "axiom",
+        "arbitrager",
+        "top_followed",
+        "top_renamed",
+        "padre"
+      ],
+      "note": "twitter from gmgn-cli track kol maker_info; followerCount unavailable from API"
+    },
+    {
+      "xHandle": "Putrickk",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "Putrick",
+      "followers": null,
+      "priority": "P1",
+      "category": "kol_alpha",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        }
+      ],
+      "topTokens": [],
+      "source": "gmgn-track-kol",
+      "sources": [
+        "gmgn-track-kol"
+      ],
+      "confidence": "likely",
+      "enabled": true,
+      "gmgnTags": [
+        "kol",
+        "wash_trader",
+        "launchpad_smart",
+        "arbitrager",
+        "top_followed",
+        "top_renamed",
+        "axiom"
+      ],
+      "note": "twitter from gmgn-cli track kol maker_info; followerCount unavailable from API"
+    },
+    {
+      "xHandle": "0xLake",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "Lake",
+      "followers": null,
+      "priority": "P1",
+      "category": "kol_alpha",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        }
+      ],
+      "topTokens": [],
+      "source": "gmgn-track-kol",
+      "sources": [
+        "gmgn-track-kol"
+      ],
+      "confidence": "likely",
+      "enabled": true,
+      "gmgnTags": [
+        "gmgn",
+        "kol",
+        "launchpad_smart",
+        "gmgn_go",
+        "padre",
+        "arbitrager",
+        "top_followed",
+        "top_renamed",
+        "axiom"
+      ],
+      "note": "twitter from gmgn-cli track kol maker_info; followerCount unavailable from API"
+    },
+    {
+      "xHandle": "KayTheDoc",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "Doc 🧲",
+      "followers": null,
+      "priority": "P1",
+      "category": "kol_alpha",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        }
+      ],
+      "topTokens": [],
+      "source": "gmgn-track-kol",
+      "sources": [
+        "gmgn-track-kol"
+      ],
+      "confidence": "likely",
+      "enabled": true,
+      "gmgnTags": [
+        "trojan",
+        "kol",
+        "app_smart_money",
+        "smart_degen",
+        "arbitrager",
+        "padre",
+        "top_followed",
+        "top_renamed",
+        "axiom"
+      ],
+      "note": "twitter from gmgn-cli track kol maker_info; followerCount unavailable from API"
+    },
+    {
+      "xHandle": "theonomix",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "theo",
+      "followers": null,
+      "priority": "P1",
+      "category": "kol_alpha",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        }
+      ],
+      "topTokens": [],
+      "source": "gmgn-track-kol",
+      "sources": [
+        "gmgn-track-kol"
+      ],
+      "confidence": "likely",
+      "enabled": true,
+      "gmgnTags": [
+        "photon",
+        "kol",
+        "gmgn_go",
+        "bluechip_owner",
+        "padre",
+        "wash_trader",
+        "axiom",
+        "top_followed",
+        "top_renamed",
+        "gmgn"
+      ],
+      "note": "twitter from gmgn-cli track kol maker_info; followerCount unavailable from API"
+    },
+    {
+      "xHandle": "radiancebrr",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "radiance",
+      "followers": null,
+      "priority": "P1",
+      "category": "kol_alpha",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        }
+      ],
+      "topTokens": [],
+      "source": "gmgn-track-kol",
+      "sources": [
+        "gmgn-track-kol"
+      ],
+      "confidence": "likely",
+      "enabled": true,
+      "gmgnTags": [
+        "kol",
+        "launchpad_smart",
+        "smart_degen",
+        "wash_trader",
+        "padre",
+        "arbitrager",
+        "top_followed",
+        "top_renamed",
+        "axiom"
+      ],
+      "note": "twitter from gmgn-cli track kol maker_info; followerCount unavailable from API"
+    },
+    {
+      "xHandle": "chingchong6257",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "chingchong",
+      "followers": null,
+      "priority": "P1",
+      "category": "kol_alpha",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        }
+      ],
+      "topTokens": [],
+      "source": "gmgn-track-kol",
+      "sources": [
+        "gmgn-track-kol"
+      ],
+      "confidence": "likely",
+      "enabled": true,
+      "gmgnTags": [
+        "kol",
+        "wash_trader",
+        "gmgn",
+        "padre",
+        "arbitrager",
+        "top_followed",
+        "top_renamed",
+        "axiom"
+      ],
+      "note": "twitter from gmgn-cli track kol maker_info; followerCount unavailable from API"
+    },
+    {
+      "xHandle": "feibo03",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "Cowboy🔶BNB ｜版本之牛",
+      "followers": null,
+      "priority": "P1",
+      "category": "kol_alpha",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "bsc"
+        }
+      ],
+      "topTokens": [],
+      "source": "gmgn-track-kol",
+      "sources": [
+        "gmgn-track-kol"
+      ],
+      "confidence": "likely",
+      "enabled": true,
+      "gmgnTags": [
+        "kol",
+        "gmgn_go",
+        "top_followed",
+        "gmgn"
+      ],
+      "note": "twitter from gmgn-cli track kol maker_info; followerCount unavailable from API"
+    },
+    {
+      "xHandle": "apastala5",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "api5",
+      "followers": null,
+      "priority": "P1",
+      "category": "kol_alpha",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "bsc"
+        }
+      ],
+      "topTokens": [],
+      "source": "gmgn-track-kol",
+      "sources": [
+        "gmgn-track-kol"
+      ],
+      "confidence": "likely",
+      "enabled": true,
+      "gmgnTags": [
+        "wash_trader",
+        "kol",
+        "fomo",
+        "gmgn_go",
+        "top_followed",
+        "gmgn"
+      ],
+      "note": "twitter from gmgn-cli track kol maker_info; followerCount unavailable from API"
+    },
+    {
+      "xHandle": "CoCoCookerr",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "CoCo❕",
+      "followers": null,
+      "priority": "P1",
+      "category": "kol_alpha",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "bsc"
+        }
+      ],
+      "topTokens": [],
+      "source": "gmgn-track-kol",
+      "sources": [
+        "gmgn-track-kol"
+      ],
+      "confidence": "likely",
+      "enabled": true,
+      "gmgnTags": [
+        "kol",
+        "arbitrager",
+        "gmgn_go",
+        "top_followed",
+        "top_renamed",
+        "gmgn"
+      ],
+      "note": "twitter from gmgn-cli track kol maker_info; followerCount unavailable from API"
+    },
+    {
+      "xHandle": "SuperL9",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "Wick李🔶 BNB",
+      "followers": null,
+      "priority": "P1",
+      "category": "kol_alpha",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "bsc"
+        }
+      ],
+      "topTokens": [],
+      "source": "gmgn-track-kol",
+      "sources": [
+        "gmgn-track-kol"
+      ],
+      "confidence": "likely",
+      "enabled": true,
+      "gmgnTags": [
+        "app_smart_money",
+        "kol",
+        "gmgn_go",
+        "fomo",
+        "top_followed",
+        "top_renamed",
+        "gmgn"
+      ],
+      "note": "twitter from gmgn-cli track kol maker_info; followerCount unavailable from API"
+    },
+    {
+      "xHandle": "casino847",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "casino",
+      "followers": null,
+      "priority": "P1",
+      "category": "kol_alpha",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "bsc"
+        }
+      ],
+      "topTokens": [],
+      "source": "gmgn-track-kol",
+      "sources": [
+        "gmgn-track-kol"
+      ],
+      "confidence": "likely",
+      "enabled": true,
+      "gmgnTags": [
+        "app_smart_money",
+        "kol",
+        "axiom",
+        "smart_degen",
+        "fomo",
+        "gmgn_go",
+        "top_followed",
+        "top_renamed",
+        "gmgn"
+      ],
+      "note": "twitter from gmgn-cli track kol maker_info; followerCount unavailable from API"
+    },
+    {
+      "xHandle": "XIGUA0903",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "西瓜🔶BNB",
+      "followers": null,
+      "priority": "P1",
+      "category": "kol_alpha",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "bsc"
+        }
+      ],
+      "topTokens": [],
+      "source": "gmgn-track-kol",
+      "sources": [
+        "gmgn-track-kol"
+      ],
+      "confidence": "likely",
+      "enabled": true,
+      "gmgnTags": [
+        "kol",
+        "gmgn_go",
+        "top_followed",
+        "top_renamed",
+        "gmgn"
+      ],
+      "note": "twitter from gmgn-cli track kol maker_info; followerCount unavailable from API"
+    },
+    {
+      "xHandle": "oooooyoung11",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "o大（吸吸喜气欧皇扫链版）",
+      "followers": null,
+      "priority": "P1",
+      "category": "kol_alpha",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "bsc"
+        }
+      ],
+      "topTokens": [],
+      "source": "gmgn-track-kol",
+      "sources": [
+        "gmgn-track-kol"
+      ],
+      "confidence": "likely",
+      "enabled": true,
+      "gmgnTags": [
+        "kol",
+        "wash_trader",
+        "top_followed",
+        "top_renamed",
+        "gmgn"
+      ],
+      "note": "twitter from gmgn-cli track kol maker_info; followerCount unavailable from API"
+    },
+    {
+      "xHandle": "hzjxhcyy",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "古月月",
+      "followers": null,
+      "priority": "P1",
+      "category": "kol_alpha",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "bsc"
+        }
+      ],
+      "topTokens": [],
+      "source": "gmgn-track-kol",
+      "sources": [
+        "gmgn-track-kol"
+      ],
+      "confidence": "likely",
+      "enabled": true,
+      "gmgnTags": [
+        "kol",
+        "smart_degen",
+        "gmgn_go",
+        "top_followed",
+        "gmgn"
+      ],
+      "note": "twitter from gmgn-cli track kol maker_info; followerCount unavailable from API"
+    },
+    {
+      "xHandle": "antpositions",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "AntPositions(蚂蚁仓）☄️",
+      "followers": null,
+      "priority": "P1",
+      "category": "kol_alpha",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "bsc"
+        }
+      ],
+      "topTokens": [],
+      "source": "gmgn-track-kol",
+      "sources": [
+        "gmgn-track-kol"
+      ],
+      "confidence": "likely",
+      "enabled": true,
+      "gmgnTags": [
+        "app_smart_money",
+        "wash_trader",
+        "kol",
+        "axiom",
+        "gmgn_go",
+        "top_followed",
+        "top_renamed",
+        "gmgn"
+      ],
+      "note": "twitter from gmgn-cli track kol maker_info; followerCount unavailable from API"
+    },
+    {
+      "xHandle": "change",
+      "fomoHandle": "change",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "change",
+      "followers": 343420,
+      "priority": "P1",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": -640033,
+          "value": 1586218
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1337,
+          "pnl": 36996,
+          "value": null
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 11117,
+          "value": 621
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "ambiguous",
+      "enabled": false
+    },
+    {
+      "xHandle": "Rowdy",
+      "fomoHandle": "Rowdy",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "Rowdy",
+      "followers": 198857,
+      "priority": "P1",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 56,
+          "pnl": 1055187,
+          "value": 113694
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1337,
+          "pnl": 526756,
+          "value": null
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1,
+          "pnl": -98180,
+          "value": 193350
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "ambiguous",
+      "enabled": false
+    },
+    {
+      "xHandle": "397397",
+      "fomoHandle": "397397",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "Lasercat397",
+      "followers": 114782,
+      "priority": "P1",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": -58444,
+          "value": 41418
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": -14634,
+          "value": 292
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 13210,
+          "value": 17294
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "ambiguous",
+      "enabled": false
+    },
+    {
+      "xHandle": "Pyro",
+      "fomoHandle": "Pyro",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "Pyro",
+      "followers": 19302,
+      "priority": "P0",
+      "category": "kol_traffic",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": 1170824,
+          "value": 1184395
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 8453,
+          "pnl": -65821,
+          "value": 51740
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 4663,
+          "pnl": 26615,
+          "value": 44462
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "ambiguous",
+      "enabled": false
+    },
+    {
+      "xHandle": "hdf",
+      "fomoHandle": "hdf",
+      "fomoUserId": "[REDACTED]",
+      "displayName": "HDF",
+      "followers": 11529,
+      "priority": "P2",
+      "category": "kol_traffic",
+      "wallets": [],
+      "topTokens": [
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": 3,
+          "value": 3
+        },
+        {
+          "tokenAddress": "[REDACTED]",
+          "networkId": 1399811149,
+          "pnl": 1,
+          "value": 10
+        }
+      ],
+      "source": "fomo-leaderboard",
+      "sources": [
+        "fomo-leaderboard"
+      ],
+      "confidence": "ambiguous",
+      "enabled": false
+    },
+    {
+      "xHandle": "Cupseyy",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "Cupsey",
+      "followers": null,
+      "priority": "P2",
+      "category": "kol_alpha",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        }
+      ],
+      "topTokens": [],
+      "source": "gmgn-track-kol",
+      "sources": [
+        "gmgn-track-kol"
+      ],
+      "confidence": "likely",
+      "enabled": false,
+      "gmgnTags": [
+        "kol",
+        "photon",
+        "wash_trader",
+        "arbitrager",
+        "axiom",
+        "gmgn_go",
+        "gmgn"
+      ],
+      "note": "twitter from gmgn-cli track kol maker_info; followerCount unavailable from API"
+    },
+    {
+      "xHandle": "alexmaxbid",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "alexmaxbid",
+      "followers": null,
+      "priority": "P2",
+      "category": "kol_alpha",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "bsc"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "bsc"
+        }
+      ],
+      "topTokens": [],
+      "source": "gmgn-track-kol",
+      "sources": [
+        "gmgn-track-kol"
+      ],
+      "confidence": "likely",
+      "enabled": false,
+      "gmgnTags": [
+        "kol",
+        "gmgn_go",
+        "gmgn"
+      ],
+      "note": "twitter from gmgn-cli track kol maker_info; followerCount unavailable from API"
+    },
+    {
+      "xHandle": "tiger_web3",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "TIGER",
+      "followers": null,
+      "priority": "P2",
+      "category": "kol_alpha",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "bsc"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "eth"
+        }
+      ],
+      "topTokens": [],
+      "source": "gmgn-track-kol",
+      "sources": [
+        "gmgn-track-kol"
+      ],
+      "confidence": "likely",
+      "enabled": false,
+      "gmgnTags": [
+        "kol",
+        "gmgn_go",
+        "fomo",
+        "gmgn"
+      ],
+      "note": "twitter from gmgn-cli track kol maker_info; followerCount unavailable from API"
+    },
+    {
+      "xHandle": "matt_willemsen",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "Matt Willemsen",
+      "followers": null,
+      "priority": "P2",
+      "category": "kol_alpha",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "base"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "eth"
+        }
+      ],
+      "topTokens": [],
+      "source": "gmgn-track-kol",
+      "sources": [
+        "gmgn-track-kol"
+      ],
+      "confidence": "likely",
+      "enabled": false,
+      "gmgnTags": [
+        "bluechip_owner",
+        "kol",
+        "gmgn",
+        "fomo"
+      ],
+      "note": "twitter from gmgn-cli track kol maker_info; followerCount unavailable from API"
+    },
+    {
+      "xHandle": "NeoCallss",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "NΞO",
+      "followers": null,
+      "priority": "P2",
+      "category": "kol_alpha",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "base"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "eth"
+        }
+      ],
+      "topTokens": [],
+      "source": "gmgn-track-kol",
+      "sources": [
+        "gmgn-track-kol"
+      ],
+      "confidence": "likely",
+      "enabled": false,
+      "gmgnTags": [
+        "kol",
+        "gmgn_go",
+        "fomo",
+        "gmgn",
+        "arbitrager",
+        "sigma"
+      ],
+      "note": "twitter from gmgn-cli track kol maker_info; followerCount unavailable from API"
+    },
+    {
+      "xHandle": "0xSpanny",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "Spanny",
+      "followers": null,
+      "priority": "P2",
+      "category": "kol_alpha",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "base"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "eth"
+        }
+      ],
+      "topTokens": [],
+      "source": "gmgn-track-kol",
+      "sources": [
+        "gmgn-track-kol"
+      ],
+      "confidence": "likely",
+      "enabled": false,
+      "gmgnTags": [
+        "kol",
+        "gmgn_go",
+        "fomo",
+        "gmgn",
+        "arbitrager"
+      ],
+      "note": "twitter from gmgn-cli track kol maker_info; followerCount unavailable from API"
+    },
+    {
+      "xHandle": "LilMoonLambo",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "LilMoonLambo",
+      "followers": null,
+      "priority": "P2",
+      "category": "kol_alpha",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        }
+      ],
+      "topTokens": [],
+      "source": "gmgn-track-kol",
+      "sources": [
+        "gmgn-track-kol"
+      ],
+      "confidence": "likely",
+      "enabled": false,
+      "gmgnTags": [
+        "kol",
+        "padre",
+        "wash_trader",
+        "top_renamed",
+        "axiom"
+      ],
+      "note": "twitter from gmgn-cli track kol maker_info; followerCount unavailable from API"
+    },
+    {
+      "xHandle": "VeloceSVJ",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "Veloce",
+      "followers": null,
+      "priority": "P2",
+      "category": "kol_alpha",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        }
+      ],
+      "topTokens": [],
+      "source": "gmgn-track-kol",
+      "sources": [
+        "gmgn-track-kol"
+      ],
+      "confidence": "likely",
+      "enabled": false,
+      "gmgnTags": [
+        "axiom",
+        "kol",
+        "launchpad_smart",
+        "gmgn_go",
+        "padre",
+        "gmgn"
+      ],
+      "note": "twitter from gmgn-cli track kol maker_info; followerCount unavailable from API"
+    },
+    {
+      "xHandle": "ottabag",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "OTTA 💰",
+      "followers": null,
+      "priority": "P2",
+      "category": "kol_alpha",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        }
+      ],
+      "topTokens": [],
+      "source": "gmgn-track-kol",
+      "sources": [
+        "gmgn-track-kol"
+      ],
+      "confidence": "likely",
+      "enabled": false,
+      "gmgnTags": [
+        "bullx",
+        "kol",
+        "app_smart_money",
+        "gmgn_go",
+        "gmgn",
+        "arbitrager",
+        "axiom",
+        "padre"
+      ],
+      "note": "twitter from gmgn-cli track kol maker_info; followerCount unavailable from API"
+    },
+    {
+      "xHandle": "Yennii56",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "Yenni",
+      "followers": null,
+      "priority": "P2",
+      "category": "kol_alpha",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        }
+      ],
+      "topTokens": [],
+      "source": "gmgn-track-kol",
+      "sources": [
+        "gmgn-track-kol"
+      ],
+      "confidence": "likely",
+      "enabled": false,
+      "gmgnTags": [
+        "kol",
+        "app_smart_money",
+        "arbitrager",
+        "axiom",
+        "padre"
+      ],
+      "note": "twitter from gmgn-cli track kol maker_info; followerCount unavailable from API"
+    },
+    {
+      "xHandle": "imsheepsol",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "Sheep",
+      "followers": null,
+      "priority": "P2",
+      "category": "kol_alpha",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        }
+      ],
+      "topTokens": [],
+      "source": "gmgn-track-kol",
+      "sources": [
+        "gmgn-track-kol"
+      ],
+      "confidence": "likely",
+      "enabled": false,
+      "gmgnTags": [
+        "kol",
+        "wash_trader",
+        "gmgn",
+        "gmgn_go",
+        "axiom",
+        "arbitrager",
+        "padre"
+      ],
+      "note": "twitter from gmgn-cli track kol maker_info; followerCount unavailable from API"
+    },
+    {
+      "xHandle": "shawncgeek",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "shawnc 🦅☝️",
+      "followers": null,
+      "priority": "P2",
+      "category": "kol_alpha",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "bsc"
+        }
+      ],
+      "topTokens": [],
+      "source": "gmgn-track-kol",
+      "sources": [
+        "gmgn-track-kol"
+      ],
+      "confidence": "likely",
+      "enabled": false,
+      "gmgnTags": [
+        "gmgn_go",
+        "kol",
+        "gmgn"
+      ],
+      "note": "twitter from gmgn-cli track kol maker_info; followerCount unavailable from API"
+    },
+    {
+      "xHandle": "lanyihou",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "蓝衣侯-搏杀ai",
+      "followers": null,
+      "priority": "P2",
+      "category": "kol_alpha",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "bsc"
+        }
+      ],
+      "topTokens": [],
+      "source": "gmgn-track-kol",
+      "sources": [
+        "gmgn-track-kol"
+      ],
+      "confidence": "likely",
+      "enabled": false,
+      "gmgnTags": [
+        "kol",
+        "arbitrager",
+        "gmgn"
+      ],
+      "note": "twitter from gmgn-cli track kol maker_info; followerCount unavailable from API"
+    },
+    {
+      "xHandle": "skygmgn",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "Sky",
+      "followers": null,
+      "priority": "P2",
+      "category": "kol_alpha",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "bsc"
+        }
+      ],
+      "topTokens": [],
+      "source": "gmgn-track-kol",
+      "sources": [
+        "gmgn-track-kol"
+      ],
+      "confidence": "likely",
+      "enabled": false,
+      "gmgnTags": [
+        "kol",
+        "gmgn_go",
+        "gmgn"
+      ],
+      "note": "twitter from gmgn-cli track kol maker_info; followerCount unavailable from API"
+    },
+    {
+      "xHandle": "0xLuckHK",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "0xLuck",
+      "followers": null,
+      "priority": "P2",
+      "category": "kol_alpha",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "bsc"
+        }
+      ],
+      "topTokens": [],
+      "source": "gmgn-track-kol",
+      "sources": [
+        "gmgn-track-kol"
+      ],
+      "confidence": "likely",
+      "enabled": false,
+      "gmgnTags": [
+        "gmgn_go",
+        "kol",
+        "gmgn"
+      ],
+      "note": "twitter from gmgn-cli track kol maker_info; followerCount unavailable from API"
+    },
+    {
+      "xHandle": "yesp999",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "Yesp 🔶",
+      "followers": null,
+      "priority": "P2",
+      "category": "kol_alpha",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "bsc"
+        }
+      ],
+      "topTokens": [],
+      "source": "gmgn-track-kol",
+      "sources": [
+        "gmgn-track-kol"
+      ],
+      "confidence": "likely",
+      "enabled": false,
+      "gmgnTags": [
+        "fresh_wallet",
+        "kol",
+        "gmgn_go",
+        "gmgn"
+      ],
+      "note": "twitter from gmgn-cli track kol maker_info; followerCount unavailable from API"
+    },
+    {
+      "xHandle": "HM010169",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "币圈荒木｜Araki🪵",
+      "followers": null,
+      "priority": "P2",
+      "category": "kol_alpha",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "bsc"
+        }
+      ],
+      "topTokens": [],
+      "source": "gmgn-track-kol",
+      "sources": [
+        "gmgn-track-kol"
+      ],
+      "confidence": "likely",
+      "enabled": false,
+      "gmgnTags": [
+        "kol",
+        "gmgn_go",
+        "gmgn"
+      ],
+      "note": "twitter from gmgn-cli track kol maker_info; followerCount unavailable from API"
+    },
+    {
+      "xHandle": "okmetom",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "TOM 🦋🔶🅿️",
+      "followers": null,
+      "priority": "P2",
+      "category": "kol_alpha",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "bsc"
+        }
+      ],
+      "topTokens": [],
+      "source": "gmgn-track-kol",
+      "sources": [
+        "gmgn-track-kol"
+      ],
+      "confidence": "likely",
+      "enabled": false,
+      "gmgnTags": [
+        "gmgn_go",
+        "fresh_wallet",
+        "kol",
+        "gmgn"
+      ],
+      "note": "twitter from gmgn-cli track kol maker_info; followerCount unavailable from API"
+    },
+    {
+      "xHandle": "0xweiqigaoshou",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "我是围棋高手（耐心/alpha）",
+      "followers": null,
+      "priority": "P2",
+      "category": "kol_alpha",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "bsc"
+        }
+      ],
+      "topTokens": [],
+      "source": "gmgn-track-kol",
+      "sources": [
+        "gmgn-track-kol"
+      ],
+      "confidence": "likely",
+      "enabled": false,
+      "gmgnTags": [
+        "kol",
+        "gmgn_go",
+        "gmgn"
+      ],
+      "note": "twitter from gmgn-cli track kol maker_info; followerCount unavailable from API"
+    },
+    {
+      "xHandle": "tempoapes",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "Tempo",
+      "followers": null,
+      "priority": "P2",
+      "category": "kol_alpha",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "bsc"
+        }
+      ],
+      "topTokens": [],
+      "source": "gmgn-track-kol",
+      "sources": [
+        "gmgn-track-kol"
+      ],
+      "confidence": "likely",
+      "enabled": false,
+      "gmgnTags": [
+        "kol",
+        "gmgn_go",
+        "gmgn"
+      ],
+      "note": "twitter from gmgn-cli track kol maker_info; followerCount unavailable from API"
+    },
+    {
+      "xHandle": "treysocial",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "Trey",
+      "followers": null,
+      "priority": "P2",
+      "category": "kol_alpha",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "bsc"
+        }
+      ],
+      "topTokens": [],
+      "source": "gmgn-track-kol",
+      "sources": [
+        "gmgn-track-kol"
+      ],
+      "confidence": "likely",
+      "enabled": false,
+      "gmgnTags": [
+        "kol",
+        "padre",
+        "gmgn"
+      ],
+      "note": "twitter from gmgn-cli track kol maker_info; followerCount unavailable from API"
+    },
+    {
+      "xHandle": "YYzzy_diamond",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "YYYzzy | GDC",
+      "followers": null,
+      "priority": "P2",
+      "category": "kol_alpha",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "bsc"
+        }
+      ],
+      "topTokens": [],
+      "source": "gmgn-track-kol",
+      "sources": [
+        "gmgn-track-kol"
+      ],
+      "confidence": "likely",
+      "enabled": false,
+      "gmgnTags": [
+        "fresh_wallet",
+        "fomo",
+        "kol",
+        "gmgn_go",
+        "gmgn"
+      ],
+      "note": "twitter from gmgn-cli track kol maker_info; followerCount unavailable from API"
+    },
+    {
+      "xHandle": "New100xGems",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "New 100x Gems",
+      "followers": null,
+      "priority": "P2",
+      "category": "kol_alpha",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "bsc"
+        }
+      ],
+      "topTokens": [],
+      "source": "gmgn-track-kol",
+      "sources": [
+        "gmgn-track-kol"
+      ],
+      "confidence": "likely",
+      "enabled": false,
+      "gmgnTags": [
+        "kol",
+        "gmgn_go",
+        "gmgn"
+      ],
+      "note": "twitter from gmgn-cli track kol maker_info; followerCount unavailable from API"
+    },
+    {
+      "xHandle": "JOJO_IterLabs",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "JOJO_IterLabs丨进击社🔴💊",
+      "followers": null,
+      "priority": "P2",
+      "category": "kol_alpha",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "bsc"
+        }
+      ],
+      "topTokens": [],
+      "source": "gmgn-track-kol",
+      "sources": [
+        "gmgn-track-kol"
+      ],
+      "confidence": "likely",
+      "enabled": false,
+      "gmgnTags": [
+        "kol",
+        "bluechip_owner",
+        "gmgn_go",
+        "gmgn"
+      ],
+      "note": "twitter from gmgn-cli track kol maker_info; followerCount unavailable from API"
+    },
+    {
+      "xHandle": "alkuap",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "alkuuu | AP",
+      "followers": null,
+      "priority": "P2",
+      "category": "kol_alpha",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "base"
+        }
+      ],
+      "topTokens": [],
+      "source": "gmgn-track-kol",
+      "sources": [
+        "gmgn-track-kol"
+      ],
+      "confidence": "likely",
+      "enabled": false,
+      "gmgnTags": [
+        "kol",
+        "gmgn",
+        "gmgn_go",
+        "fomo"
+      ],
+      "note": "twitter from gmgn-cli track kol maker_info; followerCount unavailable from API"
+    },
+    {
+      "xHandle": "pheromones_sol",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "Phero.hl",
+      "followers": null,
+      "priority": "P2",
+      "category": "kol_alpha",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "base"
+        }
+      ],
+      "topTokens": [],
+      "source": "gmgn-track-kol",
+      "sources": [
+        "gmgn-track-kol"
+      ],
+      "confidence": "likely",
+      "enabled": false,
+      "gmgnTags": [
+        "kol",
+        "gmgn_go",
+        "gmgn"
+      ],
+      "note": "twitter from gmgn-cli track kol maker_info; followerCount unavailable from API"
+    },
+    {
+      "xHandle": "yodacalls",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "Yoda",
+      "followers": null,
+      "priority": "P2",
+      "category": "kol_alpha",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "base"
+        }
+      ],
+      "topTokens": [],
+      "source": "gmgn-track-kol",
+      "sources": [
+        "gmgn-track-kol"
+      ],
+      "confidence": "likely",
+      "enabled": false,
+      "gmgnTags": [
+        "kol",
+        "fomo",
+        "gmgn_go",
+        "gmgn"
+      ],
+      "note": "twitter from gmgn-cli track kol maker_info; followerCount unavailable from API"
+    },
+    {
+      "xHandle": "VickHaoran",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "Vick浩然",
+      "followers": null,
+      "priority": "P2",
+      "category": "kol_alpha",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "base"
+        }
+      ],
+      "topTokens": [],
+      "source": "gmgn-track-kol",
+      "sources": [
+        "gmgn-track-kol"
+      ],
+      "confidence": "likely",
+      "enabled": false,
+      "gmgnTags": [
+        "kol"
+      ],
+      "note": "twitter from gmgn-cli track kol maker_info; followerCount unavailable from API"
+    },
+    {
+      "xHandle": "pe___lu",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "pedrolucio (humble arc 😌🙏)",
+      "followers": null,
+      "priority": "P2",
+      "category": "kol_alpha",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "base"
+        }
+      ],
+      "topTokens": [],
+      "source": "gmgn-track-kol",
+      "sources": [
+        "gmgn-track-kol"
+      ],
+      "confidence": "likely",
+      "enabled": false,
+      "gmgnTags": [
+        "kol",
+        "fomo",
+        "gmgn_go",
+        "gmgn"
+      ],
+      "note": "twitter from gmgn-cli track kol maker_info; followerCount unavailable from API"
+    },
+    {
+      "xHandle": "DarkKnightBTC",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "Vengeance 🦇",
+      "followers": null,
+      "priority": "P2",
+      "category": "kol_alpha",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "base"
+        }
+      ],
+      "topTokens": [],
+      "source": "gmgn-track-kol",
+      "sources": [
+        "gmgn-track-kol"
+      ],
+      "confidence": "likely",
+      "enabled": false,
+      "gmgnTags": [
+        "kol"
+      ],
+      "note": "twitter from gmgn-cli track kol maker_info; followerCount unavailable from API"
+    },
+    {
+      "xHandle": "NonVitalTooth",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "KingOfVe33",
+      "followers": null,
+      "priority": "P2",
+      "category": "kol_alpha",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "base"
+        }
+      ],
+      "topTokens": [],
+      "source": "gmgn-track-kol",
+      "sources": [
+        "gmgn-track-kol"
+      ],
+      "confidence": "likely",
+      "enabled": false,
+      "gmgnTags": [
+        "kol"
+      ],
+      "note": "twitter from gmgn-cli track kol maker_info; followerCount unavailable from API"
+    },
+    {
+      "xHandle": "morena_ny1",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "Morena New York Comité 1",
+      "followers": null,
+      "priority": "P2",
+      "category": "kol_alpha",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "base"
+        }
+      ],
+      "topTokens": [],
+      "source": "gmgn-track-kol",
+      "sources": [
+        "gmgn-track-kol"
+      ],
+      "confidence": "likely",
+      "enabled": false,
+      "gmgnTags": [
+        "kol",
+        "gmgn_go",
+        "gmgn"
+      ],
+      "note": "twitter from gmgn-cli track kol maker_info; followerCount unavailable from API"
+    },
+    {
+      "xHandle": "0xRell",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "Rell",
+      "followers": null,
+      "priority": "P2",
+      "category": "kol_alpha",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "base"
+        }
+      ],
+      "topTokens": [],
+      "source": "gmgn-track-kol",
+      "sources": [
+        "gmgn-track-kol"
+      ],
+      "confidence": "likely",
+      "enabled": false,
+      "gmgnTags": [
+        "kol",
+        "fomo",
+        "gmgn_go",
+        "gmgn"
+      ],
+      "note": "twitter from gmgn-cli track kol maker_info; followerCount unavailable from API"
+    },
+    {
+      "xHandle": "andy8052",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "andy",
+      "followers": null,
+      "priority": "P2",
+      "category": "kol_alpha",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "base"
+        }
+      ],
+      "topTokens": [],
+      "source": "gmgn-track-kol",
+      "sources": [
+        "gmgn-track-kol"
+      ],
+      "confidence": "likely",
+      "enabled": false,
+      "gmgnTags": [
+        "kol"
+      ],
+      "note": "twitter from gmgn-cli track kol maker_info; followerCount unavailable from API"
+    },
+    {
+      "xHandle": "KZMKBL",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "Kazım",
+      "followers": null,
+      "priority": "P2",
+      "category": "kol_alpha",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "eth"
+        }
+      ],
+      "topTokens": [],
+      "source": "gmgn-track-kol",
+      "sources": [
+        "gmgn-track-kol"
+      ],
+      "confidence": "likely",
+      "enabled": false,
+      "gmgnTags": [
+        "kol",
+        "gmgn"
+      ],
+      "note": "twitter from gmgn-cli track kol maker_info; followerCount unavailable from API"
+    },
+    {
+      "xHandle": "vorgtrom",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "vorgtrom",
+      "followers": null,
+      "priority": "P2",
+      "category": "kol_alpha",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "eth"
+        }
+      ],
+      "topTokens": [],
+      "source": "gmgn-track-kol",
+      "sources": [
+        "gmgn-track-kol"
+      ],
+      "confidence": "likely",
+      "enabled": false,
+      "gmgnTags": [
+        "kol"
+      ],
+      "note": "twitter from gmgn-cli track kol maker_info; followerCount unavailable from API"
+    },
+    {
+      "xHandle": "crypto17mile",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "17MILE 👻",
+      "followers": null,
+      "priority": "P2",
+      "category": "kol_alpha",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "eth"
+        }
+      ],
+      "topTokens": [],
+      "source": "gmgn-track-kol",
+      "sources": [
+        "gmgn-track-kol"
+      ],
+      "confidence": "likely",
+      "enabled": false,
+      "gmgnTags": [
+        "kol"
+      ],
+      "note": "twitter from gmgn-cli track kol maker_info; followerCount unavailable from API"
+    },
+    {
+      "xHandle": "Siegfried90210",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "阿伟 Siegfried",
+      "followers": null,
+      "priority": "P2",
+      "category": "kol_alpha",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "eth"
+        }
+      ],
+      "topTokens": [],
+      "source": "gmgn-track-kol",
+      "sources": [
+        "gmgn-track-kol"
+      ],
+      "confidence": "likely",
+      "enabled": false,
+      "gmgnTags": [
+        "kol"
+      ],
+      "note": "twitter from gmgn-cli track kol maker_info; followerCount unavailable from API"
+    },
+    {
+      "xHandle": "eth200000",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "金狗王",
+      "followers": null,
+      "priority": "P2",
+      "category": "kol_alpha",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "eth"
+        }
+      ],
+      "topTokens": [],
+      "source": "gmgn-track-kol",
+      "sources": [
+        "gmgn-track-kol"
+      ],
+      "confidence": "likely",
+      "enabled": false,
+      "gmgnTags": [
+        "kol",
+        "arbitrager"
+      ],
+      "note": "twitter from gmgn-cli track kol maker_info; followerCount unavailable from API"
+    },
+    {
+      "xHandle": "gCAN9k",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "gcan",
+      "followers": null,
+      "priority": "P2",
+      "category": "kol_alpha",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "eth"
+        }
+      ],
+      "topTokens": [],
+      "source": "gmgn-track-kol",
+      "sources": [
+        "gmgn-track-kol"
+      ],
+      "confidence": "likely",
+      "enabled": false,
+      "gmgnTags": [
+        "kol"
+      ],
+      "note": "twitter from gmgn-cli track kol maker_info; followerCount unavailable from API"
+    },
+    {
+      "xHandle": "Jun666Xx",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "币圈链丹师🌕",
+      "followers": null,
+      "priority": "P2",
+      "category": "kol_alpha",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "eth"
+        }
+      ],
+      "topTokens": [],
+      "source": "gmgn-track-kol",
+      "sources": [
+        "gmgn-track-kol"
+      ],
+      "confidence": "likely",
+      "enabled": false,
+      "gmgnTags": [
+        "kol",
+        "gmgn",
+        "arbitrager"
+      ],
+      "note": "twitter from gmgn-cli track kol maker_info; followerCount unavailable from API"
+    },
+    {
+      "xHandle": "hotlneblng_",
+      "fomoHandle": null,
+      "fomoUserId": null,
+      "displayName": "hotlneblng",
+      "followers": null,
+      "priority": "P2",
+      "category": "kol_alpha",
+      "wallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "eth"
+        }
+      ],
+      "topTokens": [],
+      "source": "gmgn-track-kol",
+      "sources": [
+        "gmgn-track-kol"
+      ],
+      "confidence": "likely",
+      "enabled": false,
+      "gmgnTags": [
+        "kol"
+      ],
+      "note": "twitter from gmgn-cli track kol maker_info; followerCount unavailable from API"
+    }
+  ]
+}

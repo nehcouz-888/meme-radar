@@ -96,6 +96,80 @@ test('market behavior deduplicates wallet evidence and requires multiple smart w
   assert.match(two.strengths.join(' '), /轻度加分/);
 });
 
+test('market behavior prefers live still-holding smart money over historical aggregate (AURACAT fix)', () => {
+  // Scenario: aggregate shows 36 smart wallets historically, but all have exited (0 still holding)
+  const auracatStyle = marketBehaviorScreen({
+    discovery: { smart_degen_count: 36, renowned_count: 5 },
+    info: { wallet_tags_stat: { smart_wallets: 36, renowned_wallets: 5 } },
+    holders: [
+      // No smart_degen wallets in current holders (all exited)
+      { address: '0x1111111111111111111111111111111111111111', tags: [] },
+      { address: '0x2222222222222222222222222222222222222222', tags: [] },
+      { address: '0x3333333333333333333333333333333333333333', tags: [] },
+      { address: '0x4444444444444444444444444444444444444444', tags: [] }
+    ],
+    nowMs: nowSec * 1000
+  }, config);
+  
+  // With adequate holder sample, should use live count (0) not aggregate (36)
+  assert.equal(auracatStyle.evidence.liveSmartHolding, 0);
+  assert.equal(auracatStyle.evidence.aggregateSmartWallets, 36);
+  assert.equal(auracatStyle.evidence.smartMoneySource, 'live_holders');
+  assert.equal(auracatStyle.evidence.smartWallets, 0);
+  
+  // No specific downgrade pattern triggered (market behavior doesn't require smart money to pass)
+  // The key fix is that we're using 0 (reality) not 36 (historical aggregate)
+  
+  // Scenario with KOL but no smart money (using live counts, not aggregate)
+  const kolOnlyLive = marketBehaviorScreen({
+    discovery: { smart_degen_count: 20, renowned_count: 1 },
+    holders: [
+      { address: '0x1111111111111111111111111111111111111111', tags: ['renowned'] },
+      { address: '0x2222222222222222222222222222222222222222', tags: [] },
+      { address: '0x3333333333333333333333333333333333333333', tags: [] }
+    ],
+    nowMs: nowSec * 1000
+  }, config);
+  
+  assert.equal(kolOnlyLive.evidence.liveSmartHolding, 0);
+  assert.equal(kolOnlyLive.evidence.liveRenownedHolding, 1);
+  assert.equal(kolOnlyLive.evidence.smartMoneySource, 'live_holders');
+  assert.equal(kolOnlyLive.evidence.smartWallets, 0);
+  assert.equal(kolOnlyLive.evidence.renownedWallets, 1);
+  assert.equal(kolOnlyLive.pass, false);
+  assert.match(kolOnlyLive.downgradeReasons.join(' '), /仅见KOL/);
+
+  // Scenario: 3 smart wallets still holding
+  const liveHolding = marketBehaviorScreen({
+    discovery: { smart_degen_count: 36, renowned_count: 5 },
+    info: { wallet_tags_stat: { smart_wallets: 36, renowned_wallets: 5 } },
+    holders: [
+      { address: '0x1111111111111111111111111111111111111111', tags: ['smart_degen'] },
+      { address: '0x2222222222222222222222222222222222222222', tags: ['smart_degen'] },
+      { address: '0x3333333333333333333333333333333333333333', tags: ['smart_degen'] },
+      { address: '0x4444444444444444444444444444444444444444', tags: [] }
+    ],
+    nowMs: nowSec * 1000
+  }, config);
+  
+  assert.equal(liveHolding.evidence.liveSmartHolding, 3);
+  assert.equal(liveHolding.evidence.smartMoneySource, 'live_holders');
+  assert.equal(liveHolding.evidence.smartWallets, 3);
+  assert.equal(liveHolding.pass, true);
+  assert.match(liveHolding.strengths.join(' '), /3个聪明钱仍持仓/);
+  
+  // Fallback scenario: no holder data, use aggregate
+  const fallbackToAggregate = marketBehaviorScreen({
+    discovery: { smart_degen_count: 5, renowned_count: 1 },
+    holders: [],
+    nowMs: nowSec * 1000
+  }, config);
+  
+  assert.equal(fallbackToAggregate.evidence.smartMoneySource, 'aggregate_fallback');
+  assert.equal(fallbackToAggregate.evidence.smartWallets, 5);
+});
+
+
 test('market behavior sends KOL-only, inconsistent activity and old sudden pumps to recheck', () => {
   const kolOnly = marketBehaviorScreen({
     discovery: { smart_degen_count: 1, renowned_count: 2 }, nowMs: nowSec * 1000

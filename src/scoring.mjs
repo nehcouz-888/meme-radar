@@ -1,3 +1,6 @@
+import { config } from './config.mjs';
+import { computeChainAffinityBonus } from './chain-competition.mjs';
+
 const NUMBER_PATTERN = /^[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:e[+-]?\d+)?$/i;
 
 function optionalNumber(value) {
@@ -148,7 +151,7 @@ export function discoveryScreen(row, config, nowSec = Date.now() / 1000) {
   else if (!(ageSec >= config.minAgeSec)) reasons.push('创建不足5分钟');
   else if (ageSec > config.maxAgeSec) reasons.push('超过观察年龄上限');
   if (mcValue === null) reasons.push('市值数据未知');
-  else if (!(mc >= config.discoveryMinMarketCap && mc <= config.discoveryMaxMarketCap)) reasons.push('市值不在发现范围');
+  // Market cap is for tiering/scoring only, NOT hard exclusion (per 2026-11-12 audit acceptance)
   if (liquidityValue === null) reasons.push('流动性数据未知');
   else if (liquidity < config.minLiquidity) reasons.push('流动性不足');
   if (rug === null) reasons.push('rug风险数据未知');
@@ -164,13 +167,14 @@ export function discoveryScreen(row, config, nowSec = Date.now() / 1000) {
     else if (honeypot) reasons.push('检测到貔貅盘');
   }
   const priorityBand = mc >= config.priorityMinMarketCap && mc <= config.priorityMaxMarketCap;
+  const mcTier = mc >= 20e6 ? 'high' : mc >= 1e6 ? 'mid' : mc >= 100e3 ? 'low' : mc >= 1e3 ? 'micro' : 'nano';
   const volume = num(first(row.volume_1h, row.volume, row.volume_24h));
   const holders = num(row.holder_count);
   const signals = discoverySignalView(row);
   const score = (priorityBand ? 35 : 10) + Math.min(25, liquidity / 1000) + Math.min(20, volume / 1000)
     + Math.min(20, holders / 10) + signals.scoreAdjustment;
   return {
-    pass: reasons.length === 0, reasons, priorityBand, score, mc, liquidity, ageSec, signals,
+    pass: reasons.length === 0, reasons, priorityBand, mcTier, score, mc, liquidity, ageSec, signals,
     unknownFields: [
       mcValue === null ? 'marketCap' : null,
       createdValue === null ? 'createdAt' : null,
@@ -312,10 +316,25 @@ export function marketBehaviorScreen({ discovery = {}, info = {}, holders = [], 
   const tagEvidence = taggedWalletSignals(holders, config.chain);
   const aggregateSmart = optionalCount(first(info.wallet_tags_stat?.smart_wallets, discovery.smart_degen_count));
   const aggregateRenowned = optionalCount(first(info.wallet_tags_stat?.renowned_wallets, discovery.renowned_count));
-  const smartKnown = aggregateSmart !== null || tagEvidence.smartWallets > 0;
-  const renownedKnown = aggregateRenowned !== null || tagEvidence.renownedWallets > 0;
-  const smartWallets = smartKnown ? Math.max(aggregateSmart ?? 0, tagEvidence.smartWallets) : null;
-  const renownedWallets = renownedKnown ? Math.max(aggregateRenowned ?? 0, tagEvidence.renownedWallets) : null;
+  
+  // Prefer live still-holding counts from holder sample when available.
+  // Aggregate counts include wallets that may have fully exited (AURACAT-style false positive).
+  // Only fall back to aggregate when holders data is unavailable or sample is too small.
+  const holderSampleSize = Array.isArray(holders) ? holders.length : 0;
+  const holderSampleAdequate = holderSampleSize >= 3;
+  
+  const liveSmartHolding = tagEvidence.smartWallets;
+  const liveRenownedHolding = tagEvidence.renownedWallets;
+  
+  // Only use live holder sample when adequate (>=3). Incomplete/missing samples score 0, NOT aggregate fallback.
+  // Historical aggregate counts (smart_degen_count) are for display/risk only, never for scoring.
+  const smartMoneySource = holderSampleAdequate ? 'live_holders' 
+    : holderSampleSize === 0 ? 'sample_missing' 
+    : 'sample_incomplete';
+  const smartWallets = holderSampleAdequate ? liveSmartHolding : 0;
+  
+  const renownedMoneySource = smartMoneySource;
+  const renownedWallets = holderSampleAdequate ? liveRenownedHolding : 0;
 
   const holderCount = optionalCount(first(info.holder_count, info.stat?.holder_count, discovery.holder_count));
   const swaps5m = optionalCount(first(price.swaps_5m, discovery.swaps_5m, discovery.swaps));
@@ -390,11 +409,21 @@ export function marketBehaviorScreen({ discovery = {}, info = {}, holders = [], 
   ].filter(Boolean);
   const warnings = [
     creatorLaunchCount !== null && creatorLaunchCount >= 10 ? `创建者历史发币${creatorLaunchCount}个` : null,
-    creatorStatus === 'UNKNOWN' ? '创建者当前持币状态未知' : null
+    creatorStatus === 'UNKNOWN' ? '创建者当前持币状态未知' : null,
+    smartMoneySource === 'sample_missing' ? '持仓样本缺失，聪明钱计分为0' 
+      : smartMoneySource === 'sample_incomplete' && holderSampleSize > 0 
+        ? `持仓样本不完整（仅${holderSampleSize}个，需>=3），聪明钱计分为0` 
+        : null,
+    aggregateSmart !== null && aggregateSmart > 0 && smartMoneySource !== 'live_holders'
+      ? `历史统计${aggregateSmart}个聪明钱（仅供参考，未计分）` : null
   ].filter(Boolean);
   const strengths = [
-    smartWallets !== null && smartWallets >= 3 ? `${smartWallets}个聪明钱钱包形成多钱包验证` : null,
-    smartWallets === 2 ? '2个聪明钱钱包，只有轻度加分' : null
+    smartWallets >= 3 && smartMoneySource === 'live_holders'
+      ? `${smartWallets}个聪明钱仍持仓，形成多钱包验证` : null,
+    smartWallets === 2 && smartMoneySource === 'live_holders' 
+      ? `2个聪明钱仍持仓，只有轻度加分` : null,
+    smartWallets === 0 && holderSampleSize >= 3 && smartMoneySource === 'live_holders'
+      ? '已验证当前无聪明钱持仓（样本完整）' : null
   ].filter(Boolean);
   const unknownFields = [
     smartWallets === null ? 'marketBehavior.smartWallets' : null,
@@ -413,7 +442,11 @@ export function marketBehaviorScreen({ discovery = {}, info = {}, holders = [], 
     status: downgradeReasons.length ? 'WAITING' : 'PASS',
     downgradeReasons, warnings, strengths, unknownFields,
     evidence: {
-      smartWallets, renownedWallets, taggedSmartWallets: tagEvidence.smartWallets,
+      smartWallets, renownedWallets,
+      liveSmartHolding, liveRenownedHolding,
+      aggregateSmartWallets: aggregateSmart, aggregateRenownedWallets: aggregateRenowned,
+      smartMoneySource, renownedMoneySource,
+      taggedSmartWallets: tagEvidence.smartWallets,
       taggedRenownedWallets: tagEvidence.renownedWallets, sampledTaggedWallets: tagEvidence.sampledTaggedWallets,
       holderCount, holderSampleDistinct, swaps5m, buys5m, sells5m, volume5m, priceChange5m,
       swapsPerHolder5m, swapCountConsistent, holderSampleConsistent, sellBuyRatio, ageSec,
@@ -521,6 +554,218 @@ export function empiricalSellability({ info, discovery, traders, nowSec = Date.n
   };
 }
 
+export function computeEmbryonicScore({ discovery, info, audit, nowMs = Date.now(), xCompetition = null, tokenChain = 'sol' }, config) {
+  const mcValue = optionalNumber(first(discovery.market_cap, discovery.usd_market_cap, discovery.mcp, info?.market_cap));
+  const liquidityValue = optionalNumber(first(discovery.liquidity, info?.liquidity));
+  const createdValue = optionalNumber(first(discovery.creation_timestamp, discovery.created_timestamp, discovery.open_timestamp, info?.creation_timestamp));
+  const ageSec = createdValue && createdValue > 0 ? nowMs / 1000 - createdValue : null;
+  const ageHours = ageSec ? ageSec / 3600 : null;
+  
+  // Prefer live still-holding counts over historical aggregates (AURACAT fix)
+  const holders = audit?.holders || [];
+  const holderSampleSize = Array.isArray(holders) ? holders.length : 0;
+  const holderSampleAdequate = holderSampleSize >= 3;
+  
+  const tagEvidence = holderSampleSize > 0 ? taggedWalletSignals(holders, config.chain) : { smartWallets: 0, renownedWallets: 0, sampledTaggedWallets: 0 };
+  const aggregateSmart = optionalCount(first(info?.wallet_tags_stat?.smart_wallets, discovery.smart_degen_count)) ?? 0;
+  const aggregateRenowned = optionalCount(first(info?.wallet_tags_stat?.renowned_wallets, discovery.renowned_count)) ?? 0;
+  
+  const liveSmartHolding = tagEvidence.smartWallets;
+  const liveRenownedHolding = tagEvidence.renownedWallets;
+  
+  // Only live-verified adequate samples score. Incomplete/missing samples score 0, NOT aggregate fallback.
+  const smartMoneySource = holderSampleAdequate ? 'live_holders' 
+    : holderSampleSize === 0 ? 'sample_missing' 
+    : 'sample_incomplete';
+  const smartWallets = holderSampleAdequate ? liveSmartHolding : 0;
+  const renownedWallets = holderSampleAdequate ? liveRenownedHolding : 0;
+  
+  const holderCount = optionalCount(first(info?.holder_count, info?.stat?.holder_count, discovery.holder_count)) ?? 0;
+  const volume5m = optionalNonNegativeNumber(first(info?.price?.volume_5m, discovery.volume_5m, discovery.volume)) ?? 0;
+  
+  const hasWebsite = Boolean(first(discovery.website, discovery.link?.website, info?.link?.website));
+  const hasTwitter = Boolean(first(discovery.twitter, discovery.twitter_username, discovery.link?.twitter_username, info?.link?.twitter_username));
+  
+  let score = 0;
+  const signals = [];
+  const signalsCN = [];
+  
+  if (mcValue !== null) {
+    const mc = mcValue;
+    if (mc >= config.embryonicOptimalMinMarketCap && mc <= config.embryonicOptimalMaxMarketCap) {
+      score += 25;
+      signals.push('Market cap in optimal early range');
+      signalsCN.push('市值处于最佳早期区间');
+    } else if (mc >= config.embryonicMinMarketCap && mc <= config.embryonicMaxMarketCap) {
+      score += 15;
+      signals.push('Market cap in acceptable range');
+      signalsCN.push('市值在可接受范围');
+    } else if (mc < config.embryonicMinMarketCap) {
+      score -= 10;
+      signals.push('Market cap too low');
+      signalsCN.push('市值过低');
+    } else {
+      score -= 15;
+      signals.push('Market cap too high for embryonic stage');
+      signalsCN.push('市值对早期阶段过高');
+    }
+  } else {
+    signals.push('Market cap unknown');
+    signalsCN.push('市值未知');
+  }
+  
+  if (liquidityValue !== null) {
+    const liq = liquidityValue;
+    const mcRatio = mcValue && mcValue > 0 ? liq / mcValue : 0;
+    if (liq >= 5000 && liq <= 50000 && mcRatio >= 0.02 && mcRatio <= 0.30) {
+      score += 20;
+      signals.push('Liquidity healthy for early stage');
+      signalsCN.push('流动性对早期阶段健康');
+    } else if (liq >= 3000 && liq <= 80000) {
+      score += 10;
+      signals.push('Liquidity acceptable');
+      signalsCN.push('流动性可接受');
+    } else if (liq < 3000) {
+      score -= 10;
+      signals.push('Liquidity too low');
+      signalsCN.push('流动性不足');
+    } else {
+      score -= 5;
+      signals.push('Liquidity unusually high');
+      signalsCN.push('流动性异常高');
+    }
+  } else {
+    signals.push('Liquidity unknown');
+    signalsCN.push('流动性未知');
+  }
+  
+  if (ageHours !== null) {
+    if (ageHours >= 0.5 && ageHours <= 6) {
+      score += 15;
+      signals.push('Age ideal for embryonic discovery');
+      signalsCN.push('年龄最适合早期发现');
+    } else if (ageHours < 0.5) {
+      score += 5;
+      signals.push('Very fresh - minutes old');
+      signalsCN.push('非常新鲜 - 分钟级');
+    } else if (ageHours <= 24) {
+      score += 8;
+      signals.push('Still early - within 24 hours');
+      signalsCN.push('仍然早期 - 24小时内');
+    } else {
+      score -= 10;
+      signals.push('Not embryonic - over 1 day old');
+      signalsCN.push('非萌芽期 - 超过1天');
+    }
+  } else {
+    signals.push('Age unknown');
+    signalsCN.push('年龄未知');
+  }
+  
+  if (smartWallets >= 3) {
+    score += 20;
+    const suffix = smartMoneySource === 'live_holders' ? ' still holding' : ' wallets';
+    const suffixCN = smartMoneySource === 'live_holders' ? '仍持仓' : '钱包';
+    signals.push(`${smartWallets} smart money${suffix}`);
+    signalsCN.push(`${smartWallets}个聪明钱${suffixCN}`);
+  } else if (smartWallets === 2) {
+    score += 10;
+    const suffix = smartMoneySource === 'live_holders' ? ' still holding' : ' wallets';
+    const suffixCN = smartMoneySource === 'live_holders' ? '仍持仓' : '钱包';
+    signals.push(`2 smart money${suffix}`);
+    signalsCN.push(`2个聪明钱${suffixCN}`);
+  } else if (smartWallets === 1) {
+    score += 5;
+    const suffix = smartMoneySource === 'live_holders' ? ' still holding' : ' wallet';
+    const suffixCN = smartMoneySource === 'live_holders' ? '仍持仓' : '钱包';
+    signals.push(`1 smart money${suffix}`);
+    signalsCN.push(`1个聪明钱${suffixCN}`);
+  } else if (smartMoneySource === 'live_holders' && aggregateSmart > 0) {
+    // AURACAT case: aggregate high but live 0
+    signals.push(`No smart money still holding (${aggregateSmart} historical)`);
+    signalsCN.push(`无聪明钱仍持仓（历史${aggregateSmart}个）`);
+  }
+  
+  if (renownedWallets > 0) {
+    score += 5;
+    const suffix = smartMoneySource === 'live_holders' ? ' still holding' : '';
+    const suffixCN = smartMoneySource === 'live_holders' ? '仍持仓' : '';
+    signals.push(`${renownedWallets} KOL/renowned${suffix}`);
+    signalsCN.push(`${renownedWallets}个KOL/知名${suffixCN}`);
+  }
+  
+  if (holderCount >= 100) {
+    score += 10;
+    signals.push('Healthy holder distribution');
+    signalsCN.push('持有人分布健康');
+  } else if (holderCount >= 50) {
+    score += 5;
+    signals.push('Moderate holder count');
+    signalsCN.push('持有人数量适中');
+  } else if (holderCount > 0) {
+    signals.push('Low holder count');
+    signalsCN.push('持有人数量较少');
+  }
+  
+  if (volume5m > 5000) {
+    score += 10;
+    signals.push('Strong 5m volume');
+    signalsCN.push('5分钟成交量强劲');
+  } else if (volume5m > 1000) {
+    score += 5;
+    signals.push('Moderate 5m volume');
+    signalsCN.push('5分钟成交量适中');
+  }
+  
+  if (hasWebsite && hasTwitter) {
+    score += 5;
+    signals.push('Social links present');
+    signalsCN.push('社交链接完整');
+  } else if (hasWebsite || hasTwitter) {
+    score += 2;
+    signals.push('Partial social links');
+    signalsCN.push('部分社交链接');
+  }
+  
+  // Chain competition bonus
+  if (xCompetition) {
+    const affinityBonus = computeChainAffinityBonus(tokenChain, xCompetition);
+    score += affinityBonus.bonus;
+    signals.push(...affinityBonus.signals);
+    signalsCN.push(...affinityBonus.signalsCN);
+  }
+  
+  score = Math.max(0, Math.min(100, score));
+  
+  const tier = score >= config.embryonicHotThreshold ? 'hot'
+    : score >= config.embryonicWatchThreshold ? 'watch'
+    : 'ignore';
+  
+  return {
+    embryonicScore: score,
+    embryonicTier: tier,
+    embryonicSignals: signals,
+    embryonicSignalsCN: signalsCN,
+    embryonicFields: {
+      marketCap: mcValue,
+      liquidity: liquidityValue,
+      ageHours,
+      smartWallets,
+      renownedWallets,
+      liveSmartHolding,
+      liveRenownedHolding,
+      aggregateSmartWallets: aggregateSmart,
+      aggregateRenownedWallets: aggregateRenowned,
+      smartMoneySource,
+      holderCount,
+      volume5m,
+      hasWebsite,
+      hasTwitter,
+      chainCompetitionBonus: xCompetition ? computeChainAffinityBonus(tokenChain, xCompetition).bonus : 0
+    }
+  };
+}
+
 export function deepScreen({ discovery, audit, nowMs = Date.now() }, config) {
   const info = audit.info || {}, pool = audit.pool || {};
   const sec = securityView(audit.security, discovery, info);
@@ -618,10 +863,14 @@ export function deepScreen({ discovery, audit, nowMs = Date.now() }, config) {
     ...(observation.status === 'WAITING' ? observation.unknownFields : []),
     ...(!isSol && honeypot === null && !sellability.pass ? sellability.unknownFields : [])
   ].filter(Boolean);
+  
+  const embryonic = computeEmbryonicScore({ discovery, info, audit, nowMs }, config);
+  
   return {
     chainPass, failed, checks, wallets, observation, marketBehavior, sellability, honeypotEvidence,
     unknownFields: [...new Set(unknownFields)],
     blockingUnknownFields: [...new Set(blockingUnknownFields)],
+    embryonic,
     security: {
       openSource, ownerRenounced: isSol ? renouncedMint === true && renouncedFreezeAccount === true : ownerRenounced,
       evmOwnerRenounced: ownerRenounced, renouncedMint, renouncedFreezeAccount, honeypot, buyTax, sellTax,

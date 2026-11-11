@@ -1,0 +1,295 @@
+{
+  "version": 1,
+  "updatedAt": "2026-10-24",
+  "mode": "alerts_research_only",
+  "neverTrade": true,
+  "dataSources": {
+    "scheduledScans": "fomo_free_plus_free_sources",
+    "gmgn": "only_if_user_named_or_lte3_single_coin"
+  },
+  "digestStyle": "wechat_plain_text_no_markdown_no_emoji",
+  "directions": {
+    "1_softMentionFirst": {
+      "enabled": true,
+      "configKeys": [
+        "softMention.enabled",
+        "softMention.minAccounts",
+        "softMention.windowHoursMin",
+        "softMention.windowHoursMax",
+        "softMention.minFollowersKol",
+        "softMention.highWeightTiers",
+        "softMention.searchChains",
+        "softMention.followerMaxMcap"
+      ],
+      "modules": [
+        "src/soft-mention-cluster.mjs",
+        "src/x-monitor.mjs",
+        "config/x-watchlist.json",
+        "config/x-trigger-keywords.json"
+      ],
+      "scripts": [
+        "scripts/soft-mention-cluster-run.mjs"
+      ],
+      "state": "scan-accum/narrative-early/state/soft-mention-events.jsonl",
+      "out": "scan-accum/narrative-early/out/soft-mention-clusters.json",
+      "rule": "High-weight X accounts (Binance/CZ/HeYi/chain leads/KOL>=10k) soft-mention words/memes/names (not only CA). Same keyword reused by >=2 such accounts within 1-2h -> search SOL/BSC (and R if easy) for same-name low-MC tokens."
+    },
+    "2_narrativeDaily": {
+      "enabled": true,
+      "configKeys": [
+        "narrativeDaily.enabled",
+        "narrativeDaily.sources",
+        "narrativeDaily.tokenizableKinds",
+        "narrativeDaily.minNameLen",
+        "narrativeDaily.maxCandidates"
+      ],
+      "modules": [
+        "src/narrative-daily.mjs"
+      ],
+      "scripts": [
+        "scripts/narrative-daily-run.mjs"
+      ],
+      "state": "scan-accum/narrative-early/state/hot-events.jsonl",
+      "out": "scan-accum/narrative-early/out/narrative-daily.json",
+      "rule": "Daily filter of hot events (Weibo + X) to tokenizable candidates: person / brand / meme name / abbrev."
+    },
+    "3_ogDualGate": {
+      "enabled": true,
+      "configKeys": [
+        "og.enabled",
+        "og.maxMcap",
+        "og.minMcap",
+        "og.minLiq",
+        "og.requireCertainty"
+      ],
+      "envKeys": [
+        "OG_ENABLED",
+        "OG_MAX_MCAP",
+        "OG_MIN_MCAP",
+        "OG_MIN_LIQ",
+        "OG_BONUS",
+        "OG_MAX_BONUS",
+        "OG_KOL_MENTIONS_FILE"
+      ],
+      "modules": [
+        "scan-accum/fomo-free/fomo-free-scan.mjs (OG block)",
+        "config/fomo-gmgn-kol-bridge.json",
+        "config/x-watchlist.json"
+      ],
+      "rule": "BOTH required: MC under ~$100k default AND certainty (>=1 big-V mention OR smart money still holding)."
+    },
+    "4_crossChainSpillover": {
+      "enabled": true,
+      "configKeys": [
+        "spillover.enabled",
+        "spillover.followers",
+        "spillover.followerMaxMcap",
+        "spillover.hardFilter",
+        "spillover.leaderExtraChains"
+      ],
+      "envKeys": [
+        "SPILLOVER_ENABLED",
+        "SPILLOVER_FOLLOWER_CHAINS",
+        "SPILLOVER_FOLLOWER_MAX_MCAP",
+        "SPILLOVER_LEADER_EXTRA_CHAINS",
+        "SPILLOVER_HARD_FILTER",
+        "HF_LP_LOCK_MIN",
+        "HF_TOP10_REJECT",
+        "HF_SINGLE_HOLDER_REJECT",
+        "HF_BUNDLE_REJECT",
+        "HF_VOL_MISMATCH_X"
+      ],
+      "modules": [
+        "src/spillover.mjs",
+        "scan-accum/fomo-free/fomo-free-scan.mjs (spillover block)"
+      ],
+      "rule": "After foreign narrative leader runs on SOL/R, look BSC same-name/narrative. Still require low MC (~$100k) + hard filters decided 2026-10-20: EVM LP lock/burn>=90% else reject; unverified contract demote; owner/proxy reject; after removing pool top10>30% or single>8% reject; SOL bundle>=20% reject; multi-source volume differ >5x flag wash; different-dev from leader without socials -> no spillover bonus."
+    },
+    "5_smartMoney": {
+      "enabled": true,
+      "configKeys": [
+        "smartMoney.newPositionPct",
+        "smartMoney.scoreCurrentHoldersOnly",
+        "smartMoney.fomoWatchRoot"
+      ],
+      "modules": [
+        "fomo-trader-watch/ (live 10-person watch)",
+        "scan-accum/fomo-free/fomo-free-scan.mjs (stillHolding scoring)",
+        "src/scoring.mjs (liveOnlySmartScoring)",
+        "src/discovery-queue.mjs",
+        "src/smart-retention.mjs"
+      ],
+      "rule": "New position + size >=5% portfolio (Fomo 10-person watch already live). Scan scoring bonuses CURRENT holders only, never historical aggregates."
+    },
+    "6_ageWindow": {
+      "enabled": true,
+      "configKeys": [
+        "ageWindow.enabled",
+        "ageWindow.minMinutes",
+        "ageWindow.maxMinutes",
+        "ageWindow.holderTraderGrowthFlag",
+        "ageWindow.secondSmartOrKolBonus",
+        "ageWindow.socialsAppearBonus",
+        "ageWindow.washReject"
+      ],
+      "modules": [
+        "src/age-window.mjs",
+        "src/wash-template.mjs",
+        "scan-accum/fomo-free/fomo-free-scan.mjs (ageWindow hook)"
+      ],
+      "rule": "Age 15-90 min: score/flag holder growth vs trader count, second smart/KOL entry, socials appearing; reject wash_trade_template (instant graduation + organic_low + holders>>traders)."
+    },
+    "7_exitDowngrade": {
+      "enabled": true,
+      "configKeys": [
+        "exitDowngrade.enabled",
+        "exitDowngrade.leaderMcBands",
+        "exitDowngrade.smartMoneyReduce",
+        "exitDowngrade.netSell1h",
+        "exitDowngrade.alertsDir"
+      ],
+      "modules": [
+        "src/exit-downgrade.mjs"
+      ],
+      "scripts": [
+        "scripts/exit-downgrade-run.mjs"
+      ],
+      "alerts": "scan-accum/narrative-early/alerts/pending/",
+      "rule": "Alert-only (no auto trade): leader MC band hit, watched smart money reducing, or sustained 1h net sell pressure -> alert this chat / mark watch downgrade."
+    }
+  },
+  "softMention": {
+    "enabled": true,
+    "minAccounts": 2,
+    "windowHoursMin": 1,
+    "windowHoursMax": 2,
+    "minFollowersKol": 10000,
+    "highWeightTiers": [
+      "official",
+      "founder",
+      "chain_lead",
+      "kol_alpha",
+      "kol",
+      "meme_whale"
+    ],
+    "searchChains": [
+      "solana",
+      "bsc",
+      "robinhood"
+    ],
+    "followerMaxMcap": 100000,
+    "eventsFile": "/workspace/meme-radar-run/scan-accum/narrative-early/state/soft-mention-events.jsonl",
+    "outFile": "/workspace/meme-radar-run/scan-accum/narrative-early/out/soft-mention-clusters.json"
+  },
+  "narrativeDaily": {
+    "enabled": true,
+    "sources": [
+      "weibo_hot",
+      "x_hot"
+    ],
+    "tokenizableKinds": [
+      "person",
+      "brand",
+      "meme_name",
+      "abbrev"
+    ],
+    "minNameLen": 2,
+    "maxNameLen": 32,
+    "maxCandidates": 40,
+    "blocklist": [
+      "比特币",
+      "以太坊",
+      "bitcoin",
+      "ethereum",
+      "btc",
+      "eth",
+      "sol",
+      "bnb",
+      "usdt",
+      "usdc"
+    ],
+    "eventsFile": "/workspace/meme-radar-run/scan-accum/narrative-early/state/hot-events.jsonl",
+    "outFile": "/workspace/meme-radar-run/scan-accum/narrative-early/out/narrative-daily.json"
+  },
+  "og": {
+    "enabled": true,
+    "maxMcap": 100000,
+    "minMcap": 10000,
+    "minLiq": 10000,
+    "requireCertainty": true,
+    "certaintyAnyOf": [
+      "big_v_mention",
+      "smart_money_still_holding"
+    ]
+  },
+  "spillover": {
+    "enabled": true,
+    "followers": [
+      "bsc"
+    ],
+    "followerMaxMcap": 100000,
+    "leaderExtraChains": [
+      "robinhood"
+    ],
+    "hardFilter": true
+  },
+  "smartMoney": {
+    "newPositionPct": 0.05,
+    "scoreCurrentHoldersOnly": true,
+    "fomoWatchRoot": "/workspace/meme-radar-run/fomo-trader-watch/",
+    "note": "Do not change Fomo daemon credit burn; reuse existing fomo-trader-watch."
+  },
+  "ageWindow": {
+    "enabled": true,
+    "minMinutes": 15,
+    "maxMinutes": 90,
+    "holderTraderGrowthFlagRatio": 1.5,
+    "secondSmartOrKolBonus": 4,
+    "socialsAppearBonus": 3,
+    "maxBonus": 10,
+    "washReject": true
+  },
+  "exitDowngrade": {
+    "enabled": true,
+    "leaderMcBandsUsd": [
+      1000000,
+      5000000,
+      10000000,
+      50000000
+    ],
+    "smartMoneyReduceMin": 1,
+    "netSell1hRatio": 1.5,
+    "netSell1hMinUsd": 5000,
+    "watchStateFile": "/workspace/meme-radar-run/scan-accum/narrative-early/state/watchlist.json",
+    "alertsDir": "/workspace/meme-radar-run/scan-accum/narrative-early/alerts/pending",
+    "queueFile": "/workspace/meme-radar-run/scan-accum/narrative-early/alerts/queue.jsonl"
+  },
+  "routinesNeeded": [
+    {
+      "id_suggest": "meme-soft-mention-cluster",
+      "every": "15m",
+      "call": "node /workspace/meme-radar-run/meme-radar-branch/scripts/soft-mention-cluster-run.mjs",
+      "deliver": "If out has newClusters with lowMcHits, SendToUser plain digest; else silent"
+    },
+    {
+      "id_suggest": "meme-narrative-daily",
+      "every": "1d",
+      "call": "node /workspace/meme-radar-run/meme-radar-branch/scripts/narrative-daily-run.mjs",
+      "deliver": "SendToUser plain list of tokenizable candidates from Weibo+X hot"
+    },
+    {
+      "id_suggest": "meme-exit-downgrade",
+      "every": "10m",
+      "call": "node /workspace/meme-radar-run/meme-radar-branch/scripts/exit-downgrade-run.mjs && claim pending under scan-accum/narrative-early/alerts/pending/",
+      "deliver": "SendToUser each pending exit/downgrade alert; claim after send; silent if empty"
+    },
+    {
+      "id_suggest": "fullchain / fomo_free scan (existing)",
+      "note": "Already covers OG dual gate, spillover+hard filters, wash reject, current-holder smart scoring, ageWindow hook after this change"
+    },
+    {
+      "id_suggest": "fomo-unipcs (existing)",
+      "note": "Keep claiming fomo-trader-watch alerts; do not alter daemon credit carelessly"
+    }
+  ]
+}
