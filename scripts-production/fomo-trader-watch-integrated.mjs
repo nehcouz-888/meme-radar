@@ -742,42 +742,49 @@ async function restGet(apiPath, key, estCost = 250, cacheKey = null, cacheType =
   
   // ✅ Atomic budget operation with shared lock
   const reservationId = `${process.pid}-${Date.now()}-${Math.random().toString(36).slice(2)}`;
-  const ledgerLock = acquireLedgerLock();
+  let ledgerLock = null;
   
   try {
-    const currentLedger = readLedger();
-    currentLedger.reservations = currentLedger.reservations || {};
+    ledgerLock = acquireLedgerLock();
     
-    // Calculate total reserved
-    let totalReserved = 0;
-    for (const resId in currentLedger.reservations) {
-      const res = currentLedger.reservations[resId];
-      totalReserved += res.amount || 0;
-    }
-    
-    // Check budget
-    if (currentLedger.spent + totalReserved + estCost > MONTHLY_BUDGET) {
-      releaseLedgerLock(ledgerLock);
-      log(`BUDGET SKIP ${apiPath} (spent=${currentLedger.spent}, reserved=${totalReserved}, est=${estCost}, limit=${MONTHLY_BUDGET})`);
-      const result = { ok: false, status: 0, cost: 0, rem: null, body: {}, budgetExceeded: true };
-      // ✅ Don't cache budget rejections
-      if (cacheKey) {
-        const cacheMap = cacheType === 'balance' ? balanceCacheMap : tradeCacheMap;
-        cacheMap.delete(cacheKey);
+    try {
+      const currentLedger = readLedger();
+      currentLedger.reservations = currentLedger.reservations || {};
+      
+      // Calculate total reserved
+      let totalReserved = 0;
+      for (const resId in currentLedger.reservations) {
+        const res = currentLedger.reservations[resId];
+        totalReserved += res.amount || 0;
       }
-      resolvePromise(result);
-      return result;
+      
+      // Check budget
+      if (currentLedger.spent + totalReserved + estCost > MONTHLY_BUDGET) {
+        log(`BUDGET SKIP ${apiPath} (spent=${currentLedger.spent}, reserved=${totalReserved}, est=${estCost}, limit=${MONTHLY_BUDGET})`);
+        const result = { ok: false, status: 0, cost: 0, rem: null, body: {}, budgetExceeded: true };
+        // ✅ Don't cache budget rejections
+        if (cacheKey) {
+          const cacheMap = cacheType === 'balance' ? balanceCacheMap : tradeCacheMap;
+          cacheMap.delete(cacheKey);
+        }
+        resolvePromise(result);
+        return result;
+      }
+      
+      // ✅ Reserve with owner/TTL
+      currentLedger.reservations[reservationId] = {
+        amount: estCost,
+        pid: process.pid,
+        at: Date.now(),
+        path: apiPath.split('?')[0]
+      };
+      saveLedger(currentLedger);
+    } finally {
+      if (ledgerLock !== null) {
+        releaseLedgerLock(ledgerLock);
+        ledgerLock = null;
+      }
     }
-    
-    // ✅ Reserve with owner/TTL
-    currentLedger.reservations[reservationId] = {
-      amount: estCost,
-      pid: process.pid,
-      at: Date.now(),
-      path: apiPath.split('?')[0]
-    };
-    saveLedger(currentLedger);
-    releaseLedgerLock(ledgerLock);
     
     // Make request
     const url = `${CFG.apiBase}${apiPath}`;
@@ -846,30 +853,35 @@ async function restGet(apiPath, key, estCost = 250, cacheKey = null, cacheType =
   } catch (error) {
     // ✅ Release reservation on error (conservative: mark spent if unknown)
     try {
-      const errorLock = acquireLedgerLock();
-      const errorLedger = readLedger();
-      
-      if (errorLedger.reservations[reservationId]) {
-        const reservedAmount = errorLedger.reservations[reservationId].amount;
-        delete errorLedger.reservations[reservationId];
+      let errorLock = null;
+      try {
+        errorLock = acquireLedgerLock();
+        const errorLedger = readLedger();
         
-        // ✅ Conservative: if request sent but failed, assume cost unknown -> hold as spent
-        // Network errors mean we don't know if server processed it
-        errorLedger.spent += reservedAmount;
-        errorLedger.log.push({
-          at: new Date().toISOString(),
-          path: apiPath.split('?')[0],
-          cost: reservedAmount,
-          remaining: null,
-          ok: false,
-          error: String(error.message || error).slice(0, 100),
-          reservationId: reservationId.slice(0, 16)
-        });
-        
-        saveLedger(errorLedger);
+        if (errorLedger.reservations[reservationId]) {
+          const reservedAmount = errorLedger.reservations[reservationId].amount;
+          delete errorLedger.reservations[reservationId];
+          
+          // ✅ Conservative: if request sent but failed, assume cost unknown -> hold as spent
+          // Network errors mean we don't know if server processed it
+          errorLedger.spent += reservedAmount;
+          errorLedger.log.push({
+            at: new Date().toISOString(),
+            path: apiPath.split('?')[0],
+            cost: reservedAmount,
+            remaining: null,
+            ok: false,
+            error: String(error.message || error).slice(0, 100),
+            reservationId: reservationId.slice(0, 16)
+          });
+          
+          saveLedger(errorLedger);
+        }
+      } finally {
+        if (errorLock !== null) {
+          releaseLedgerLock(errorLock);
+        }
       }
-      
-      releaseLedgerLock(errorLock);
     } catch {}
     
     if (cacheKey) {
