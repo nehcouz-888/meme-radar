@@ -188,8 +188,8 @@ function releaseLock(lockObj) {
  */
 export function claimPendingAlerts(queueFile, options = {}) {
   const {
-    leaseDurationMs = 10 * 60 * 1000,  // 默认10分钟lease
-    ttlMs = 10 * 60 * 1000,             // 默认10分钟TTL
+    leaseDurationMs = 5 * 60 * 1000,   // 默认5分钟lease（短于TTL避免崩溃恢复时事件已过期）
+    ttlMs = 10 * 60 * 1000,            // 默认10分钟TTL
     maxClaims = 10,
     now = Date.now()
   } = options;
@@ -222,8 +222,8 @@ export function claimPendingAlerts(queueFile, options = {}) {
       continue;
     }
     
-    // ✅ claimed状态检查lease
-    if (status === 'claimed') {
+    // ✅ claimed和sent状态检查lease
+    if (status === 'claimed' || status === 'sent') {
       const leaseExpiry = item.leaseExpiry ? new Date(item.leaseExpiry).getTime() : 0;
       if (now < leaseExpiry) {
         // lease未过期，保留
@@ -235,8 +235,8 @@ export function claimPendingAlerts(queueFile, options = {}) {
       }
     }
     
-    // ✅ pending或lease过期的claimed可以claim
-    if ((status === 'pending' || status === 'claimed') && claimed.length < maxClaims) {
+    // ✅ pending或lease过期的claimed/sent可以claim
+    if ((status === 'pending' || status === 'claimed' || status === 'sent') && claimed.length < maxClaims) {
       const leaseExpiry = new Date(now + leaseDurationMs).toISOString();
       const claimedItem = {
         ...item,
@@ -309,14 +309,25 @@ export function acknowledgeDelivered(queueFile, eventIds, options = {}) {
           updated.push(deliveredItem);
         }
       } else if (item.status === 'sent') {
-        // sent状态可以直接ack（已通过之前的lease验证）
-        const deliveredItem = {
-          ...item,
-          status: 'delivered',
-          deliveredAt: new Date(now).toISOString()
-        };
-        acknowledged.push(deliveredItem);
-        updated.push(deliveredItem);
+        // ✅ sent状态也必须验证lease（不能绕过lease）
+        const leaseExpiry = item.leaseExpiry ? new Date(item.leaseExpiry).getTime() : 0;
+        const leaseExpired = leaseExpiry > 0 && now > leaseExpiry;
+        
+        if (!leaseId || item.leaseId !== leaseId) {
+          failed.push({ eventId: item.eventId, reason: 'lease_mismatch', status: item.status });
+          updated.push(item);
+        } else if (leaseExpired) {
+          failed.push({ eventId: item.eventId, reason: 'lease_expired', status: item.status, leaseExpiry: item.leaseExpiry });
+          updated.push(item);
+        } else {
+          const deliveredItem = {
+            ...item,
+            status: 'delivered',
+            deliveredAt: new Date(now).toISOString()
+          };
+          acknowledged.push(deliveredItem);
+          updated.push(deliveredItem);
+        }
       } else {
         // 已经delivered或其他状态，跳过
         skipped.push({ eventId: item.eventId, status: item.status, reason: 'invalid_status' });
