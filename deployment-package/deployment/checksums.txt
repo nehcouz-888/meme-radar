@@ -13,6 +13,7 @@ e4e06862d66bc090c0b298fd5c4a6196bde07a7d57c55717292bf2f13b75f8aa  ./test/holder-
 d1425c79df70e95f454913178856336e7aea5a2f8776f432d6252339c0945241  ./test/narrative-daily-runner-e2e.test.mjs
 94984b5e953492a7e66c187d5c0c85d28047c3b8587f9b03ce2f089118224519  ./test/scoring.test.mjs
 15914894b2524b021ef6f799ec314e7fbca11cf96fa61b32086d452307dd5bfc  ./test/exit-monitoring.test.mjs
+e2b8c9c5c9ef157542788139a01515023f6237676602a184226d94272cee3d35  ./test/fomo-trader-watch-e2e.test.mjs
 ff4ce48e62decd7bb3546ea513878e291067fd5471061b57a2a86f3ad25614be  ./test/ui.test.mjs
 068b1f69604734f4eb78e6ebad6e750a8812a946670acdee0b059aa6baf3cd48  ./test/embryonic.test.mjs
 37edf65f7d114980b938f0cb3431539463f38a6db4a14d805d9997e508779958  ./test/server.test.mjs
@@ -23,7 +24,8 @@ c6c3d3741abf8b2c37db194c5c8ba44be0b14d5ea7d9a9e151e059631354a2ae  ./test/gmgn-on
 0937677f0f229e9a60ca6bfdcefe3c5f3a0f91d0994b060c9a22630150eab5ab  ./test/e2e-exit-monitoring.test.mjs
 84abb28989d51dd09021ffbc6259ddbb0c6e8b2fbf00e89e4ebb33dd2e1118dd  ./test/gmgn.test.mjs
 5cc5e93cbac508374887ff50bd62196aeb6d0cca5cb18e1e579c75525f3b95ba  ./test/market-cap-tiers.test.mjs
-9e2d7854fc63c6c934422e4b36d8e7e07c0c3340d6ec0e38fce8db59a5979b34  ./src/narrative-daily.mjs
+83cfcc266024bbd1b729ae14b52ddc84735ca7e20437ef3386cc4a01bf9bd927  ./src/narrative-daily.mjs
+cd6784eabe3946a310bf30ac102c80defa4601ccfe77d791f37d95cbf7ce57f0  ./src/modules/alert-queue.mjs
 1e38aa105c78779335466528de1ff009588deb2689cda9e9bd2dcb830d31c8e1  ./src/modules/market-cap-tiers.mjs
 e83468b9de3807ae12148912b37c2d672ec8e998af70cb2c3400ca9c7a9e1d00  ./src/modules/narrative-daily-production.mjs
 2016618639d595e6333b2cf5eb088dadee73ff2403d845ef7e4b7919adfc976b  ./src/modules/exit-downgrade-production.mjs
@@ -32,10 +34,14 @@ acd61cbd4fe8e5d0626c9303ba026c233bd319caa87538434119946eedbd7da4  ./src/modules/
 ef848cc9a59b861454ffcad81f9cfa1527dad67b478c6184adc7a1ccd3ab71a8  ./src/modules/position-analysis.mjs
 bcfaadc0f8f86ac71e3237eabffc72b1be0432c134976a057ed870c49448b42d  ./README.md
 9ee09283c4fa1a51009499e1b8840ad0ca81a0a71864d0535354c9f111cde29b  ./package.json
+0127d6ca4ef0c9f98e6be164c9309a9a5ed1608b687047eb9e29bb8ba1db6902  ./scripts/fomo-trader-watch.mjs
 48eef073f18a11a04aaad0ebec5667d981ecb7e15057b2bb57f38efc07267d77  ./scripts/fomo-free-scan.mjs
+1bbdb08331f4f54712cf419251a88ca600a8c090ed102fda2f72c7428f6982c1  ./scripts/ack-delivered.sh
 632ec979ebb550adfeb67b0e34f824ce8ee9e90edece7a66a9f22303ded51a34  ./scripts/exit-downgrade-run-integrated.mjs
+4edd9c1a4f0acd4972dfb4c466b27d65aebbd6937c1a7d14341830371fc77728  ./scripts/claim-pending.sh
 ce4d8eee69acea49e6c9bda723561401217208aff0023a237c6f7e5f858315a2  ./scripts/fomo-free-scan-integrated.mjs
 3295a47f554d9b0878bb880d9335ea76b97b6dbb90d6a08e38693925f617a04b  ./scripts/narrative-daily-run.mjs
+c778ada414a959f8a92cd5c8f6b814fa6a436268178f7865e225559824fe48f8  ./narrative-daily/report.mjs
 8fe24f540a78ffdcf6d00664deebf87f4dc458244dda5800da37a6465e68e4d3  ./deployment/CONFIG-MERGE-GUIDE.md
 626bc5a7dd38eca5d12c3f7557c189c0850ee43c73896bdac747affb925dadfb  ./deployment/backup.sh
 b6ec3f316beb8fef5babd563d76ef21f56ff4b44ea67d0d77a654c6262b7377d  ./deployment/rollback.sh

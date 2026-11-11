@@ -17,8 +17,8 @@ export function narrativeDailyConfig(overrides = {}) {
     // ✅ Fix (b): 不再填充到40，允许零候选
     maxCandidates: Number(E('NARRATIVE_MAX_CANDIDATES', 100)),  // 移除硬性40填充
     blocklist: String(E('NARRATIVE_BLOCKLIST', '比特币,以太坊,bitcoin,ethereum,btc,eth,sol,bnb,usdt,usdc')).split(',').map(s => s.trim().toLowerCase()).filter(Boolean),
-    // ✅ Fix (a): TTL freshness (默认7天)
-    ttlDays: Number(E('NARRATIVE_TTL_DAYS', 7)),
+    // ✅ Fix (a): TTL freshness (默认24小时，日筛用)
+    ttlDays: Number(E('NARRATIVE_TTL_DAYS', 1)),  // 1天=24小时
     ...overrides
   };
 }
@@ -205,10 +205,9 @@ export function readHotEvents(file, { limit = 2000 } = {}) {
 }
 
 export function formatNarrativeDigest(candidates) {
-  // ✅ Fix (c): A级标注"叙事匹配，非链上安全验证"
+  // ✅ 日筛摘要不加A级disclaimer（A级在真实出口）
   const lines = [
     '叙事日筛 (可代币化候选，微博+X 热)',
-    '⚠️ A级：仅叙事匹配，非链上安全验证。仿盘不共享主币评级。',
     `共 ${candidates.length} 条`,
     ''
   ];

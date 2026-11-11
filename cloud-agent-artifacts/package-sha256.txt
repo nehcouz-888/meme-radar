@@ -1,2 +1,3 @@
 9090ca267b26e2206dab3421be975dd94d97aa74dee8985b2af1a5a22123dd18  cloud-agent-artifacts/meme-radar-audit-fix-20261111-165124.tar.gz
 0c6fc30a1d20c4437ea0a2b3c23ca5c828408aef7f3d993acaee534f4ac08b6d  cloud-agent-artifacts/meme-radar-audit-fix-narrative-20261111-165904.tar.gz
+727cdaffdc205e61630d7321dbbb6773e654d1f8a5a01db80982b5e33b099b8a  cloud-agent-artifacts/meme-radar-audit-fix-fomo-queue-20261111-170735.tar.gz

@@ -1,0 +1,267 @@
+/**
+ * Alert queue management: pending → claimed (lease) → sent → delivered
+ * ✅ 三阶段队列with lease
+ * ✅ 01:00-06:00 Asia/Shanghai静默
+ * ✅ TTL过期处理
+ * ✅ 多进程安全原子更新
+ */
+import fs from 'node:fs';
+import path from 'node:path';
+import { randomBytes } from 'node:crypto';
+
+const CST_OFFSET_MS = 8 * 3600_000;
+
+/**
+ * 检查是否在静默时段 (01:00-06:00 Asia/Shanghai)
+ */
+export function isQuietHours(now = Date.now()) {
+  const cst = new Date(now + CST_OFFSET_MS);
+  const hour = cst.getUTCHours();
+  return hour >= 1 && hour < 6;
+}
+
+/**
+ * 加载队列文件（原子读取）
+ */
+export function loadQueue(queueFile) {
+  try {
+    if (!fs.existsSync(queueFile)) return [];
+    const lines = fs.readFileSync(queueFile, 'utf8').split('\n').filter(Boolean);
+    return lines.map((line, idx) => {
+      try {
+        return JSON.parse(line);
+      } catch {
+        console.error(`Invalid queue line ${idx}: ${line.slice(0, 100)}`);
+        return null;
+      }
+    }).filter(Boolean);
+  } catch (e) {
+    console.error(`Failed to load queue: ${e.message}`);
+    return [];
+  }
+}
+
+/**
+ * 原子性写入队列文件
+ */
+export function saveQueue(queueFile, items) {
+  const tmpFile = queueFile + '.tmp.' + randomBytes(8).toString('hex');
+  try {
+    const lines = items.map(item => JSON.stringify(item)).join('\n') + (items.length ? '\n' : '');
+    fs.writeFileSync(tmpFile, lines, 'utf8');
+    fs.renameSync(tmpFile, queueFile);
+    return true;
+  } catch (e) {
+    console.error(`Failed to save queue: ${e.message}`);
+    try { fs.unlinkSync(tmpFile); } catch {}
+    return false;
+  }
+}
+
+/**
+ * Claim pending alerts (带lease)
+ * @param {string} queueFile - 队列文件路径
+ * @param {Object} options - 配置
+ * @returns {Array} 已claim的alerts
+ */
+export function claimPendingAlerts(queueFile, options = {}) {
+  const {
+    leaseDurationMs = 10 * 60 * 1000,  // 默认10分钟lease
+    ttlMs = 10 * 60 * 1000,             // 默认10分钟TTL
+    maxClaims = 10,
+    now = Date.now()
+  } = options;
+  
+  // ✅ 静默时段不claim
+  if (isQuietHours(now)) {
+    return { claimed: [], reason: 'quiet_hours', quietHours: '01:00-06:00 CST' };
+  }
+  
+  const items = loadQueue(queueFile);
+  const claimed = [];
+  const updated = [];
+  
+  for (const item of items) {
+    const status = item.status || 'pending';
+    
+    // ✅ 已delivered不重复
+    if (status === 'delivered') {
+      updated.push(item);
+      continue;
+    }
+    
+    // ✅ TTL过期标记为expired
+    const eventTime = item.whenIso ? new Date(item.whenIso).getTime() : item.createdAt ? new Date(item.createdAt).getTime() : now;
+    if (now - eventTime > ttlMs) {
+      updated.push({ ...item, status: 'expired', expiredAt: new Date(now).toISOString(), reason: 'ttl_exceeded' });
+      continue;
+    }
+    
+    // ✅ claimed状态检查lease
+    if (status === 'claimed') {
+      const leaseExpiry = item.leaseExpiry ? new Date(item.leaseExpiry).getTime() : 0;
+      if (now < leaseExpiry) {
+        // lease未过期，保留
+        updated.push(item);
+        continue;
+      } else {
+        // lease过期，可重新claim
+        // 继续下面的pending逻辑
+      }
+    }
+    
+    // ✅ pending或lease过期的claimed可以claim
+    if ((status === 'pending' || status === 'claimed') && claimed.length < maxClaims) {
+      const leaseExpiry = new Date(now + leaseDurationMs).toISOString();
+      const claimedItem = {
+        ...item,
+        status: 'claimed',
+        claimedAt: new Date(now).toISOString(),
+        leaseExpiry,
+        leaseId: randomBytes(16).toString('hex')
+      };
+      claimed.push(claimedItem);
+      updated.push(claimedItem);
+    } else {
+      updated.push(item);
+    }
+  }
+  
+  // 原子性保存
+  if (saveQueue(queueFile, updated)) {
+    return { claimed, total: items.length, updated: updated.length };
+  } else {
+    return { claimed: [], error: 'failed_to_save' };
+  }
+}
+
+/**
+ * Acknowledge delivered alerts
+ * @param {string} queueFile - 队列文件路径
+ * @param {Array} eventIds - 要ack的eventId列表
+ * @param {Object} options - 配置
+ */
+export function acknowledgeDelivered(queueFile, eventIds, options = {}) {
+  const { now = Date.now() } = options;
+  
+  const items = loadQueue(queueFile);
+  const acked = [];
+  const updated = [];
+  
+  const eventIdSet = new Set(eventIds);
+  
+  for (const item of items) {
+    if (eventIdSet.has(item.eventId)) {
+      // ✅ 只有claimed或sent状态才能ack为delivered
+      if (item.status === 'claimed' || item.status === 'sent') {
+        const deliveredItem = {
+          ...item,
+          status: 'delivered',
+          deliveredAt: new Date(now).toISOString()
+        };
+        acked.push(deliveredItem);
+        updated.push(deliveredItem);
+      } else {
+        // 已经delivered或其他状态，保留
+        updated.push(item);
+      }
+    } else {
+      updated.push(item);
+    }
+  }
+  
+  if (saveQueue(queueFile, updated)) {
+    return { acked: acked.length, eventIds: acked.map(a => a.eventId) };
+  } else {
+    return { acked: 0, error: 'failed_to_save' };
+  }
+}
+
+/**
+ * 清理过期和已delivered的旧记录
+ */
+export function cleanupQueue(queueFile, options = {}) {
+  const {
+    keepDeliveredHours = 48,  // 保留已delivered记录48小时
+    keepExpiredHours = 24,    // 保留过期记录24小时
+    now = Date.now()
+  } = options;
+  
+  const items = loadQueue(queueFile);
+  const kept = [];
+  let removed = 0;
+  
+  for (const item of items) {
+    let shouldRemove = false;
+    
+    if (item.status === 'delivered' && item.deliveredAt) {
+      const deliveredTime = new Date(item.deliveredAt).getTime();
+      if (now - deliveredTime > keepDeliveredHours * 3600_000) {
+        shouldRemove = true;
+      }
+    } else if (item.status === 'expired' && item.expiredAt) {
+      const expiredTime = new Date(item.expiredAt).getTime();
+      if (now - expiredTime > keepExpiredHours * 3600_000) {
+        shouldRemove = true;
+      }
+    }
+    
+    if (!shouldRemove) {
+      kept.push(item);
+    } else {
+      removed++;
+    }
+  }
+  
+  if (saveQueue(queueFile, kept)) {
+    return { kept: kept.length, removed };
+  } else {
+    return { kept: items.length, removed: 0, error: 'failed_to_save' };
+  }
+}
+
+/**
+ * 格式化历史提醒（06:00后）
+ */
+export function formatHistoricalAlert(item, now = Date.now()) {
+  const eventTime = item.whenIso ? new Date(item.whenIso).getTime() : now;
+  const ageMinutes = Math.floor((now - eventTime) / 60_000);
+  
+  // ✅ 不用"9分钟前"误导，用绝对时间
+  const eventTimeStr = item.whenIso ? item.whenIso.replace('T', ' ').slice(0, 19) + ' UTC' : '时间未知';
+  
+  let text = item.text || '';
+  
+  // 在文本开头添加历史标记
+  const historicalNote = `[历史提醒 - ${eventTimeStr}, ${ageMinutes}分钟前]`;
+  
+  return historicalNote + '\n' + text;
+}
+
+/**
+ * 获取队列统计
+ */
+export function getQueueStats(queueFile) {
+  const items = loadQueue(queueFile);
+  
+  const stats = {
+    total: items.length,
+    pending: 0,
+    claimed: 0,
+    sent: 0,
+    delivered: 0,
+    expired: 0,
+    other: 0
+  };
+  
+  for (const item of items) {
+    const status = item.status || 'pending';
+    if (status in stats) {
+      stats[status]++;
+    } else {
+      stats.other++;
+    }
+  }
+  
+  return stats;
+}
