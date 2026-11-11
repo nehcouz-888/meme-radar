@@ -66,12 +66,12 @@ export function matchesTriggerKeywords(text, account, triggerKeywords) {
   if (!text || !triggerKeywords) return { matched: false, keywords: [] };
   
   const lowerText = text.toLowerCase();
-  const matchedKeywords = [];
+  const keywordSet = new Set();
   
   // Check global keywords
   for (const keyword of triggerKeywords.globalKeywords || []) {
     if (lowerText.includes(keyword.toLowerCase())) {
-      matchedKeywords.push(keyword);
+      keywordSet.add(keyword);
     }
   }
   
@@ -79,15 +79,15 @@ export function matchesTriggerKeywords(text, account, triggerKeywords) {
   const accountConfig = triggerKeywords.accountSpecific?.[account.handle];
   if (accountConfig?.enabled && accountConfig.keywords) {
     for (const keyword of accountConfig.keywords) {
-      if (lowerText.includes(keyword.toLowerCase()) && !matchedKeywords.includes(keyword)) {
-        matchedKeywords.push(keyword);
+      if (lowerText.includes(keyword.toLowerCase()) ) {
+        keywordSet.add(keyword);
       }
     }
   }
   
   return {
-    matched: matchedKeywords.length > 0,
-    keywords: matchedKeywords
+    matched: keywordSet.size > 0,
+    keywords: [...keywordSet]
   };
 }
 
