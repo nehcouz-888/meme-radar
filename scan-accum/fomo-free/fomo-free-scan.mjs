@@ -105,24 +105,27 @@ async function fomo(pathq, estCost = 250) {
   // ✅ Atomic budget check with shared lock
   const reservationId = `scanner-${process.pid}-${Date.now()}`;
   const ledgerLock = acquireLedgerLock();
-  let ledger = readLedger();
   
-  // Calculate total reserved (including watcher reservations)
-  let totalReserved = 0;
-  for (const resId in ledger.reservations) {
-    totalReserved += ledger.reservations[resId]?.amount || 0;
-  }
-  
-  if (ledger.spent + totalReserved + estCost > MONTHLY_BUDGET) {
+  try {
+    let ledger = readLedger();
+    
+    // Calculate total reserved (including watcher reservations)
+    let totalReserved = 0;
+    for (const resId in ledger.reservations) {
+      totalReserved += ledger.reservations[resId]?.amount || 0;
+    }
+    
+    if (ledger.spent + totalReserved + estCost > MONTHLY_BUDGET) {
+      fomoRun.skipped.push(`${pathq} (monthly budget ${MONTHLY_BUDGET}, spent=${ledger.spent}, reserved=${totalReserved})`);
+      return null;
+    }
+    
+    // Reserve
+    ledger.reservations[reservationId] = { amount: estCost, pid: process.pid, at: Date.now(), path: pathq.split('?')[0] };
+    saveLedger(ledger);
+  } finally {
     releaseLedgerLock(ledgerLock);
-    fomoRun.skipped.push(`${pathq} (monthly budget ${MONTHLY_BUDGET}, spent=${ledger.spent}, reserved=${totalReserved})`);
-    return null;
   }
-  
-  // Reserve
-  ledger.reservations[reservationId] = { amount: estCost, pid: process.pid, at: Date.now(), path: pathq.split('?')[0] };
-  saveLedger(ledger);
-  releaseLedgerLock(ledgerLock);
   
   let key = ''; try { key = fs.readFileSync(path.join(STATE, 'fomo-api-key'), 'utf8').trim(); } catch {}
   if (!key) { fomoRun.skipped.push(`${pathq} (no key file)`); return null; }
@@ -135,16 +138,19 @@ async function fomo(pathq, estCost = 250) {
   
   // ✅ Settle reservation atomically
   const settleLock = acquireLedgerLock();
-  ledger = readLedger();
-  delete ledger.reservations[reservationId];
-  
-  if (rem !== null) { if (fomoRun.remainingBefore === null) fomoRun.remainingBefore = rem + cost; fomoRun.remainingAfter = rem; ledger.lastRemaining = rem; }
-  if (rem !== null) ledger.spent = Math.max(ledger.spent, Number(process.env.FOMO_PLAN_CREDITS || 250000) - rem - cost);
-  if (r.status === 402) { fomoRun.skipped.push(`${pathq} (402 out of credits)`); }
-  fomoRun.calls++; fomoRun.credits += cost; ledger.spent += cost; ledger.calls++;
-  ledger.log.push({ at: STAMP, path: pathq.split('?')[0], cost, remaining: rem, ok: !!r.ok });
-  saveLedger(ledger);
-  releaseLedgerLock(settleLock);
+  try {
+    ledger = readLedger();
+    delete ledger.reservations[reservationId];
+    
+    if (rem !== null) { if (fomoRun.remainingBefore === null) fomoRun.remainingBefore = rem + cost; fomoRun.remainingAfter = rem; ledger.lastRemaining = rem; }
+    if (rem !== null) ledger.spent = Math.max(ledger.spent, Number(process.env.FOMO_PLAN_CREDITS || 250000) - rem - cost);
+    if (r.status === 402) { fomoRun.skipped.push(`${pathq} (402 out of credits)`); }
+    fomoRun.calls++; fomoRun.credits += cost; ledger.spent += cost; ledger.calls++;
+    ledger.log.push({ at: STAMP, path: pathq.split('?')[0], cost, remaining: rem, ok: !!r.ok });
+    saveLedger(ledger);
+  } finally {
+    releaseLedgerLock(settleLock);
+  }
   
   return r.ok ? r.body : null;
 }
