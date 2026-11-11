@@ -92,26 +92,35 @@ export function addPendingAlert(queueFile, alert) {
  * ✅ Safe recovery from SIGKILL crashed processes
  */
 /**
- * ✅ proper-lockfile: mature OS-level lockfile implementation
- * - Handles all edge cases: stale locks, crashes, concurrent access
- * - Atomic operations with proper fencing
- * - SIGKILL recovery with stale detection
- * - Generation-safe: cannot delete wrong generation
+ * ✅ proper-lockfile: npm package using fs.mkdir (atomic), mtime-based stale detection
+ * - Atomic mkdir(lockPath): only one process succeeds (POSIX atomic operation)
+ * - Stale detection: mtime-based (stat.mtime < now - stale)
+ * - Heartbeat: utimes updates mtime every update interval (default stale/2)
+ * - onCompromised: fail-closed when lock cannot be renewed
+ * - NOT O_EXCL file open; NOT inode/generation-based
  */
 function acquireLock(queueFile, timeoutMs = 5000) {
   const startTime = Date.now();
   
+  let compromised = false;
   const options = {
-    stale: 10000, // 10s stale timeout
-    realpath: false, // Don't resolve symlinks
-    fs: fs
+    stale: 10000,        // 10s stale timeout
+    update: 4000,        // heartbeat every 4s (< stale/2)
+    realpath: false,     // don't resolve symlinks
+    fs: fs,
+    onCompromised: (err) => {
+      // Lock compromised (stolen/deleted while held)
+      compromised = true;
+      console.error(`Lock compromised for ${queueFile}:`, err.message);
+      throw err;  // fail-closed
+    }
   };
   
   // Retry loop (sync API doesn't support retries option)
   while (Date.now() - startTime < timeoutMs) {
     try {
       const release = properLockfile.lockSync(queueFile, options);
-      return { release, queueFile };
+      return { release, queueFile, compromised: () => compromised };
     } catch (e) {
       if (e.code === 'ELOCKED') {
         // Lock held by another process, retry
@@ -131,14 +140,16 @@ function acquireLock(queueFile, timeoutMs = 5000) {
 
 /**
  * Release proper-lockfile lock
- * ✅ proper-lockfile handles generation safety internally
+ * ✅ proper-lockfile calls fs.rmdir(lockPath)
+ * Note: release errors logged, not swallowed silently
  */
 function releaseLock(lockObj) {
   const { release } = lockObj;
   try {
     release();
   } catch (e) {
-    // Lock already released or error, ok
+    // Log release errors for debugging
+    console.error(`Lock release error for ${lockObj.queueFile}:`, e.message);
   }
 }
 

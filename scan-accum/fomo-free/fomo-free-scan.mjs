@@ -71,11 +71,12 @@ function saveLedger(ledger) { ledger.log = ledger.log.slice(-200); fs.writeFileS
  */
 function acquireLedgerLock(timeoutMs = 5000) {
   const startTime = Date.now();
-  const options = { stale: 10000, realpath: false, fs: fs };
+  let compromised = false;
+  const options = { stale: 10000, update: 4000, realpath: false, fs: fs, onCompromised: (err) => { compromised = true; console.error(`Ledger lock compromised:`, err.message); throw err; } };
   while (Date.now() - startTime < timeoutMs) {
     try {
       const release = properLockfile.lockSync(LEDGER, options);
-      return { release, ledgerFile: LEDGER };
+      return { release, ledgerFile: LEDGER, compromised: () => compromised };
     } catch (e) {
       if (e.code === 'ELOCKED') {
         const waitMs = Math.min(50 + Math.random() * 50, timeoutMs - (Date.now() - startTime));
@@ -90,7 +91,7 @@ function acquireLedgerLock(timeoutMs = 5000) {
   }
   throw new Error(`Failed to acquire ledger lock after ${timeoutMs}ms`);
 }
-function releaseLedgerLock(lockObj) { try { lockObj.release(); } catch {} }
+function releaseLedgerLock(lockObj) { try { lockObj.release(); } catch (e) { console.error(`Ledger lock release error:`, e.message); } }
 
 async function fomo(pathq, estCost = 250) {
   // ✅ Atomic budget check with shared lock

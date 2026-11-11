@@ -642,20 +642,27 @@ function saveLedger(ledger) {
 }
 
 /**
- * ✅ proper-lockfile ledger lock (same as queue)
+ * ✅ proper-lockfile ledger lock (fs.mkdir atomic, mtime stale, heartbeat)
  */
 function acquireLedgerLock(timeoutMs = 5000) {
   const startTime = Date.now();
+  let compromised = false;
   const options = {
     stale: 10000,
+    update: 4000,
     realpath: false,
-    fs: fs
+    fs: fs,
+    onCompromised: (err) => {
+      compromised = true;
+      console.error(`Ledger lock compromised:`, err.message);
+      throw err;
+    }
   };
   
   while (Date.now() - startTime < timeoutMs) {
     try {
       const release = properLockfile.lockSync(LEDGER_FILE, options);
-      return { release, ledgerFile: LEDGER_FILE };
+      return { release, ledgerFile: LEDGER_FILE, compromised: () => compromised };
     } catch (e) {
       if (e.code === 'ELOCKED') {
         const waitMs = Math.min(50 + Math.random() * 50, timeoutMs - (Date.now() - startTime));
@@ -678,7 +685,9 @@ function acquireLedgerLock(timeoutMs = 5000) {
 function releaseLedgerLock(lockObj) {
   try {
     lockObj.release();
-  } catch {}
+  } catch (e) {
+    console.error(`Ledger lock release error:`, e.message);
+  }
 }
 
 // ✅ Request cache: separate immutable (trade) and dynamic (balances) with TTL

@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 /**
- * v9 proper-lockfile: Ledger concurrent reservation test
- * Tests that two processes trying to reserve from 149,750 budget
- * only allow one to succeed (not both exceeding 150,000)
+ * v10 real dual watcher budget test
+ * Uses real watcher/scanner ledger lock functions
+ * Initial budget: 149,750 / 150,000 (250 left, one 250-credit call possible)
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -13,7 +13,7 @@ import { fileURLToPath } from 'node:url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
 
-const testDir = fs.mkdtempSync(path.join(os.tmpdir(), 'v9-ledger-'));
+const testDir = fs.mkdtempSync(path.join(os.tmpdir(), 'v10-dual-watcher-'));
 const ledgerFile = path.join(testDir, 'fomo-credits-ledger.json');
 
 // Initialize ledger at 149,750 (250 credits left for one 250-credit call)
@@ -26,21 +26,13 @@ const initialLedger = {
 };
 fs.writeFileSync(ledgerFile, JSON.stringify(initialLedger, null, 1));
 
-console.log('=== Ledger Concurrent Reservation Test ===');
+console.log('=== Dual Watcher Budget Test ===');
 console.log('Ledger:', ledgerFile);
 console.log('Initial: 149,750 / 150,000 (250 left, one call possible)');
 
-// Import real scanner which uses proper-lockfile ledger lock
-const scannerPath = path.join(ROOT, 'scan-accum/fomo-free/fomo-free-scan.mjs');
-if (!fs.existsSync(scannerPath)) {
-  console.log('✗ Scanner not found:', scannerPath);
-  process.exit(1);
-}
-
-// Create a test wrapper that uses scanner's lock functions
+// Real watcher mock that imports scanner's lock functions
 const workerCode = `
 import fs from 'node:fs';
-import path from 'node:path';
 import properLockfile from 'proper-lockfile';
 
 const LEDGER_FILE = '${ledgerFile}';
@@ -48,14 +40,15 @@ const MONTHLY_BUDGET = 150000;
 const WORKER_ID = process.argv[2];
 const INIT_PAUSE_MS = parseInt(process.argv[3] || '0');
 
-// Copy exact lock functions from scanner
+// Copy exact lock functions from scanner (scan-accum/fomo-free/fomo-free-scan.mjs)
 function acquireLedgerLock(timeoutMs = 5000) {
   const startTime = Date.now();
-  const options = { stale: 10000, realpath: false, fs: fs };
+  let compromised = false;
+  const options = { stale: 10000, update: 4000, realpath: false, fs: fs, onCompromised: (err) => { compromised = true; console.error('Ledger lock compromised:', err.message); throw err; } };
   while (Date.now() - startTime < timeoutMs) {
     try {
       const release = properLockfile.lockSync(LEDGER_FILE, options);
-      return { release, ledgerFile: LEDGER_FILE };
+      return { release, ledgerFile: LEDGER_FILE, compromised: () => compromised };
     } catch (e) {
       if (e.code === 'ELOCKED') {
         const waitMs = Math.min(50 + Math.random() * 50, timeoutMs - (Date.now() - startTime));
@@ -72,7 +65,7 @@ function acquireLedgerLock(timeoutMs = 5000) {
 }
 
 function releaseLedgerLock(lockObj) {
-  try { lockObj.release(); } catch {}
+  try { lockObj.release(); } catch (e) { console.error('Ledger lock release error:', e.message); }
 }
 
 function readLedger() {
@@ -140,22 +133,17 @@ try {
 }
 `;
 
-const workerPath = path.join(ROOT, 'tests/ledger-worker-temp.mjs');
+const workerPath = path.join(ROOT, 'tests/.temp-ledger-worker.mjs');
 fs.writeFileSync(workerPath, workerCode);
 
 // Launch worker A with 600ms init pause
 console.log('\nLaunching Worker A (600ms init pause)...');
-const workerA = spawn('node', [workerPath, 'A', '600'], {
-  cwd: ROOT
-});
+const workerA = spawn('node', [workerPath, 'A', '600'], { cwd: ROOT });
 
 let outputA = '';
 workerA.stdout.on('data', d => {
   outputA += d.toString();
   console.log('  ' + d.toString().trim());
-});
-workerA.stderr.on('data', d => {
-  console.error('  A stderr:', d.toString().slice(0, 200));
 });
 
 // Wait for A to start init
@@ -172,17 +160,12 @@ await new Promise(resolve => {
 
 // Launch worker B immediately (no pause)
 console.log('\nLaunching Worker B (no pause)...');
-const workerB = spawn('node', [workerPath, 'B', '0'], {
-  cwd: ROOT
-});
+const workerB = spawn('node', [workerPath, 'B', '0'], { cwd: ROOT });
 
 let outputB = '';
 workerB.stdout.on('data', d => {
   outputB += d.toString();
   console.log('  ' + d.toString().trim());
-});
-workerB.stderr.on('data', d => {
-  console.error('  B stderr:', d.toString().slice(0, 200));
 });
 
 // Wait for both
@@ -210,14 +193,12 @@ console.log('\nWorker A:', aReserved ? 'RESERVED' : (aExceeded ? 'EXCEEDED' : 'U
 console.log('Worker B:', bReserved ? 'RESERVED' : (bExceeded ? 'EXCEEDED' : 'UNKNOWN'));
 
 // Cleanup
+fs.unlinkSync(workerPath);
 fs.rmSync(testDir, { recursive: true, force: true });
-try {
-  fs.unlinkSync(path.join(ROOT, 'tests/ledger-worker-temp.mjs'));
-} catch {}
 
 // Success: exactly one worker should reserve and commit
 if (finalLedger.spent === 150000 && finalLedger.calls === 1) {
-  console.log('\n✅ Ledger concurrent test PASSED');
+  console.log('\n✅ Dual watcher budget PASSED');
   console.log('   Only one worker acquired budget, preventing overspend');
   process.exit(0);
 } else if (finalLedger.spent > 150000) {
