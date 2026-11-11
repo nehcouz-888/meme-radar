@@ -107,10 +107,10 @@ test('detectPositionAnomalies - 持仓超过总资产', () => {
   const anomalies = detectPositionAnomalies(tx);
   
   // Should detect position exceeds assets
-  const posExceeds = anomalies.find(a => a.type === 'POSITION_EXCEEDS_ASSETS');
-  assert.ok(posExceeds);
-  assert.ok(posExceeds.ratio > 1.0);
-  assert.match(posExceeds.message, /超过总资产/);
+  assert.ok(anomalies.positionExceedsAssets);
+  assert.ok(anomalies.positionExceedsAssets.detected);
+  assert.ok(anomalies.positionExceedsAssets.ratio > 1.0);
+  assert.match(anomalies.positionExceedsAssets.message, /超过总资产/);
 });
 
 test('detectPositionAnomalies - 缺成交额', () => {
@@ -122,10 +122,10 @@ test('detectPositionAnomalies - 缺成交额', () => {
   
   const anomalies = detectPositionAnomalies(tx);
   
-  const missing = anomalies.find(a => a.type === 'MISSING_TRADE_AMOUNT');
-  assert.ok(missing);
-  assert.equal(missing.severity, 'LOW');
-  assert.match(missing.message, /无实际成交额/);
+  assert.ok(anomalies.missingTradeAmount);
+  assert.ok(anomalies.missingTradeAmount.detected);
+  assert.equal(anomalies.missingTradeAmount.severity, 'LOW');
+  assert.match(anomalies.missingTradeAmount.message, /无实际成交额/);
 });
 
 test('detectPositionAnomalies - 成交与持仓差异大', () => {
@@ -137,10 +137,10 @@ test('detectPositionAnomalies - 成交与持仓差异大', () => {
   
   const anomalies = detectPositionAnomalies(tx);
   
-  const mismatch = anomalies.find(a => a.type === 'TRADE_POSITION_MISMATCH');
-  assert.ok(mismatch);
-  assert.equal(mismatch.severity, 'INFO');
-  assert.ok(parseFloat(mismatch.diffPercent) > 50);
+  assert.ok(anomalies.tradePositionMismatch);
+  assert.ok(anomalies.tradePositionMismatch.detected);
+  assert.equal(anomalies.tradePositionMismatch.severity, 'INFO');
+  assert.ok(parseFloat(anomalies.tradePositionMismatch.diffPercent) > 50);
 });
 
 test('formatAnomalies - 格式化显示', () => {
@@ -192,27 +192,23 @@ test('MASK regression - positionValue 102.8% of assets', () => {
   assert.ok(result.hasAnomalies);
   
   // 找到持仓超资产的anomaly
-  const posExceedsAssets = result.anomalies.find(
-    a => a.type === 'POSITION_EXCEEDS_ASSETS'
-  );
-  assert.ok(posExceedsAssets);
-  assert.ok(posExceedsAssets.ratio > 1.0);
-  assert.match(posExceedsAssets.positionPercent, /102\./);
+  assert.ok(result.anomalies.positionExceedsAssets);
+  assert.ok(result.anomalies.positionExceedsAssets.detected);
+  assert.ok(result.anomalies.positionExceedsAssets.ratio > 1.0);
+  assert.match(result.anomalies.positionExceedsAssets.positionPercent, /102\./);
   
   // 找到缺成交额的anomaly
-  const missingTrade = result.anomalies.find(
-    a => a.type === 'MISSING_TRADE_AMOUNT'
-  );
-  assert.ok(missingTrade);
-  assert.match(missingTrade.impact, /无法确认买入规模/);
+  assert.ok(result.anomalies.missingTradeAmount);
+  assert.ok(result.anomalies.missingTradeAmount.detected);
+  assert.match(result.anomalies.missingTradeAmount.impact, /无法确认买入规模/);
   
   // ❌ 不能判定为新仓（因为无成交额）
   assert.equal(result.isNewPosition, false);
   assert.equal(result.cannotDetermine, true);
   
-  // ⚠️ 不应该指控钱包造假
+  // ⚠️ 不应该指控钱包造假  
   assert.doesNotMatch(
-    result.anomalies.map(a => a.message).join(' '),
+    JSON.stringify(result.anomalies),
     /造假|fraud|manipulation/i
   );
 });

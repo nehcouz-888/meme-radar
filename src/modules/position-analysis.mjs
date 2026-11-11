@@ -34,6 +34,27 @@ export function analyzeTransaction(event) {
     token: event.token || event.tokenAddress
   };
   
+  // Determine trade amount and source
+  let tradeAmount = null;
+  let source = 'unknown';
+  let warnings = [];
+  
+  if (tx.tradeUsd !== null && Number.isFinite(tx.tradeUsd) && tx.tradeUsd > 0) {
+    tradeAmount = tx.tradeUsd;
+    source = 'tradeUsd';
+  } else if (event.usdValue !== null && event.usdValue !== undefined) {
+    // usdValue meaning unclear, mark as unknown
+    warnings.push('usdValue_ambiguous');
+    source = 'usdValue';
+  } else if (tx.positionValueUsd !== null) {
+    // Position value cannot be used as trade amount
+    warnings.push('no_trade_amount');
+    warnings.push('only_position_value');
+    source = 'unknown';
+  } else {
+    warnings.push('no_trade_amount');
+  }
+  
   // Analyze position size
   const positionAnalysis = analyzePositionSize(tx, event);
   
@@ -42,9 +63,12 @@ export function analyzeTransaction(event) {
   
   return {
     ...tx,
+    tradeAmount,
+    source,
+    warnings,
     ...positionAnalysis,
     anomalies,
-    hasAnomalies: anomalies.length > 0
+    hasAnomalies: anomalies.hasAnomalies || false
   };
 }
 
@@ -140,10 +164,16 @@ export function analyzePositionSize(tx, metadata = {}) {
 
 /**
  * Detect position anomalies
- * Returns array of anomaly objects
+ * Returns object with named anomaly flags (for backward compatibility)
+ * plus array of detailed anomaly objects
  */
 export function detectPositionAnomalies(tx) {
   const anomalies = [];
+  const result = {
+    positionExceedsAssets: null,
+    missingTradeAmount: null,
+    tradePositionMismatch: null
+  };
   
   // Anomaly 1: Position value exceeds total assets
   if (tx.positionValueUsd !== null && 
@@ -152,30 +182,41 @@ export function detectPositionAnomalies(tx) {
     const ratio = tx.positionValueUsd / tx.totalAssetsUsd;
     
     if (ratio > 1.0) {
-      anomalies.push({
+      const detail = {
         type: 'POSITION_EXCEEDS_ASSETS',
         ratio: ratio,
         positionPercent: (ratio * 100).toFixed(1),
+        positionPct: parseFloat((ratio * 100).toFixed(1)),
         severity: ratio > 2.0 ? 'HIGH' : ratio > 1.5 ? 'MEDIUM' : 'LOW',
         message: `单币种仓位${(ratio * 100).toFixed(1)}%超过总资产`,
         messageEn: `Single token position ${(ratio * 100).toFixed(1)}% exceeds total assets`,
         note: '可能的原因：数据延迟、杠杆、或报价差异',
         noteEn: 'Possible causes: data lag, leverage, or price discrepancy',
-        recommendation: '⚠️ 标记异常但不指控钱包造假'
-      });
+        recommendation: '⚠️ 标记异常，可能为数据时差或价格波动'
+      };
+      anomalies.push(detail);
+      result.positionExceedsAssets = {
+        detected: true,
+        ...detail
+      };
     }
   }
   
   // Anomaly 2: Missing trade amount (only have position value)
   if (tx.tradeUsd === null && tx.positionValueUsd !== null) {
-    anomalies.push({
+    const detail = {
       type: 'MISSING_TRADE_AMOUNT',
       severity: 'LOW',
       message: '仅有持仓市值，无实际成交额',
       messageEn: 'Only position value available, no actual trade amount',
       impact: '无法确认买入规模 (Cannot confirm buy size)',
       recommendation: 'Cannot use position value as trade amount'
-    });
+    };
+    anomalies.push(detail);
+    result.missingTradeAmount = {
+      detected: true,
+      ...detail
+    };
   }
   
   // Anomaly 3: Trade amount significantly different from position value
@@ -186,7 +227,7 @@ export function detectPositionAnomalies(tx) {
     const diffRatio = diff / tx.tradeUsd;
     
     if (diffRatio > 0.5) {  // >50% difference
-      anomalies.push({
+      const detail = {
         type: 'TRADE_POSITION_MISMATCH',
         severity: 'INFO',
         tradeUsd: tx.tradeUsd,
@@ -197,11 +238,21 @@ export function detectPositionAnomalies(tx) {
         messageEn: `Trade amount vs position value differs by ${(diffRatio * 100).toFixed(1)}%`,
         note: '可能因价格变动或其他持仓累加',
         recommendation: '使用成交额而非持仓估值'
-      });
+      };
+      anomalies.push(detail);
+      result.tradePositionMismatch = {
+        detected: true,
+        ...detail
+      };
     }
   }
   
-  return anomalies;
+  // Return both formats for compatibility
+  result.list = anomalies;
+  result.hasAnomalies = anomalies.length > 0;
+  result.count = anomalies.length;
+  
+  return result;
 }
 
 /**

@@ -118,17 +118,18 @@ test('claim后crash重领/lease到期，ack成功一次', async () => {
   try {
     const queueFile = path.join(tmpDir, 'queue.jsonl');
     
+    // Use 10:00 UTC (18:00 CST) - outside quiet hours
+    const now1 = new Date('2026-11-12T10:00:00Z').getTime();
+    
     const alert = {
       eventId: 'test-lease',
       status: 'pending',
-      whenIso: new Date().toISOString(),
-      createdAt: new Date().toISOString(),
+      whenIso: new Date(now1).toISOString(),
+      createdAt: new Date(now1).toISOString(),
       text: '测试lease'
     };
     
     fs.writeFileSync(queueFile, JSON.stringify(alert) + '\n');
-    
-    const now1 = Date.now();
     
     // 第一次claim
     const result1 = claimPendingAlerts(queueFile, {
@@ -172,13 +173,16 @@ test('旧delivered不重复 (兼容80条已delivered记录)', async () => {
   try {
     const queueFile = path.join(tmpDir, 'queue.jsonl');
     
+    // Use 10:00 UTC (18:00 CST) - outside quiet hours
+    const testNow = new Date('2026-11-12T10:00:00Z').getTime();
+    
     // 创建80条已delivered + 5条pending
     const alerts = [];
     for (let i = 0; i < 80; i++) {
       alerts.push({
         eventId: `old-delivered-${i}`,
         status: 'delivered',
-        deliveredAt: new Date(Date.now() - 3600_000).toISOString(),
+        deliveredAt: new Date(testNow - 3600_000).toISOString(),
         text: `旧delivered ${i}`
       });
     }
@@ -186,7 +190,7 @@ test('旧delivered不重复 (兼容80条已delivered记录)', async () => {
       alerts.push({
         eventId: `new-pending-${i}`,
         status: 'pending',
-        whenIso: new Date().toISOString(),
+        whenIso: new Date(testNow).toISOString(),
         text: `新pending ${i}`
       });
     }
@@ -196,7 +200,7 @@ test('旧delivered不重复 (兼容80条已delivered记录)', async () => {
     // Claim
     const result = claimPendingAlerts(queueFile, {
       maxClaims: 10,
-      now: Date.now()
+      now: testNow
     });
     
     // ✅ 只claim pending的5条，不重复delivered的80条
@@ -218,13 +222,16 @@ test('多进程安全原子更新', async () => {
   try {
     const queueFile = path.join(tmpDir, 'queue.jsonl');
     
+    // Use 10:00 UTC (18:00 CST) - outside quiet hours
+    const testNow = new Date('2026-11-12T10:00:00Z').getTime();
+    
     // 创建10条pending
     const alerts = [];
     for (let i = 0; i < 10; i++) {
       alerts.push({
         eventId: `test-atomic-${i}`,
         status: 'pending',
-        whenIso: new Date().toISOString(),
+        whenIso: new Date(testNow).toISOString(),
         text: `测试原子性 ${i}`
       });
     }
@@ -232,10 +239,9 @@ test('多进程安全原子更新', async () => {
     fs.writeFileSync(queueFile, alerts.map(a => JSON.stringify(a)).join('\n') + '\n');
     
     // 模拟并发claim（串行执行，验证原子性）
-    const now = Date.now();
-    const result1 = claimPendingAlerts(queueFile, { maxClaims: 3, now });
-    const result2 = claimPendingAlerts(queueFile, { maxClaims: 3, now });
-    const result3 = claimPendingAlerts(queueFile, { maxClaims: 3, now });
+    const result1 = claimPendingAlerts(queueFile, { maxClaims: 3, now: testNow });
+    const result2 = claimPendingAlerts(queueFile, { maxClaims: 3, now: testNow });
+    const result3 = claimPendingAlerts(queueFile, { maxClaims: 3, now: testNow });
     
     // ✅ 第一次claim 3条
     assert.strictEqual(result1.claimed.length, 3);
