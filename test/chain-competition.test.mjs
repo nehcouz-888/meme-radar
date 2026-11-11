@@ -33,12 +33,21 @@ test('detectChainCompetition: single chain with high-tier activity', () => {
       tier: 'chain_lead',
       chainAffinity: 'sol',
       discoveredAt: nowMs - 120_000 // 2 minutes ago
+    },
+    {
+      tweetId: '3',
+      handle: 'solana_defi',
+      displayName: 'Solana DeFi',
+      tier: 'community',
+      chainAffinity: 'sol',
+      discoveredAt: nowMs - 180_000 // 3 minutes ago
     }
   ];
   
   const watchlist = [
     { handle: 'solana', tier: 'chain_lead', chainAffinity: 'sol', displayName: 'Solana' },
-    { handle: 'aeyakovenko', tier: 'chain_lead', chainAffinity: 'sol', displayName: 'Anatoly' }
+    { handle: 'aeyakovenko', tier: 'chain_lead', chainAffinity: 'sol', displayName: 'Anatoly' },
+    { handle: 'solana_defi', tier: 'community', chainAffinity: 'sol', displayName: 'Solana DeFi' }
   ];
   
   const result = detectChainCompetition(hits, watchlist, 6, nowMs);
@@ -62,6 +71,14 @@ test('detectChainCompetition: cross-chain competition', () => {
       discoveredAt: nowMs - 60_000
     },
     {
+      tweetId: '1b',
+      handle: 'aeyakovenko',
+      displayName: 'Anatoly',
+      tier: 'chain_lead',
+      chainAffinity: 'sol',
+      discoveredAt: nowMs - 65_000
+    },
+    {
       tweetId: '2',
       handle: 'base',
       displayName: 'Base',
@@ -70,19 +87,38 @@ test('detectChainCompetition: cross-chain competition', () => {
       discoveredAt: nowMs - 90_000
     },
     {
+      tweetId: '2b',
+      handle: 'jessepollak',
+      displayName: 'Jesse Pollak',
+      tier: 'founder',
+      chainAffinity: 'base',
+      discoveredAt: nowMs - 95_000
+    },
+    {
       tweetId: '3',
       handle: 'bnbchain',
       displayName: 'BNB Chain',
       tier: 'chain_lead',
       chainAffinity: 'bsc',
       discoveredAt: nowMs - 120_000
+    },
+    {
+      tweetId: '3b',
+      handle: 'cz_binance',
+      displayName: 'CZ',
+      tier: 'founder',
+      chainAffinity: 'bsc',
+      discoveredAt: nowMs - 125_000
     }
   ];
   
   const watchlist = [
     { handle: 'solana', tier: 'chain_lead', chainAffinity: 'sol', displayName: 'Solana' },
+    { handle: 'aeyakovenko', tier: 'chain_lead', chainAffinity: 'sol', displayName: 'Anatoly' },
     { handle: 'base', tier: 'chain_lead', chainAffinity: 'base', displayName: 'Base' },
-    { handle: 'bnbchain', tier: 'chain_lead', chainAffinity: 'bsc', displayName: 'BNB Chain' }
+    { handle: 'jessepollak', tier: 'founder', chainAffinity: 'base', displayName: 'Jesse Pollak' },
+    { handle: 'bnbchain', tier: 'chain_lead', chainAffinity: 'bsc', displayName: 'BNB Chain' },
+    { handle: 'cz_binance', tier: 'founder', chainAffinity: 'bsc', displayName: 'CZ' }
   ];
   
   const result = detectChainCompetition(hits, watchlist, 6, nowMs);
