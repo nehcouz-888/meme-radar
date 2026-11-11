@@ -26,7 +26,8 @@ const HB_FILE = path.join(STATE, 'heartbeat.json');
 const DAEMON_LOG = path.join(LOG_DIR, 'daemon.log');
 const SKIP_LOG = path.join(LOG_DIR, 'skipped-transfers.jsonl');
 const SKIP_PCT_LOG = path.join(LOG_DIR, 'skipped-pct.jsonl');
-const LEDGER_FILE = path.join(STATE, 'fomo-credits-ledger.json');
+// ✅ B8: Shared ledger (同scanner一致，所有producer共享)
+const LEDGER_FILE = '/workspace/meme-radar-run/meme-radar-branch/state/fomo-credits-ledger.json';
 const CST_OFFSET_MS = 8 * 3600_000;
 const MONTHLY_BUDGET = Number(process.env.FOMO_MONTHLY_CREDIT_BUDGET || 150000);
 
@@ -339,7 +340,8 @@ function classifyBuyVsTransfer(ev) {
 async function verifyTradeIsSwapBuy(tradeId, key) {
   if (!tradeId) return { ok: true, skipped: 'no_tradeId' };
   try {
-    const r = await restGet(`/v2/trades/${encodeURIComponent(tradeId)}`, key);
+    // ✅ Cache by tradeId (同一笔交易不重复请求)
+    const r = await restGet(`/v2/trades/${encodeURIComponent(tradeId)}`, key, 250, `trade:${tradeId}`);
     if (!r.ok) return { ok: true, skipped: `trade_http_${r.status}`, cost: r.cost };
     const b = r.body || {};
     const bought = Number(b.boughtAmount ?? 0);
@@ -401,7 +403,8 @@ async function fetchPortfolioContext(handle, key, ev) {
   const pathTpl = CFG.portfolioPct?.balancesPath || '/v2/users/{handle}/balances';
   const apiPath = pathTpl.replace('{handle}', encodeURIComponent(handle));
   try {
-    const r = await restGet(apiPath, key);
+    // ✅ Cache by handle (同一账号短时间内不重复请求)
+    const r = await restGet(apiPath, key, 250, `balances:${handle}`);
     if (!r.ok) {
       return {
         ok: false,
@@ -445,18 +448,24 @@ async function fetchPortfolioContext(handle, key, ev) {
  */
 function judgeNewPosition(portfolio, buyInfo) {
   if (!portfolio?.ok) {
-    return { isNew: null, unknown: true, label: '是否新仓未知' };
+    return { isNew: null, unknown: true, label: '是否新仓未知（portfolio查询失败）' };
   }
   const hv = portfolio.holdingValueUsd || 0;
   const amt = portfolio.holdingAmount || 0;
   
-  // No holding = likely new
+  // ✅ No holding data OR zero amount/value = insufficient evidence (not definite new position)
+  // Cannot distinguish: (1) truly no prior position (2) API returned empty data (3) holding below threshold
   if (!portfolio.holding || amt <= 0 || hv <= 0) {
-    return { isNew: true, unknown: false, label: '新开仓', priorEst: 0 };
+    return {
+      isNew: null,
+      unknown: true,
+      label: '是否新仓未知（无持仓数据或金额为0）',
+      note: '空持仓/零值无法确认新仓（可能是API未返回或低于阈值）'
+    };
   }
   
-  // ✅ Cannot deduce prior balance from post-buy position without explicit prior snapshot
-  // Post-buy position - buy estimate is unreliable (time gap, price change, multiple trades)
+  // ✅ Has holding data but cannot deduce prior balance from post-buy position without explicit prior snapshot
+  // Post-buy position - buy amount delta is unreliable (time gap, price change, multiple trades)
   return {
     isNew: null,
     unknown: true,
@@ -622,55 +631,105 @@ function readLedger() {
     const l = JSON.parse(fs.readFileSync(LEDGER_FILE, 'utf8'));
     if (l.month === monthKey()) return l;
   } catch {}
-  return { month: monthKey(), spent: 0, calls: 0, lastRemaining: null, log: [] };
+  return { month: monthKey(), spent: 0, calls: 0, lastRemaining: null, log: [], reserved: 0 };
 }
 
-let ledger = readLedger();
-
-function saveLedger() {
+function saveLedger(ledger) {
   ledger.log = ledger.log.slice(-200);
   fs.writeFileSync(LEDGER_FILE + '.tmp', JSON.stringify(ledger, null, 1));
   fs.renameSync(LEDGER_FILE + '.tmp', LEDGER_FILE);
 }
 
+// ✅ Request cache (同tradeId/handle去重)
+const requestCache = new Map(); // key: cacheKey, value: {promise, result}
+
 /**
- * ✅ B8: Budget-guarded REST call with shared ledger
+ * ✅ B8: Budget-guarded REST call with shared ledger + atomic reserve + cache
  */
-async function restGet(apiPath, key, estCost = 250) {
-  // ✅ Pre-flight budget check
-  if (ledger.spent + estCost > MONTHLY_BUDGET) {
-    log(`BUDGET SKIP ${apiPath} (${ledger.spent}+${estCost} > ${MONTHLY_BUDGET})`);
-    return { ok: false, status: 0, cost: 0, rem: null, body: {}, budgetExceeded: true };
+async function restGet(apiPath, key, estCost = 250, cacheKey = null) {
+  // ✅ Cache check (同tradeId不重复请求)
+  if (cacheKey && requestCache.has(cacheKey)) {
+    const cached = requestCache.get(cacheKey);
+    if (cached.promise) {
+      return await cached.promise; // 等待进行中的请求
+    }
+    if (cached.result) {
+      return cached.result; // 返回已完成的结果
+    }
   }
   
-  const url = `${CFG.apiBase}${apiPath}`;
-  const res = await fetch(url, {
-    headers: { authorization: `Bearer ${key}`, accept: 'application/json' },
+  // ✅ Create promise for concurrent dedup
+  let resolvePromise, rejectPromise;
+  const promise = new Promise((resolve, reject) => {
+    resolvePromise = resolve;
+    rejectPromise = reject;
   });
   
-  const costHeader = res.headers.get('x-credits-cost');
-  const remHeader = res.headers.get('x-credits-remaining');
-  const cost = Number(costHeader) || (res.ok ? estCost : 0);
-  const rem = remHeader !== null ? Number(remHeader) : null;
-  
-  // ✅ Record actual cost
-  if (rem !== null) {
-    ledger.spent = Math.max(ledger.spent, Number(process.env.FOMO_PLAN_CREDITS || 250000) - rem - cost);
-    ledger.lastRemaining = rem;
+  if (cacheKey) {
+    requestCache.set(cacheKey, { promise });
   }
-  ledger.spent += cost;
-  ledger.calls++;
-  ledger.log.push({
-    at: new Date().toISOString(),
-    path: apiPath.split('?')[0],
-    cost,
-    remaining: rem,
-    ok: res.ok
-  });
-  saveLedger();
   
-  const body = await res.json().catch(() => ({}));
-  return { ok: res.ok, status: res.status, cost, rem, body };
+  try {
+    // ✅ Atomic reserve: 每次请求前重新读取最新账本，预留预算
+    const currentLedger = readLedger();
+    const totalReserved = (currentLedger.reserved || 0) + estCost;
+    
+    if (currentLedger.spent + totalReserved > MONTHLY_BUDGET) {
+      log(`BUDGET SKIP ${apiPath} (spent=${currentLedger.spent}, reserved=${currentLedger.reserved || 0}, est=${estCost}, limit=${MONTHLY_BUDGET})`);
+      const result = { ok: false, status: 0, cost: 0, rem: null, body: {}, budgetExceeded: true };
+      if (cacheKey) requestCache.set(cacheKey, { result });
+      resolvePromise(result);
+      return result;
+    }
+    
+    // ✅ Reserve budget atomically
+    currentLedger.reserved = totalReserved;
+    saveLedger(currentLedger);
+    
+    const url = `${CFG.apiBase}${apiPath}`;
+    const res = await fetch(url, {
+      headers: { authorization: `Bearer ${key}`, accept: 'application/json' },
+    });
+    
+    const costHeader = res.headers.get('x-credits-cost');
+    const remHeader = res.headers.get('x-credits-remaining');
+    const cost = Number(costHeader) || (res.ok ? estCost : 0);
+    const rem = remHeader !== null ? Number(remHeader) : null;
+    
+    // ✅ Release reservation and record actual cost (重新读取避免覆盖其他调用)
+    const finalLedger = readLedger();
+    if (rem !== null) {
+      finalLedger.spent = Math.max(finalLedger.spent, Number(process.env.FOMO_PLAN_CREDITS || 250000) - rem - cost);
+      finalLedger.lastRemaining = rem;
+    }
+    finalLedger.spent += cost;
+    finalLedger.reserved = Math.max(0, (finalLedger.reserved || 0) - estCost); // 释放预留
+    finalLedger.calls++;
+    finalLedger.log.push({
+      at: new Date().toISOString(),
+      path: apiPath.split('?')[0],
+      cost,
+      remaining: rem,
+      ok: res.ok
+    });
+    saveLedger(finalLedger);
+    
+    const body = await res.json().catch(() => ({}));
+    const result = { ok: res.ok, status: res.status, cost, rem, body };
+    
+    if (cacheKey) requestCache.set(cacheKey, { result });
+    resolvePromise(result);
+    return result;
+  } catch (error) {
+    // ✅ Release reservation on error
+    const errorLedger = readLedger();
+    errorLedger.reserved = Math.max(0, (errorLedger.reserved || 0) - estCost);
+    saveLedger(errorLedger);
+    
+    if (cacheKey) requestCache.delete(cacheKey);
+    rejectPromise(error);
+    throw error;
+  }
 }
 
 /** Seed only traders not yet recorded in seeded-traders.json (per-new-trader). */
@@ -689,7 +748,8 @@ async function seedNewTraders(seen, key, traders) {
   for (const t of traders) {
     if (seededSet.has(t.handle)) continue;
     const q = `/v2/alerts?userId=${encodeURIComponent(t.userId)}&type=buy&limit=50`;
-    const r = await restGet(q, key);
+    // ✅ Cache by handle (同一账号seed不重复)
+    const r = await restGet(q, key, 250, `seed:${t.handle}`);
     costSum += Number(r.cost || 0);
     log(`seed REST @${t.handle} status=${r.status} cost=${r.cost} rem=${r.rem} (key redacted)`);
     const alerts = r.body?.alerts || [];

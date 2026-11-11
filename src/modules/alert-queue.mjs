@@ -114,13 +114,21 @@ function acquireLock(queueFile, timeoutMs = 5000) {
       // Check if lock owner still alive and lock is fresh
       try {
         const stat = fs.statSync(lockFile);
+        
+        // ✅ 0-byte lock (crashed between wx and metadata write) → immediate reclaim
+        if (stat.size === 0) {
+          fs.unlinkSync(lockFile);
+          continue;
+        }
+        
         const lockContent = fs.readFileSync(lockFile, 'utf8');
         let lockInfo;
         try {
           lockInfo = JSON.parse(lockContent);
         } catch {
-          // Legacy format or corrupted, treat as stale
-          if (Date.now() - stat.mtimeMs > 10000) {
+          // ✅ Invalid JSON: if 0-byte or crash artifact, reclaim faster (1s instead of 10s)
+          const lockAge = Date.now() - stat.mtimeMs;
+          if (stat.size === 0 || lockAge > 1000) {
             fs.unlinkSync(lockFile);
             continue;
           }

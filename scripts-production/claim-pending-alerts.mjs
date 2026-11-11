@@ -9,7 +9,7 @@ import fs from 'node:fs';
 const args = process.argv.slice(2);
 const queueFile = args[0] || '/workspace/meme-radar-run/fomo-trader-watch/alerts/queue.jsonl';
 const maxClaims = parseInt(args.find(a => a.startsWith('--max='))?.split('=')[1]) || 10;
-const leaseMin = parseInt(args.find(a => a.startsWith('--lease-min='))?.split('=')[1]) || 10;
+const leaseMin = parseInt(args.find(a => a.startsWith('--lease-min='))?.split('=')[1]) || 5;
 
 if (!fs.existsSync(queueFile)) {
   console.error(`Queue file not found: ${queueFile}`);
