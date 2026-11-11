@@ -353,10 +353,18 @@ function score(c, smart) {
   const notes = [], flags = []; let s = 10, reject = null;
   const k = c.chain === 'sol' ? c.address : c.address.toLowerCase();
   const holders = smart.holding.get(k); const liveHolders = c.fomoHoldersLive; // from /token/{addr}/holders when called
-  // live /holders lists every tracked Fomo user; only those in the smart set (24h leaderboard + KOL bridge) count
+  // Only live-verified holders count for scoring; historical snapshot is for display/risk only
   const liveSmart = liveHolders != null ? liveHolders.filter(h => SMART_HANDLES.has(h.toLowerCase())) : null;
-  const stillHolding = liveSmart != null ? new Set([...liveSmart, ...(holders || [])]).size : (holders ? holders.size : 0);
-  c.smart = { stillHolding, fomoUsersHolding: liveHolders?.length ?? null, handles: (liveSmart != null ? [...new Set([...liveSmart, ...(holders || [])])] : [...(holders || [])]).slice(0, 8), src: liveHolders != null ? 'fomo:token-holders(live)' : 'fomo:leaderboard-topTokens' };
+  const stillHolding = liveSmart != null ? liveSmart.length : 0;
+  const historicalCount = holders ? holders.size : 0;
+  c.smart = { 
+    stillHolding, 
+    historicalCount, 
+    fomoUsersHolding: liveHolders?.length ?? null, 
+    handles: liveSmart != null ? liveSmart.slice(0, 8) : [...(holders || [])].slice(0, 8), 
+    src: liveHolders != null ? 'fomo:token-holders(live)' : 'fomo:leaderboard-topTokens(historical,no-score)',
+    liveVerified: liveHolders != null
+  };
   if (c.liq == null) return { ...c, score: 0, tier: 'ignore', status: 'NO_MARKET_DATA', notes: ['DexScreener 无数据'], flags };
   if (c.liq < 5000) reject = 'liq<5k';
   s += c.liq < 10e3 ? 5 : c.liq < 50e3 ? 12 : c.liq < 200e3 ? 15 : 10;
@@ -368,7 +376,13 @@ function score(c, smart) {
   if (c.ageH != null) s += c.ageH < 24 ? 8 : c.ageH < 72 ? 5 : c.ageH > 720 ? -5 : 0;
   if (c.fomo.trendingRank != null) s += c.fomo.trendingRank <= 10 ? 8 : c.fomo.trendingRank <= 30 ? 5 : 2;
   if ((c.fomo.fomoHolders || 0) > 50) s += 4;
-  const smartPts = Math.min(18, stillHolding * 6); s += smartPts; notes.push(`聪明钱[仍持仓${stillHolding}个(${c.smart.src})；计分+${smartPts}]${c.smart.fomoUsersHolding != null ? `；Fomo 用户持仓${c.smart.fomoUsersHolding}(不计分)` : ''}`);
+  const smartPts = liveSmart != null ? Math.min(18, stillHolding * 6) : 0;
+  s += smartPts;
+  if (liveSmart != null) {
+    notes.push(`聪明钱[实时验证${stillHolding}个持仓(${c.smart.src})；计分+${smartPts}]${c.smart.fomoUsersHolding != null ? `；Fomo总用户${c.smart.fomoUsersHolding}(不计分)` : ''}`);
+  } else if (historicalCount > 0) {
+    notes.push(`聪明钱[历史快照${historicalCount}个(${c.smart.src})；未实时验证，计分+0]`);
+  }
   if (c.jup) {
     if (c.jup.isSus) reject = reject || 'jupiter isSus';
     if (c.jup.mintOff === false || c.jup.freezeOff === false) reject = reject || 'mint/freeze 权限未放弃';
@@ -523,14 +537,28 @@ if (SPILL.enabled) {
   log(`spillover: leaders=${spillLog.length} followers=${spillLog.reduce((a, e) => a + e.followers.length, 0)}`);
   scored = [...cands.values()].map(c => score(c, smart));
 }
-// capped live Fomo per-token calls for the top non-rejected candidates
-const top = scored.filter(x => x.status === 'WAIT_RECHECK').sort((a, b) => b.score - a.score);
-for (const c of top.slice(0, HOLDERS_MAX)) {
+// Live verification must cover ALL candidates that would receive smart-money scoring points,
+// not just the initial top N. Verify any candidate with historical holders or initial score > threshold.
+const needsVerification = scored.filter(x => {
+  if (x.status === 'HARD_REJECT') return false;
+  const k = x.chain === 'sol' ? x.address : x.address.toLowerCase();
+  const historicalHolders = smart.holding.get(k);
+  return historicalHolders && historicalHolders.size > 0;
+}).sort((a, b) => b.score - a.score);
+
+for (const c of needsVerification.slice(0, HOLDERS_MAX)) {
   const b = await fomo(`/token/${c.address}/holders${c.chain === 'sol' ? `?networkId=${SOL_NET}` : ''}`);
   const rows = b?.holders || b?.traders || (Array.isArray(b) ? b : null);
-  if (rows) { const src = cands.get(`${c.chain}:${c.address}`); src.fomoHoldersLive = rows.map(h => String(h.handle || h.username || h.userId || '?').slice(0, 30)); }
+  if (rows) { 
+    const src = cands.get(`${c.chain}:${c.address}`); 
+    src.fomoHoldersLive = rows.map(h => String(h.handle || h.username || h.userId || '?').slice(0, 30)); 
+  } else {
+    // Sample incomplete or address not found - do NOT assume liquidated
+    const src = cands.get(`${c.chain}:${c.address}`);
+    src.fomoHoldersLive = null;  // Explicitly mark as unverified, not cleared
+  }
 }
-for (const c of top.slice(0, STATS_MAX)) { const b = await fomo(`/v2/token/${c.address}/stats`); if (b) cands.get(`${c.chain}:${c.address}`).fomoStats = { top10HoldersPercent: num(b.top10HoldersPercent), holders: num(b.holders), w1h: b.windows?.['1h'] || null }; }
+for (const c of needsVerification.slice(0, STATS_MAX)) { const b = await fomo(`/v2/token/${c.address}/stats`); if (b) cands.get(`${c.chain}:${c.address}`).fomoStats = { top10HoldersPercent: num(b.top10HoldersPercent), holders: num(b.holders), w1h: b.windows?.['1h'] || null }; }
 scored = [...cands.values()].map(c => score(c, smart)).sort((a, b) => b.score - a.score);
 
 // ---------- report ----------
