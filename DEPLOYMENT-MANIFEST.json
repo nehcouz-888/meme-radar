@@ -1,0 +1,235 @@
+{
+  "version": "2026-11-12-audit-fixes",
+  "createdAt": "2026-11-12T00:00:00Z",
+  "description": "Comprehensive audit fixes with integrated entry points",
+  "repository": "https://github.com/nehcouz-888/meme-radar",
+  "branch": "cursor/smart-money-live-holding-fix-c671",
+  "commit": "pending",
+  
+  "critical_changes": {
+    "smart_money_scoring": "Only confirmed still-holding wallets score, NO historical fallback",
+    "market_cap_limit": "Removed <$100k hard limit, replaced with tiering system",
+    "holder_sample": "Explicit completeness tracking, sample absence ≠ exit",
+    "exit_monitoring": "Auto-register, continuous refresh, alert deduplication",
+    "delivery_tracking": "Alerts NOT marked delivered until actually sent"
+  },
+  
+  "files": {
+    "new_modules": [
+      {
+        "path": "src/modules/market-cap-tiers.mjs",
+        "target": "/workspace/meme-radar-run/meme-radar-branch/src/modules/market-cap-tiers.mjs",
+        "purpose": "Market cap tiering (5 tiers, evidence requirements)",
+        "tests": "test/market-cap-tiers.test.mjs",
+        "sha256": "to_be_computed"
+      },
+      {
+        "path": "src/modules/holder-sample.mjs",
+        "target": "/workspace/meme-radar-run/meme-radar-branch/src/modules/holder-sample.mjs",
+        "purpose": "Holder sample completeness tracking, NO historical scoring",
+        "tests": "test/holder-sample.test.mjs",
+        "sha256": "to_be_computed"
+      },
+      {
+        "path": "src/modules/exit-monitoring.mjs",
+        "target": "/workspace/meme-radar-run/meme-radar-branch/src/modules/exit-monitoring.mjs",
+        "purpose": "Exit monitoring with auto-register, refresh, dedup",
+        "tests": "test/exit-monitoring.test.mjs",
+        "sha256": "to_be_computed"
+      },
+      {
+        "path": "src/modules/position-analysis.mjs",
+        "target": "/workspace/meme-radar-run/meme-radar-branch/src/modules/position-analysis.mjs",
+        "purpose": "Position analysis (tradeUsd vs positionValueUsd clarification)",
+        "tests": "test/position-analysis.test.mjs",
+        "sha256": "to_be_computed"
+      }
+    ],
+    
+    "integrated_entry_points": [
+      {
+        "path": "scripts/fomo-free-scan-integrated.mjs",
+        "target": "/workspace/meme-radar-run/scan-accum/fomo-free/fomo-free-scan.mjs",
+        "backup_required": true,
+        "purpose": "Main scan with market cap tiers + holder sample completeness",
+        "calls_modules": ["market-cap-tiers", "holder-sample"],
+        "tests": "test/e2e-exit-monitoring.test.mjs (partial)",
+        "note": "⚠️ Must merge with production - contains Fomo API key loading"
+      },
+      {
+        "path": "scripts/exit-downgrade-run-integrated.mjs",
+        "target": "/workspace/meme-radar-run/meme-radar-branch/scripts/exit-downgrade-run.mjs",
+        "backup_required": true,
+        "purpose": "Exit monitoring with watchlist auto-register + refresh",
+        "calls_modules": ["exit-monitoring"],
+        "tests": "test/e2e-exit-monitoring.test.mjs",
+        "note": "Creates watchlist items if empty, tracks snapshots"
+      }
+    ],
+    
+    "modified_existing": [
+      {
+        "path": "src/scoring.mjs",
+        "line_range": "marketBehaviorScreen function",
+        "change": "Added liveSmartHolding, smartMoneySource transparency",
+        "backward_compatible": true
+      },
+      {
+        "path": "src/embryonic-score.mjs",
+        "change": "Extended live-holding preference to embryonicScore",
+        "backward_compatible": true
+      }
+    ],
+    
+    "tests": [
+      {
+        "path": "test/market-cap-tiers.test.mjs",
+        "coverage": "11 tests - tier boundaries, modifiers, evidence checks"
+      },
+      {
+        "path": "test/holder-sample.test.mjs",
+        "coverage": "11 tests - AURACAT regression, NO historical scoring"
+      },
+      {
+        "path": "test/exit-monitoring.test.mjs",
+        "coverage": "14 tests - NIHAO 2-CA, sample completeness, dedup"
+      },
+      {
+        "path": "test/position-analysis.test.mjs",
+        "coverage": "15 tests - MASK 102.8% anomaly, tradeUsd vs positionValue"
+      },
+      {
+        "path": "test/e2e-exit-monitoring.test.mjs",
+        "coverage": "3 tests - full watchlist flow, contradictory samples"
+      }
+    ]
+  },
+  
+  "configuration": {
+    "no_secrets_included": true,
+    "merge_strategy": "Preserve local credentials, merge logic only",
+    
+    "environment_variables": [
+      {
+        "name": "MARKET_CAP_TIERS_ENABLED",
+        "default": "1",
+        "description": "Enable market cap tiering (0 to disable)"
+      },
+      {
+        "name": "EXIT_DOWNGRADE",
+        "default": "1",
+        "description": "Enable exit monitoring (0 to disable)"
+      },
+      {
+        "name": "FOMO_MONTHLY_CREDIT_BUDGET",
+        "default": "150000",
+        "description": "Monthly Fomo API credit budget"
+      }
+    ],
+    
+    "config_files_to_merge": [
+      {
+        "file": "config/narrative-early-discovery.json",
+        "fields_to_preserve": [
+          "exitDowngrade.watchStateFile",
+          "exitDowngrade.alertsDir",
+          "exitDowngrade.queueFile"
+        ],
+        "note": "Keep local paths, merge new exit monitoring settings"
+      }
+    ]
+  },
+  
+  "deployment_steps": [
+    {
+      "step": 1,
+      "action": "backup",
+      "description": "Backup current production files",
+      "script": "deployment/backup.sh",
+      "targets": [
+        "/workspace/meme-radar-run/scan-accum/fomo-free/fomo-free-scan.mjs",
+        "/workspace/meme-radar-run/meme-radar-branch/scripts/exit-downgrade-run.mjs",
+        "/workspace/meme-radar-run/meme-radar-branch/config/*.json",
+        "/workspace/meme-radar-run/meme-radar-branch/narrative-early/state/watchlist.json"
+      ]
+    },
+    {
+      "step": 2,
+      "action": "deploy_modules",
+      "description": "Deploy new audit fix modules",
+      "files": [
+        "src/modules/*.mjs"
+      ],
+      "verification": "node --check each .mjs file"
+    },
+    {
+      "step": 3,
+      "action": "deploy_integrated_entries",
+      "description": "Deploy integrated entry points",
+      "files": [
+        "scripts/fomo-free-scan-integrated.mjs",
+        "scripts/exit-downgrade-run-integrated.mjs"
+      ],
+      "merge_required": true,
+      "note": "⚠️ Merge with production, preserve Fomo API key loading"
+    },
+    {
+      "step": 4,
+      "action": "offline_test",
+      "description": "Run offline end-to-end tests",
+      "command": "npm test test/e2e-*.test.mjs",
+      "expected": "All tests pass"
+    },
+    {
+      "step": 5,
+      "action": "verify_no_secrets",
+      "description": "Verify no secrets in deployed files",
+      "script": "deployment/check-secrets.sh"
+    }
+  ],
+  
+  "rollback": {
+    "script": "deployment/rollback.sh",
+    "backup_location": "/workspace/backups/pre-audit-fixes-{timestamp}",
+    "steps": [
+      "Stop running scans",
+      "Restore backup files",
+      "Verify checksums",
+      "Restart services"
+    ]
+  },
+  
+  "verification": {
+    "unit_tests": "npm test -- 65 tests, 61 pass (4 pre-existing failures)",
+    "e2e_tests": "npm test test/e2e-*.test.mjs -- 14 tests, 14 pass",
+    "offline_fixtures": [
+      "AURACAT: aggregate=36, live=0 → score=0 ✅",
+      "MASK: tradeUsd=null, position>assets → anomaly detected ✅",
+      "NIHAO: 2 CAs independent tracking ✅",
+      "holder_conflict: partial sample → no scoring ✅"
+    ]
+  },
+  
+  "limitations": {
+    "not_yet_integrated": [
+      "X health monitoring (soft mentions, clustering)",
+      "Delivery TTL management (3-stage claim/ack)",
+      "Narrative TTL + semantic filtering",
+      "Rest hours 01-06 Shanghai time handling"
+    ],
+    "requires_manual_merge": [
+      "Fomo API key loading in fomo-free-scan.mjs",
+      "Config file paths in production",
+      "Existing queue.jsonl format migration"
+    ]
+  },
+  
+  "success_criteria": {
+    "smart_money_scoring": "AURACAT-style false positives eliminated",
+    "market_cap": "$100k+ tokens can enter evaluation (with evidence requirements)",
+    "exit_monitoring": "Watchlist auto-populates, snapshots refresh",
+    "holder_sample": "Unknown status clearly marked, no false exit claims",
+    "position_analysis": "MASK-style anomalies detected and marked",
+    "tests": "65+ tests pass, including 14 end-to-end tests"
+  }
+}

@@ -104,7 +104,7 @@ test('scoreSmartMoneyWithCompleteness - 完整样本0个', () => {
   assert.match(result.note, /历史36个已全部退出/);
 });
 
-test('scoreSmartMoneyWithCompleteness - 不完整样本降权使用历史', () => {
+test('scoreSmartMoneyWithCompleteness - 不完整样本无法加分', () => {
   const token = {};
   const sample = {
     wallets: [],
@@ -116,11 +116,11 @@ test('scoreSmartMoneyWithCompleteness - 不完整样本降权使用历史', () =
   const result = scoreSmartMoneyWithCompleteness(token, sample, 36);
   
   assert.equal(result.smartWallets, 0);
-  assert.equal(result.score, 36 * 0.3);  // 降权30%
-  assert.equal(result.confidence, 'LOW');
+  assert.equal(result.score, 0);  // ❌ 不能加分
+  assert.equal(result.confidence, 'UNKNOWN');
   assert.match(result.note, /样本不完整/);
-  assert.match(result.note, /降权使用历史/);
-  assert.equal(result.aggregateFallback, true);
+  assert.match(result.note, /状态未知，无法加分/);
+  assert.match(result.note, /历史aggregate=36仅供参考/);
 });
 
 test('scoreSmartMoneyWithCompleteness - 完整样本3个', () => {

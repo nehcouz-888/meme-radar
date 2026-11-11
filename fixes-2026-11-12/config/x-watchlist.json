@@ -1,0 +1,4258 @@
+{
+  "version": 5,
+  "lastUpdated": "2026-09-24",
+  "minFollowers": 10000,
+  "followerNote": "KOL/community/meme_whale accounts require ≥10k followers. Official/founder accounts exempt from this rule.",
+  "chainAffinityNote": "chainAffinity tracks account's primary chain alignment: sol | bsc | base | eth | multi | null. Used for cross-chain competition detection.",
+  "accounts": [
+    {
+      "handle": "binance",
+      "displayName": "Binance",
+      "category": "official",
+      "tier": "official",
+      "chainAffinity": "bsc",
+      "followerCount": null,
+      "notes": "Binance main official account - BNB Chain founder",
+      "enabled": true
+    },
+    {
+      "handle": "BinanceWallet",
+      "displayName": "Binance Wallet",
+      "category": "official",
+      "tier": "official",
+      "chainAffinity": "multi",
+      "followerCount": null,
+      "notes": "Binance Web3 Wallet official - multi-chain",
+      "enabled": true
+    },
+    {
+      "handle": "BinanceResearch",
+      "displayName": "Binance Research",
+      "category": "official",
+      "tier": "official",
+      "chainAffinity": "multi",
+      "followerCount": null,
+      "notes": "Binance Research official - multi-chain coverage",
+      "enabled": true
+    },
+    {
+      "handle": "BinanceChinese",
+      "displayName": "币安中文",
+      "category": "official",
+      "tier": "official",
+      "chainAffinity": "bsc",
+      "followerCount": null,
+      "notes": "Binance Chinese official - verify handle if changed",
+      "enabled": true
+    },
+    {
+      "handle": "BinanceAcademy",
+      "displayName": "Binance Academy",
+      "category": "official",
+      "tier": "official",
+      "chainAffinity": "multi",
+      "followerCount": null,
+      "notes": "Binance Academy official - educational content",
+      "enabled": true
+    },
+    {
+      "handle": "cz_binance",
+      "displayName": "CZ",
+      "category": "founder",
+      "tier": "founder",
+      "chainAffinity": "bsc",
+      "followerCount": null,
+      "notes": "Changpeng Zhao - Binance founder, BNB Chain affinity",
+      "enabled": true
+    },
+    {
+      "handle": "heyibinance",
+      "displayName": "He Yi / 何一",
+      "category": "founder",
+      "tier": "founder",
+      "chainAffinity": "bsc",
+      "followerCount": null,
+      "notes": "He Yi - Binance Co-Founder, BNB Chain affinity",
+      "enabled": true
+    },
+    {
+      "handle": "solana",
+      "displayName": "Solana",
+      "category": "chain_lead",
+      "tier": "chain_lead",
+      "chainAffinity": "sol",
+      "followerCount": null,
+      "notes": "Solana official account",
+      "enabled": true
+    },
+    {
+      "handle": "aeyakovenko",
+      "displayName": "Anatoly Yakovenko",
+      "category": "chain_lead",
+      "tier": "chain_lead",
+      "chainAffinity": "sol",
+      "followerCount": null,
+      "notes": "Solana co-founder",
+      "enabled": true
+    },
+    {
+      "handle": "rajgokal",
+      "displayName": "Raj Gokal",
+      "category": "chain_lead",
+      "tier": "chain_lead",
+      "chainAffinity": "sol",
+      "followerCount": null,
+      "notes": "Solana co-founder",
+      "enabled": true
+    },
+    {
+      "handle": "bnbchain",
+      "displayName": "BNB Chain",
+      "category": "chain_lead",
+      "tier": "chain_lead",
+      "chainAffinity": "bsc",
+      "followerCount": null,
+      "notes": "BNB Chain official",
+      "enabled": true
+    },
+    {
+      "handle": "base",
+      "displayName": "Base",
+      "category": "chain_lead",
+      "tier": "chain_lead",
+      "chainAffinity": "base",
+      "followerCount": null,
+      "notes": "Base official (Coinbase L2)",
+      "enabled": true
+    },
+    {
+      "handle": "jessepollak",
+      "displayName": "Jesse Pollak",
+      "category": "chain_lead",
+      "tier": "chain_lead",
+      "chainAffinity": "base",
+      "followerCount": null,
+      "notes": "Base lead at Coinbase",
+      "enabled": true
+    },
+    {
+      "handle": "VitalikButerin",
+      "displayName": "Vitalik Buterin",
+      "category": "chain_lead",
+      "tier": "chain_lead",
+      "chainAffinity": "eth",
+      "followerCount": null,
+      "notes": "Ethereum founder",
+      "enabled": true
+    },
+    {
+      "handle": "Ansem",
+      "displayName": "Ansem",
+      "category": "meme_whale",
+      "tier": "meme_whale",
+      "chainAffinity": "sol",
+      "followerCount": 500000,
+      "notes": "Major SOL meme whale and caller",
+      "enabled": true
+    },
+    {
+      "handle": "thecryptodogs",
+      "displayName": "The Crypto Dog",
+      "category": "meme_whale",
+      "tier": "meme_whale",
+      "chainAffinity": "multi",
+      "followerCount": 450000,
+      "notes": "High-profile crypto trader, multi-chain meme focus",
+      "enabled": true
+    },
+    {
+      "handle": "hsaka",
+      "displayName": "Hsaka",
+      "category": "meme_whale",
+      "tier": "meme_whale",
+      "chainAffinity": "eth",
+      "followerCount": 200000,
+      "notes": "Veteran crypto trader, ETH/multi-chain early meme calls",
+      "enabled": true
+    },
+    {
+      "handle": "RunnerXBT",
+      "displayName": "RunnerXBT",
+      "category": "meme_whale",
+      "tier": "meme_whale",
+      "chainAffinity": "multi",
+      "followerCount": 150000,
+      "notes": "Active crypto trader, multi-chain meme plays",
+      "enabled": true
+    },
+    {
+      "handle": "ThinkingUSD",
+      "displayName": "Thinking",
+      "category": "meme_whale",
+      "tier": "meme_whale",
+      "chainAffinity": "sol",
+      "followerCount": 120000,
+      "notes": "Sol ecosystem meme whale",
+      "enabled": true
+    },
+    {
+      "handle": "CryptoCred",
+      "displayName": "Cred",
+      "category": "meme_whale",
+      "tier": "meme_whale",
+      "chainAffinity": "multi",
+      "followerCount": 380000,
+      "notes": "Technical trader, multi-chain occasional meme plays",
+      "enabled": true
+    },
+    {
+      "handle": "MilkRoadDaily",
+      "displayName": "Milk Road",
+      "category": "community",
+      "tier": "community",
+      "followerCount": 90000,
+      "notes": "Crypto news + meme narratives",
+      "enabled": true,
+      "chainAffinity": "multi"
+    },
+    {
+      "handle": "degenmfer",
+      "displayName": "Degen MFer",
+      "category": "community",
+      "tier": "community",
+      "followerCount": 45000,
+      "notes": "Solana meme community organizer",
+      "enabled": true,
+      "chainAffinity": "sol"
+    },
+    {
+      "handle": "SolJakey",
+      "displayName": "Sol Jakey",
+      "category": "community",
+      "tier": "community",
+      "followerCount": 35000,
+      "notes": "Solana meme calls and community",
+      "enabled": true,
+      "chainAffinity": "sol"
+    },
+    {
+      "handle": "Messiahbol",
+      "displayName": "Messiah",
+      "category": "community",
+      "tier": "community",
+      "followerCount": 40000,
+      "notes": "SOL meme narratives and CA posts",
+      "enabled": true,
+      "chainAffinity": "sol"
+    },
+    {
+      "handle": "thedefiedge",
+      "displayName": "The DeFi Edge",
+      "category": "community",
+      "tier": "community",
+      "followerCount": 55000,
+      "notes": "DeFi and memecoin educator",
+      "enabled": true,
+      "chainAffinity": "multi"
+    },
+    {
+      "handle": "Washigorira",
+      "displayName": "Washi",
+      "category": "community",
+      "tier": "community",
+      "followerCount": 28000,
+      "notes": "Solana meme community voice",
+      "enabled": true,
+      "chainAffinity": "sol"
+    },
+    {
+      "handle": "0xRacer",
+      "displayName": "Racer",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "followerCount": 65000,
+      "notes": "Known for early SOL meme calls",
+      "enabled": true,
+      "chainAffinity": "sol"
+    },
+    {
+      "handle": "blknoiz06",
+      "displayName": "Blknoiz",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "followerCount": 48000,
+      "notes": "Solana alpha caller",
+      "enabled": true,
+      "chainAffinity": "sol"
+    },
+    {
+      "handle": "TheRoaringKitty",
+      "displayName": "Roaring Kitty",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "followerCount": 1500000,
+      "notes": "Influential meme investor (GME/DFV)",
+      "enabled": true,
+      "chainAffinity": "multi"
+    },
+    {
+      "handle": "Murad_MHH",
+      "displayName": "Murad",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "followerCount": 280000,
+      "notes": "Memecoin philosopher and caller",
+      "enabled": true,
+      "chainAffinity": "sol"
+    },
+    {
+      "handle": "0xSisyphus",
+      "displayName": "Sisyphus",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "followerCount": 42000,
+      "notes": "Crypto alpha researcher",
+      "enabled": true,
+      "chainAffinity": "multi"
+    },
+    {
+      "handle": "DegenSpartan",
+      "displayName": "Degen Spartan",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "followerCount": 175000,
+      "notes": "DeFi and meme trader | ETH/multi-chain degen trader, meme whale",
+      "enabled": true,
+      "chainAffinity": "eth"
+    },
+    {
+      "handle": "GiganticRebirth",
+      "displayName": "Gigantic Rebirth",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "followerCount": 95000,
+      "notes": "SOL ecosystem alpha",
+      "enabled": true,
+      "chainAffinity": "sol"
+    },
+    {
+      "handle": "TheDeFinvestor",
+      "displayName": "The DeFi Investor",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "followerCount": 32000,
+      "notes": "DeFi and memecoin analysis",
+      "enabled": true,
+      "chainAffinity": "multi"
+    },
+    {
+      "handle": "cobie",
+      "displayName": "Cobie",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "followerCount": 520000,
+      "notes": "Crypto trader and commentator",
+      "enabled": true,
+      "chainAffinity": "eth"
+    },
+    {
+      "handle": "DeFi_Cheetah",
+      "displayName": "DeFi Cheetah",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "followerCount": 78000,
+      "notes": "SOL memecoin tracker",
+      "enabled": true,
+      "chainAffinity": "sol"
+    },
+    {
+      "handle": "0xMert_",
+      "displayName": "Mert",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "followerCount": 130000,
+      "notes": "Crypto analyst and caller",
+      "enabled": true,
+      "chainAffinity": "multi"
+    },
+    {
+      "handle": "AltcoinGordon",
+      "displayName": "Altcoin Gordon",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "followerCount": 220000,
+      "notes": "Multi-chain meme caller",
+      "enabled": true,
+      "chainAffinity": "multi"
+    },
+    {
+      "handle": "CryptoGodJohn",
+      "displayName": "Crypto God John",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "followerCount": 88000,
+      "notes": "Memecoin researcher",
+      "enabled": true,
+      "chainAffinity": "sol"
+    },
+    {
+      "handle": "CryptoKaleo",
+      "displayName": "Kaleo",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "followerCount": 640000,
+      "notes": "Crypto analyst with meme calls",
+      "enabled": true,
+      "chainAffinity": "multi"
+    },
+    {
+      "handle": "ZssBecker",
+      "displayName": "Zach Becker",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "followerCount": 52000,
+      "notes": "SOL ecosystem early caller",
+      "enabled": true,
+      "chainAffinity": "sol"
+    },
+    {
+      "handle": "0xShinChan",
+      "displayName": "Shin Chan",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "followerCount": 38000,
+      "notes": "Asian crypto alpha (CN/EN)",
+      "enabled": true,
+      "chainAffinity": "multi"
+    },
+    {
+      "handle": "CryptoJelleNL",
+      "displayName": "Crypto Jelle",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "followerCount": 115000,
+      "notes": "Multi-chain analyst",
+      "enabled": true,
+      "chainAffinity": "multi"
+    },
+    {
+      "handle": "0x_Todd",
+      "displayName": "Todd",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "followerCount": 25000,
+      "notes": "SOL memecoin trader",
+      "enabled": true,
+      "chainAffinity": "sol"
+    },
+    {
+      "handle": "thetokenist",
+      "displayName": "The Tokenist",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "followerCount": 18000,
+      "notes": "Crypto and meme analysis",
+      "enabled": true,
+      "chainAffinity": "multi"
+    },
+    {
+      "handle": "GameOfTrades_",
+      "displayName": "Game of Trades",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "followerCount": 340000,
+      "notes": "Macro trader with crypto/meme exposure",
+      "enabled": true,
+      "chainAffinity": "multi"
+    },
+    {
+      "handle": "RookieXBT",
+      "displayName": "RookieXBT",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "followerCount": 160000,
+      "notes": "Crypto trader, occasional meme plays",
+      "enabled": true,
+      "chainAffinity": "multi"
+    },
+    {
+      "handle": "lookonchain",
+      "displayName": "Lookonchain",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "followerCount": 580000,
+      "notes": "On-chain tracking, whale movements",
+      "enabled": true,
+      "chainAffinity": "multi"
+    },
+    {
+      "handle": "Flip_Flippen",
+      "displayName": "Flip Flippen",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "followerCount": 95000,
+      "notes": "Solana ecosystem focus",
+      "enabled": true,
+      "chainAffinity": "sol"
+    },
+    {
+      "handle": "Pentosh1",
+      "displayName": "Pentoshi",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "followerCount": 720000,
+      "notes": "Crypto trader with meme exposure",
+      "enabled": true,
+      "chainAffinity": "eth"
+    },
+    {
+      "handle": "KaitoAI",
+      "displayName": "Kaito",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "followerCount": 92000,
+      "notes": "Crypto data and trending narratives",
+      "enabled": true,
+      "chainAffinity": "multi"
+    },
+    {
+      "handle": "CryptoHayes",
+      "displayName": "Arthur Hayes",
+      "category": "meme_whale",
+      "tier": "meme_whale",
+      "chainAffinity": "multi",
+      "followerCount": 380000,
+      "notes": "BitMEX founder, macro trader, influential meme calls",
+      "enabled": true
+    },
+    {
+      "handle": "DeFi_Made_Here",
+      "displayName": "DeFi Made Here",
+      "category": "community",
+      "tier": "community",
+      "chainAffinity": "multi",
+      "followerCount": 42000,
+      "notes": "DeFi and meme ecosystem coverage",
+      "enabled": true
+    },
+    {
+      "handle": "CryptoCobain",
+      "displayName": "Crypto Cobain",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "chainAffinity": "multi",
+      "followerCount": 320000,
+      "notes": "Macro trader, occasional meme plays with large following",
+      "enabled": true
+    },
+    {
+      "handle": "AltcoinPsycho",
+      "displayName": "Altcoin Psycho",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "chainAffinity": "multi",
+      "followerCount": 280000,
+      "notes": "Altcoin trader, meme coin coverage",
+      "enabled": true
+    },
+    {
+      "handle": "BlurCrypto",
+      "displayName": "Blur",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "chainAffinity": "sol",
+      "followerCount": 92000,
+      "notes": "Solana ecosystem trader, early meme positioning",
+      "enabled": true
+    },
+    {
+      "handle": "TraderXO",
+      "displayName": "TraderXO",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "chainAffinity": "multi",
+      "followerCount": 145000,
+      "notes": "Multi-chain trader, meme alpha",
+      "enabled": true
+    },
+    {
+      "handle": "CryptoMessiah",
+      "displayName": "Crypto Messiah",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "chainAffinity": "multi",
+      "followerCount": 210000,
+      "notes": "Crypto analyst with large Chinese following, multi-chain",
+      "enabled": true
+    },
+    {
+      "handle": "WuBlockchain",
+      "displayName": "Wu Blockchain",
+      "category": "community",
+      "tier": "community",
+      "chainAffinity": "multi",
+      "followerCount": 530000,
+      "notes": "Major Chinese crypto news source, Binance ecosystem coverage",
+      "enabled": true
+    },
+    {
+      "handle": "Colin_Wu",
+      "displayName": "Colin Wu",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "chainAffinity": "multi",
+      "followerCount": 420000,
+      "notes": "Wu Blockchain founder, Chinese crypto journalist, major influence",
+      "enabled": true
+    },
+    {
+      "handle": "BTCdayu",
+      "displayName": "BTC大宇",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "chainAffinity": "multi",
+      "followerCount": 180000,
+      "notes": "Major Chinese crypto KOL, proven track record",
+      "enabled": true
+    },
+    {
+      "handle": "bitouq",
+      "displayName": "比特币秋山君",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "chainAffinity": "multi",
+      "followerCount": 95000,
+      "notes": "Chinese crypto analyst, memecoin coverage",
+      "enabled": true
+    },
+    {
+      "handle": "8btcci",
+      "displayName": "8BTC",
+      "category": "community",
+      "tier": "community",
+      "chainAffinity": "multi",
+      "followerCount": 320000,
+      "notes": "Major Chinese crypto media platform",
+      "enabled": true
+    },
+    {
+      "handle": "CryptoWendyO",
+      "displayName": "Crypto Wendy O",
+      "category": "kol_alpha",
+      "tier": "kol_alpha",
+      "chainAffinity": "multi",
+      "followerCount": 225000,
+      "notes": "Crypto analyst, bilingual CN/EN, Binance ecosystem",
+      "enabled": true
+    },
+    {
+      "handle": "0xcryptowizzard",
+      "displayName": "主编",
+      "category": "kol_alpha",
+      "tier": "P0",
+      "followerCount": 0,
+      "notes": "[ebook] 主编. GMGN guide chief editor. Section: 荣誉主编/观察团 (pp.1-5-ish).",
+      "enabled": true,
+      "chainAffinity": "sol",
+      "source": "GMGN-meme-guide",
+      "ebookPriority": "P0",
+      "uncertain": false
+    },
+    {
+      "handle": "0xSunNFT",
+      "displayName": "荣誉主编",
+      "category": "kol_alpha",
+      "tier": "P0",
+      "followerCount": 0,
+      "notes": "[ebook] 荣誉主编 / Ave KOL「0xSun」. Methodology + tool emphasis; also named in P-handbook Ave KOL榜. Section: 荣誉主编/观察团 (pp.1-5-ish).",
+      "enabled": true,
+      "chainAffinity": "sol",
+      "source": "GMGN-meme-guide",
+      "ebookPriority": "P0",
+      "uncertain": false
+    },
+    {
+      "handle": "corleonefnf",
+      "displayName": "荣誉主编",
+      "category": "kol_alpha",
+      "tier": "P0",
+      "followerCount": 0,
+      "notes": "[ebook] 荣誉主编 / JAMES猴哥. 地址盈亏分析; 外盘已开盘栏; 盈亏比思维; ~$4M TRUMP case. Section: 荣誉主编/观察团 (pp.1-5-ish). | Also FOMO LB handle=corleonefnf wallets=2",
+      "enabled": true,
+      "chainAffinity": "sol",
+      "source": "GMGN-meme-guide",
+      "ebookPriority": "P0",
+      "uncertain": false,
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ]
+    },
+    {
+      "handle": "CryptoDevinL",
+      "displayName": "荣誉主编",
+      "category": "kol_alpha",
+      "tier": "P0",
+      "followerCount": 0,
+      "notes": "[ebook] 荣誉主编. GMGN node speed praise; TRUMP 17M; early 1% size habit. Section: 荣誉主编/观察团 (pp.1-5-ish).",
+      "enabled": true,
+      "chainAffinity": "sol",
+      "source": "GMGN-meme-guide",
+      "ebookPriority": "P0",
+      "uncertain": false
+    },
+    {
+      "handle": "hexiecs",
+      "displayName": "荣誉主编",
+      "category": "kol_alpha",
+      "tier": "P0",
+      "followerCount": 0,
+      "notes": "[ebook] 荣誉主编 /「冷静冷静再冷静」. Pumpfun看板+钱包监控; 筹码气泡图; early ≥1% buy; TRUMP via wallet monitor. Section: 荣誉主编/观察团 (pp.1-5-ish).",
+      "enabled": true,
+      "chainAffinity": "sol",
+      "source": "GMGN-meme-guide",
+      "ebookPriority": "P0",
+      "uncertain": false
+    },
+    {
+      "handle": "Unipioneer",
+      "displayName": "荣誉主编",
+      "category": "kol_alpha",
+      "tier": "P0",
+      "followerCount": 0,
+      "notes": "[ebook] 荣誉主编. TRUMP low-cost hold, no波段, +$2.2M. Section: 荣誉主编/观察团 (pp.1-5-ish).",
+      "enabled": true,
+      "chainAffinity": "sol",
+      "source": "GMGN-meme-guide",
+      "ebookPriority": "P0",
+      "uncertain": false,
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "bsc"
+        }
+      ]
+    },
+    {
+      "handle": "Vida_BWE",
+      "displayName": "0富哥 Vida_BWE",
+      "category": "kol_alpha",
+      "tier": "P0",
+      "followerCount": 0,
+      "notes": "[ebook] Cited as most successful signal-trading example in P handbook.",
+      "enabled": true,
+      "chainAffinity": "sol",
+      "source": "P-xiajiang-handbook",
+      "ebookPriority": "P0",
+      "uncertain": false
+    },
+    {
+      "handle": "yuyue_chris",
+      "displayName": "荣誉主编",
+      "category": "kol_alpha",
+      "tier": "P0",
+      "followerCount": 0,
+      "notes": "[ebook] 荣誉主编. TRUMP盈利榜; P-handbook also cites「yuyue」as alpha喊单信号. Section: 荣誉主编/观察团 (pp.1-5-ish).",
+      "enabled": true,
+      "chainAffinity": "sol",
+      "source": "GMGN-meme-guide",
+      "ebookPriority": "P0",
+      "uncertain": false
+    },
+    {
+      "handle": "0xleff",
+      "displayName": "0xleff",
+      "category": "kol_alpha",
+      "tier": "ebook",
+      "followerCount": 0,
+      "notes": "[ebook] GMGN指南观察团 listed contributor; use for X CA/signal monitoring (alert/research).",
+      "enabled": true,
+      "chainAffinity": "sol",
+      "source": "GMGN-meme-guide",
+      "ebookPriority": "P1",
+      "uncertain": false
+    },
+    {
+      "handle": "0xmagnolia",
+      "displayName": "0xmagnolia",
+      "category": "kol_alpha",
+      "tier": "ebook",
+      "followerCount": 0,
+      "notes": "[ebook] GMGN指南观察团 listed contributor; use for X CA/signal monitoring (alert/research).",
+      "enabled": true,
+      "chainAffinity": "sol",
+      "source": "GMGN-meme-guide",
+      "ebookPriority": "P1",
+      "uncertain": false
+    },
+    {
+      "handle": "0xseven1",
+      "displayName": "0xseven1",
+      "category": "kol_alpha",
+      "tier": "ebook",
+      "followerCount": 0,
+      "notes": "[ebook] GMGN指南观察团 listed contributor; use for X CA/signal monitoring (alert/research).",
+      "enabled": true,
+      "chainAffinity": "sol",
+      "source": "GMGN-meme-guide",
+      "ebookPriority": "P1",
+      "uncertain": false
+    },
+    {
+      "handle": "0xSun",
+      "displayName": "0xSun",
+      "category": "kol_alpha",
+      "tier": "ebook",
+      "followerCount": 0,
+      "notes": "[ebook] P篇经验分享作者; likely same person as @0xSunNFT (GMGN). Keep both until wallet/X link verified.",
+      "enabled": false,
+      "chainAffinity": "sol",
+      "source": "P-xiajiang-handbook",
+      "ebookPriority": "P1",
+      "uncertain": true
+    },
+    {
+      "handle": "A9",
+      "displayName": "A9银时",
+      "category": "kol_alpha",
+      "tier": "ebook",
+      "followerCount": 0,
+      "notes": "[ebook] 「想炒 meme 币？别再无脑 FOMO」; printed @A9银时 — ASCII handle may be incomplete.",
+      "enabled": false,
+      "chainAffinity": "sol",
+      "source": "P-xiajiang-handbook",
+      "ebookPriority": "P1",
+      "uncertain": true
+    },
+    {
+      "handle": "cryptocishanjia",
+      "displayName": "cryptocishanjia",
+      "category": "kol_alpha",
+      "tier": "ebook",
+      "followerCount": 0,
+      "notes": "[ebook] GMGN指南观察团 listed contributor; use for X CA/signal monitoring (alert/research).",
+      "enabled": true,
+      "chainAffinity": "sol",
+      "source": "GMGN-meme-guide",
+      "ebookPriority": "P1",
+      "uncertain": false
+    },
+    {
+      "handle": "CryptoHtdi",
+      "displayName": "CryptoHtdi",
+      "category": "kol_alpha",
+      "tier": "ebook",
+      "followerCount": 0,
+      "notes": "[ebook] GMGN指南观察团 listed contributor; use for X CA/signal monitoring (alert/research).",
+      "enabled": true,
+      "chainAffinity": "sol",
+      "source": "GMGN-meme-guide",
+      "ebookPriority": "P1",
+      "uncertain": false
+    },
+    {
+      "handle": "DekuKing1",
+      "displayName": "DekuKing1",
+      "category": "kol_alpha",
+      "tier": "ebook",
+      "followerCount": 0,
+      "notes": "[ebook] GMGN指南观察团 listed contributor; use for X CA/signal monitoring (alert/research).",
+      "enabled": true,
+      "chainAffinity": "sol",
+      "source": "GMGN-meme-guide",
+      "ebookPriority": "P1",
+      "uncertain": false
+    },
+    {
+      "handle": "haventseenyou_",
+      "displayName": "haventseenyou_",
+      "category": "kol_alpha",
+      "tier": "ebook",
+      "followerCount": 0,
+      "notes": "[ebook] GMGN指南观察团 listed contributor; use for X CA/signal monitoring (alert/research).",
+      "enabled": true,
+      "chainAffinity": "sol",
+      "source": "GMGN-meme-guide",
+      "ebookPriority": "P1",
+      "uncertain": false
+    },
+    {
+      "handle": "hellosuoha",
+      "displayName": "hellosuoha",
+      "category": "kol_alpha",
+      "tier": "ebook",
+      "followerCount": 0,
+      "notes": "[ebook] GMGN指南观察团 listed contributor; use for X CA/signal monitoring (alert/research).",
+      "enabled": true,
+      "chainAffinity": "sol",
+      "source": "GMGN-meme-guide",
+      "ebookPriority": "P1",
+      "uncertain": false
+    },
+    {
+      "handle": "keyahayek",
+      "displayName": "keyahayek",
+      "category": "kol_alpha",
+      "tier": "ebook",
+      "followerCount": 0,
+      "notes": "[ebook] GMGN指南观察团 listed contributor; use for X CA/signal monitoring (alert/research).",
+      "enabled": true,
+      "chainAffinity": "sol",
+      "source": "GMGN-meme-guide",
+      "ebookPriority": "P1",
+      "uncertain": false
+    },
+    {
+      "handle": "lijiuer1",
+      "displayName": "lijiuer1",
+      "category": "kol_alpha",
+      "tier": "ebook",
+      "followerCount": 0,
+      "notes": "[ebook] GMGN指南观察团 listed contributor; use for X CA/signal monitoring (alert/research).",
+      "enabled": true,
+      "chainAffinity": "sol",
+      "source": "GMGN-meme-guide",
+      "ebookPriority": "P1",
+      "uncertain": false
+    },
+    {
+      "handle": "MetaHunter168",
+      "displayName": "MetaHunter168",
+      "category": "kol_alpha",
+      "tier": "ebook",
+      "followerCount": 0,
+      "notes": "[ebook] GMGN指南观察团 listed contributor; use for X CA/signal monitoring (alert/research).",
+      "enabled": true,
+      "chainAffinity": "sol",
+      "source": "GMGN-meme-guide",
+      "ebookPriority": "P1",
+      "uncertain": false
+    },
+    {
+      "handle": "Michael_Liu93",
+      "displayName": "Michael_Liu93",
+      "category": "kol_alpha",
+      "tier": "ebook",
+      "followerCount": 0,
+      "notes": "[ebook] GMGN指南观察团 listed contributor; use for X CA/signal monitoring (alert/research). | Also in P-xiajiang-handbook: Also in GMGN观察团; P handbook embeds an x.com status link.",
+      "enabled": true,
+      "chainAffinity": "sol",
+      "source": "GMGN-meme-guide+P-xiajiang-handbook",
+      "ebookPriority": "P1",
+      "uncertain": false
+    },
+    {
+      "handle": "Mirro7777",
+      "displayName": "Mirro7777",
+      "category": "kol_alpha",
+      "tier": "ebook",
+      "followerCount": 0,
+      "notes": "[ebook] GMGN指南观察团 listed contributor; use for X CA/signal monitoring (alert/research).",
+      "enabled": true,
+      "chainAffinity": "sol",
+      "source": "GMGN-meme-guide",
+      "ebookPriority": "P1",
+      "uncertain": false
+    },
+    {
+      "handle": "Nene",
+      "displayName": "Nene",
+      "category": "kol_alpha",
+      "tier": "ebook",
+      "followerCount": 0,
+      "notes": "[ebook] 「meme币的叙事与分类」",
+      "enabled": true,
+      "chainAffinity": "sol",
+      "source": "P-xiajiang-handbook",
+      "ebookPriority": "P1",
+      "uncertain": false
+    },
+    {
+      "handle": "Nyenchenpepe",
+      "displayName": "Nyenchenpepe",
+      "category": "kol_alpha",
+      "tier": "ebook",
+      "followerCount": 0,
+      "notes": "[ebook] GMGN指南观察团 listed contributor; use for X CA/signal monitoring (alert/research).",
+      "enabled": true,
+      "chainAffinity": "sol",
+      "source": "GMGN-meme-guide",
+      "ebookPriority": "P1",
+      "uncertain": false
+    },
+    {
+      "handle": "Rocky_Bitcoin",
+      "displayName": "Rocky_Bitcoin",
+      "category": "kol_alpha",
+      "tier": "ebook",
+      "followerCount": 0,
+      "notes": "[ebook] GMGN指南观察团 listed contributor; use for X CA/signal monitoring (alert/research).",
+      "enabled": true,
+      "chainAffinity": "sol",
+      "source": "GMGN-meme-guide",
+      "ebookPriority": "P1",
+      "uncertain": false
+    },
+    {
+      "handle": "SatoshiNobility",
+      "displayName": "SatoshiNobility",
+      "category": "kol_alpha",
+      "tier": "ebook",
+      "followerCount": 0,
+      "notes": "[ebook] GMGN指南观察团 listed contributor; use for X CA/signal monitoring (alert/research).",
+      "enabled": true,
+      "chainAffinity": "sol",
+      "source": "GMGN-meme-guide",
+      "ebookPriority": "P1",
+      "uncertain": false
+    },
+    {
+      "handle": "Serpent",
+      "displayName": "Serpent.sol",
+      "category": "kol_alpha",
+      "tier": "ebook",
+      "followerCount": 0,
+      "notes": "[ebook] 「传统meme pvp心得」; printed @Serpent.sol",
+      "enabled": false,
+      "chainAffinity": "sol",
+      "source": "P-xiajiang-handbook",
+      "ebookPriority": "P1",
+      "uncertain": true
+    },
+    {
+      "handle": "Shanks",
+      "displayName": "Shanks",
+      "category": "kol_alpha",
+      "tier": "ebook",
+      "followerCount": 0,
+      "notes": "[ebook] 「MEME市场擒龙术一」",
+      "enabled": true,
+      "chainAffinity": "sol",
+      "source": "P-xiajiang-handbook",
+      "ebookPriority": "P1",
+      "uncertain": false
+    },
+    {
+      "handle": "silverfang88",
+      "displayName": "silverfang88",
+      "category": "kol_alpha",
+      "tier": "ebook",
+      "followerCount": 0,
+      "notes": "[ebook] GMGN指南观察团 listed contributor; use for X CA/signal monitoring (alert/research).",
+      "enabled": true,
+      "chainAffinity": "sol",
+      "source": "GMGN-meme-guide",
+      "ebookPriority": "P1",
+      "uncertain": false
+    },
+    {
+      "handle": "Tangerine",
+      "displayName": "Tangerine",
+      "category": "kol_alpha",
+      "tier": "ebook",
+      "followerCount": 0,
+      "notes": "[ebook] 「探寻史上最强冲土狗策略之路」",
+      "enabled": true,
+      "chainAffinity": "sol",
+      "source": "P-xiajiang-handbook",
+      "ebookPriority": "P1",
+      "uncertain": false
+    },
+    {
+      "handle": "timotimo007",
+      "displayName": "timotimo007",
+      "category": "kol_alpha",
+      "tier": "ebook",
+      "followerCount": 0,
+      "notes": "[ebook] GMGN指南观察团 listed contributor; use for X CA/signal monitoring (alert/research).",
+      "enabled": true,
+      "chainAffinity": "sol",
+      "source": "GMGN-meme-guide",
+      "ebookPriority": "P1",
+      "uncertain": false
+    },
+    {
+      "handle": "Tintinx2021",
+      "displayName": "Tintinx2021",
+      "category": "kol_alpha",
+      "tier": "ebook",
+      "followerCount": 0,
+      "notes": "[ebook] GMGN指南观察团 listed contributor; use for X CA/signal monitoring (alert/research).",
+      "enabled": true,
+      "chainAffinity": "sol",
+      "source": "GMGN-meme-guide",
+      "ebookPriority": "P1",
+      "uncertain": false
+    },
+    {
+      "handle": "V1JeromeLoo",
+      "displayName": "V1JeromeLoo",
+      "category": "kol_alpha",
+      "tier": "ebook",
+      "followerCount": 0,
+      "notes": "[ebook] GMGN指南观察团 listed contributor; use for X CA/signal monitoring (alert/research).",
+      "enabled": true,
+      "chainAffinity": "sol",
+      "source": "GMGN-meme-guide",
+      "ebookPriority": "P1",
+      "uncertain": false
+    },
+    {
+      "handle": "Wolfy_XBT",
+      "displayName": "Wolfy_XBT",
+      "category": "kol_alpha",
+      "tier": "ebook",
+      "followerCount": 0,
+      "notes": "[ebook] GMGN指南观察团 listed contributor; use for X CA/signal monitoring (alert/research).",
+      "enabled": true,
+      "chainAffinity": "sol",
+      "source": "GMGN-meme-guide",
+      "ebookPriority": "P1",
+      "uncertain": false
+    },
+    {
+      "handle": "wsjack",
+      "displayName": "wsjack.eth",
+      "category": "kol_alpha",
+      "tier": "ebook",
+      "followerCount": 0,
+      "notes": "[ebook] P元帅经验文「如何看池子识破狗庄拉砸的阴谋」作者。Handle printed as @wsjack.eth — ENS suffix stripped for X handle; VERIFY.",
+      "enabled": false,
+      "chainAffinity": "sol",
+      "source": "P-xiajiang-handbook",
+      "ebookPriority": "P1",
+      "uncertain": true
+    },
+    {
+      "handle": "xunle111",
+      "displayName": "xunle111",
+      "category": "kol_alpha",
+      "tier": "ebook",
+      "followerCount": 0,
+      "notes": "[ebook] GMGN指南观察团 listed contributor; use for X CA/signal monitoring (alert/research).",
+      "enabled": true,
+      "chainAffinity": "sol",
+      "source": "GMGN-meme-guide",
+      "ebookPriority": "P1",
+      "uncertain": false
+    },
+    {
+      "handle": "YeruiZhang",
+      "displayName": "YeruiZhang",
+      "category": "kol_alpha",
+      "tier": "ebook",
+      "followerCount": 0,
+      "notes": "[ebook] GMGN指南观察团 listed contributor; use for X CA/signal monitoring (alert/research).",
+      "enabled": true,
+      "chainAffinity": "sol",
+      "source": "GMGN-meme-guide",
+      "ebookPriority": "P1",
+      "uncertain": false
+    },
+    {
+      "handle": "ZTZZ",
+      "displayName": "ZTZZ",
+      "category": "kol_alpha",
+      "tier": "ebook",
+      "followerCount": 0,
+      "notes": "[ebook] 「6个MEME，写点这几天有感而发」",
+      "enabled": true,
+      "chainAffinity": "sol",
+      "source": "P-xiajiang-handbook",
+      "ebookPriority": "P1",
+      "uncertain": false
+    },
+    {
+      "handle": "0xJason_btc",
+      "displayName": "0xJason_btc",
+      "category": "kol_alpha",
+      "tier": "ebook",
+      "followerCount": 0,
+      "notes": "[ebook] Appears next to MemeRadar_sol partnership mention.",
+      "enabled": true,
+      "chainAffinity": "sol",
+      "source": "P-xiajiang-handbook",
+      "ebookPriority": "P2",
+      "uncertain": false
+    },
+    {
+      "handle": "gmgnai",
+      "displayName": "GMGN",
+      "category": "official",
+      "tier": "ebook",
+      "followerCount": 0,
+      "notes": "[ebook] Official GMGN X; platform announcements not alpha calls. Also listed as 主编.",
+      "enabled": true,
+      "chainAffinity": "multi",
+      "source": "GMGN-meme-guide",
+      "ebookPriority": "P2",
+      "uncertain": false
+    },
+    {
+      "handle": "kkkk",
+      "displayName": "kkkk（回本版）",
+      "category": "kol_alpha",
+      "tier": "ebook",
+      "followerCount": 0,
+      "notes": "[ebook] 「关于meme coin寿命的思考」— handle very generic; VERIFY uniqueness.",
+      "enabled": false,
+      "chainAffinity": "sol",
+      "source": "P-xiajiang-handbook",
+      "ebookPriority": "P2",
+      "uncertain": true
+    },
+    {
+      "handle": "MemeRadar_sol",
+      "displayName": "MemeRadar_sol",
+      "category": "kol_alpha",
+      "tier": "ebook",
+      "followerCount": 0,
+      "notes": "[ebook] Cited as Ave合作伙伴 for strategy optimization — platform-adjacent.",
+      "enabled": true,
+      "chainAffinity": "sol",
+      "source": "P-xiajiang-handbook",
+      "ebookPriority": "P2",
+      "uncertain": false
+    },
+    {
+      "handle": "launchcoin",
+      "displayName": "launchcoin",
+      "category": "kol_alpha",
+      "tier": "ebook",
+      "followerCount": 0,
+      "notes": "[ebook] Believe launch bot on X — product account, not smart-money trader.",
+      "enabled": true,
+      "chainAffinity": "sol",
+      "source": "P-xiajiang-handbook",
+      "ebookPriority": "P3",
+      "uncertain": false
+    },
+    {
+      "handle": "unipcs",
+      "displayName": "Unipcs",
+      "category": "kol_alpha",
+      "tier": "P0",
+      "chainAffinity": "multi",
+      "followerCount": 704286,
+      "notes": "FOMO leaderboard KOL (likely); fomoHandle=unipcs; linked wallets=2; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "likely",
+      "fomoHandle": "unipcs",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "ebookPriority": "P0"
+    },
+    {
+      "handle": "AvgJoesCrypto",
+      "displayName": "AJC",
+      "category": "kol_alpha",
+      "tier": "P0",
+      "chainAffinity": "multi",
+      "followerCount": 141822,
+      "notes": "FOMO leaderboard KOL (confirmed); fomoHandle=AvgJoesCrypto; linked wallets=2; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "confirmed",
+      "fomoHandle": "AvgJoesCrypto",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "ebookPriority": "P0"
+    },
+    {
+      "handle": "lordarbiter",
+      "displayName": "lordarbiter",
+      "category": "kol_alpha",
+      "tier": "P0",
+      "chainAffinity": "multi",
+      "followerCount": 24480,
+      "notes": "FOMO leaderboard KOL (likely); fomoHandle=lordarbiter; linked wallets=2; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "likely",
+      "fomoHandle": "lordarbiter",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "ebookPriority": "P0"
+    },
+    {
+      "handle": "kyle",
+      "displayName": "kyle",
+      "category": "kol_alpha",
+      "tier": "P0",
+      "chainAffinity": "multi",
+      "followerCount": 42929,
+      "notes": "FOMO leaderboard KOL (confirmed); fomoHandle=kyle; linked wallets=2; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "confirmed",
+      "fomoHandle": "kyle",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "ebookPriority": "P0"
+    },
+    {
+      "handle": "0xleo",
+      "displayName": "leo",
+      "category": "kol_alpha",
+      "tier": "P0",
+      "chainAffinity": "multi",
+      "followerCount": 93475,
+      "notes": "FOMO leaderboard KOL (likely); fomoHandle=0xleo; linked wallets=2; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "likely",
+      "fomoHandle": "0xleo",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "ebookPriority": "P0"
+    },
+    {
+      "handle": "0xnobi",
+      "displayName": "nobi",
+      "category": "kol_alpha",
+      "tier": "P0",
+      "chainAffinity": "multi",
+      "followerCount": 52465,
+      "notes": "FOMO leaderboard KOL (likely); fomoHandle=0xnobi; linked wallets=2; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "likely",
+      "fomoHandle": "0xnobi",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "ebookPriority": "P0"
+    },
+    {
+      "handle": "kv4rl",
+      "displayName": "k4rl",
+      "category": "kol_alpha",
+      "tier": "P0",
+      "chainAffinity": "multi",
+      "followerCount": 37130,
+      "notes": "FOMO leaderboard KOL (confirmed); fomoHandle=kv4rl; linked wallets=2; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "confirmed",
+      "fomoHandle": "kv4rl",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "ebookPriority": "P0"
+    },
+    {
+      "handle": "econoar",
+      "displayName": "eric.eth",
+      "category": "kol_alpha",
+      "tier": "P0",
+      "chainAffinity": "multi",
+      "followerCount": 82941,
+      "notes": "FOMO leaderboard KOL (confirmed); fomoHandle=econoar; linked wallets=2; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "confirmed",
+      "fomoHandle": "econoar",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "ebookPriority": "P0"
+    },
+    {
+      "handle": "bigbabba",
+      "displayName": "big babba johnson",
+      "category": "kol_alpha",
+      "tier": "P0",
+      "chainAffinity": null,
+      "followerCount": 66983,
+      "notes": "FOMO leaderboard KOL (likely); fomoHandle=bigbabba; linked wallets=0; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "likely",
+      "fomoHandle": "bigbabba",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [],
+      "ebookPriority": "P0"
+    },
+    {
+      "handle": "carlwheezor",
+      "displayName": "Carl Wheezor",
+      "category": "kol_alpha",
+      "tier": "P0",
+      "chainAffinity": "multi",
+      "followerCount": 16574,
+      "notes": "FOMO leaderboard KOL (likely); fomoHandle=carlwheezor; linked wallets=2; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "likely",
+      "fomoHandle": "carlwheezor",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "ebookPriority": "P0"
+    },
+    {
+      "handle": "BitmanTW",
+      "displayName": "Bitman",
+      "category": "kol_alpha",
+      "tier": "P0",
+      "chainAffinity": "sol",
+      "followerCount": 10286,
+      "notes": "FOMO leaderboard KOL (likely); fomoHandle=BitmanTW; linked wallets=1; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "likely",
+      "fomoHandle": "BitmanTW",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        }
+      ],
+      "ebookPriority": "P0"
+    },
+    {
+      "handle": "pointfarmcap",
+      "displayName": "point farm capital",
+      "category": "kol_alpha",
+      "tier": "P0",
+      "chainAffinity": "multi",
+      "followerCount": 309699,
+      "notes": "FOMO leaderboard KOL (likely); fomoHandle=pointfarmcap; linked wallets=2; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "likely",
+      "fomoHandle": "pointfarmcap",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "ebookPriority": "P0"
+    },
+    {
+      "handle": "DumbCrayonEater",
+      "displayName": "DumbCrayonEater",
+      "category": "kol_alpha",
+      "tier": "P0",
+      "chainAffinity": "multi",
+      "followerCount": 619665,
+      "notes": "FOMO leaderboard KOL (likely); fomoHandle=DumbCrayonEater; linked wallets=2; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "likely",
+      "fomoHandle": "DumbCrayonEater",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "ebookPriority": "P0"
+    },
+    {
+      "handle": "The__Solstice",
+      "displayName": "TheS◎Lstice",
+      "category": "kol_alpha",
+      "tier": "P0",
+      "chainAffinity": "multi",
+      "followerCount": 305047,
+      "notes": "FOMO leaderboard KOL (likely); fomoHandle=The__Solstice; linked wallets=2; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "likely",
+      "fomoHandle": "The__Solstice",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "ebookPriority": "P0"
+    },
+    {
+      "handle": "Salem1299534",
+      "displayName": "Salem",
+      "category": "kol_alpha",
+      "tier": "P0",
+      "chainAffinity": "multi",
+      "followerCount": 271747,
+      "notes": "FOMO leaderboard KOL (confirmed); fomoHandle=Salem1299534; linked wallets=2; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "confirmed",
+      "fomoHandle": "Salem1299534",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "ebookPriority": "P0"
+    },
+    {
+      "handle": "theveeman",
+      "displayName": "Vee",
+      "category": "kol_alpha",
+      "tier": "P0",
+      "chainAffinity": "multi",
+      "followerCount": 261336,
+      "notes": "FOMO leaderboard KOL (likely); fomoHandle=theveeman; linked wallets=2; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "likely",
+      "fomoHandle": "theveeman",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "ebookPriority": "P0"
+    },
+    {
+      "handle": "Natan_benish",
+      "displayName": "Nate",
+      "category": "kol_alpha",
+      "tier": "P0",
+      "chainAffinity": "multi",
+      "followerCount": 164867,
+      "notes": "FOMO leaderboard KOL (likely); fomoHandle=Natan_benish; linked wallets=2; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "likely",
+      "fomoHandle": "Natan_benish",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "ebookPriority": "P0"
+    },
+    {
+      "handle": "brrrgrrrz",
+      "displayName": "Burgz",
+      "category": "kol_alpha",
+      "tier": "P0",
+      "chainAffinity": "multi",
+      "followerCount": 107702,
+      "notes": "FOMO leaderboard KOL (likely); fomoHandle=brrrgrrrz; linked wallets=2; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "likely",
+      "fomoHandle": "brrrgrrrz",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "ebookPriority": "P0"
+    },
+    {
+      "handle": "frankdegods",
+      "displayName": "frank 🎒",
+      "category": "kol_alpha",
+      "tier": "P0",
+      "chainAffinity": "multi",
+      "followerCount": 280385,
+      "notes": "FOMO leaderboard KOL (likely); fomoHandle=frankdegods; linked wallets=2; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "likely",
+      "fomoHandle": "frankdegods",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "ebookPriority": "P0"
+    },
+    {
+      "handle": "0xdetweiler",
+      "displayName": "Theo",
+      "category": "kol_alpha",
+      "tier": "P0",
+      "chainAffinity": "multi",
+      "followerCount": 59404,
+      "notes": "FOMO leaderboard KOL (likely); fomoHandle=0xdetweiler; linked wallets=2; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "likely",
+      "fomoHandle": "0xdetweiler",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "ebookPriority": "P0"
+    },
+    {
+      "handle": "poorgoat_",
+      "displayName": "PoorGoat💛🐈",
+      "category": "kol_alpha",
+      "tier": "P0",
+      "chainAffinity": "multi",
+      "followerCount": 568321,
+      "notes": "FOMO leaderboard KOL (confirmed); fomoHandle=PoorGoat_; linked wallets=2; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "confirmed",
+      "fomoHandle": "PoorGoat_",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "ebookPriority": "P0"
+    },
+    {
+      "handle": "notanicecat69",
+      "displayName": "Wood",
+      "category": "kol_alpha",
+      "tier": "P0",
+      "chainAffinity": "multi",
+      "followerCount": 77749,
+      "notes": "FOMO leaderboard KOL (likely); fomoHandle=notanicecat69; linked wallets=2; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "likely",
+      "fomoHandle": "notanicecat69",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "ebookPriority": "P0"
+    },
+    {
+      "handle": "CardinalSaint2",
+      "displayName": "Cardinal Saint",
+      "category": "kol_alpha",
+      "tier": "P0",
+      "chainAffinity": "multi",
+      "followerCount": 27029,
+      "notes": "FOMO leaderboard KOL (likely); fomoHandle=CardinalSaint2; linked wallets=2; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "likely",
+      "fomoHandle": "CardinalSaint2",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "ebookPriority": "P0"
+    },
+    {
+      "handle": "LP1111",
+      "displayName": "LP 1",
+      "category": "kol_alpha",
+      "tier": "P0",
+      "chainAffinity": "multi",
+      "followerCount": 27043,
+      "notes": "FOMO leaderboard KOL (likely); fomoHandle=LP1111; linked wallets=2; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "likely",
+      "fomoHandle": "LP1111",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "ebookPriority": "P0"
+    },
+    {
+      "handle": "FullPinkYak",
+      "displayName": "FullPinkYak",
+      "category": "kol_alpha",
+      "tier": "P0",
+      "chainAffinity": "multi",
+      "followerCount": 22944,
+      "notes": "FOMO leaderboard KOL (confirmed); fomoHandle=FullPinkYak; linked wallets=2; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "confirmed",
+      "fomoHandle": "FullPinkYak",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "ebookPriority": "P0"
+    },
+    {
+      "handle": "aki11a",
+      "displayName": "aki",
+      "category": "kol_alpha",
+      "tier": "P0",
+      "chainAffinity": "multi",
+      "followerCount": 22172,
+      "notes": "FOMO leaderboard KOL (likely); fomoHandle=aki11a; linked wallets=2; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "likely",
+      "fomoHandle": "aki11a",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "ebookPriority": "P0"
+    },
+    {
+      "handle": "RunningClam",
+      "displayName": "Clam",
+      "category": "kol_alpha",
+      "tier": "P0",
+      "chainAffinity": "multi",
+      "followerCount": 15688,
+      "notes": "FOMO leaderboard KOL (likely); fomoHandle=RunningClam; linked wallets=2; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "likely",
+      "fomoHandle": "RunningClam",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "ebookPriority": "P0"
+    },
+    {
+      "handle": "TheDazzleNovak",
+      "displayName": "Dazzle Novak",
+      "category": "kol_alpha",
+      "tier": "P0",
+      "chainAffinity": "multi",
+      "followerCount": 12552,
+      "notes": "FOMO leaderboard KOL (likely); fomoHandle=TheDazzleNovak; linked wallets=2; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "likely",
+      "fomoHandle": "TheDazzleNovak",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "ebookPriority": "P0"
+    },
+    {
+      "handle": "seralberttrades",
+      "displayName": "Ser Albert",
+      "category": "kol_alpha",
+      "tier": "P0",
+      "chainAffinity": "multi",
+      "followerCount": 22003,
+      "notes": "FOMO leaderboard KOL (likely); fomoHandle=seralberttrades; linked wallets=1; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "likely",
+      "fomoHandle": "seralberttrades",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "ebookPriority": "P0"
+    },
+    {
+      "handle": "rzdxbt",
+      "displayName": "RZD",
+      "category": "kol_alpha",
+      "tier": "P0",
+      "chainAffinity": "multi",
+      "followerCount": 15003,
+      "notes": "FOMO leaderboard KOL (confirmed); fomoHandle=RZDxbt; linked wallets=2; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "confirmed",
+      "fomoHandle": "RZDxbt",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "ebookPriority": "P0"
+    },
+    {
+      "handle": "Aurelius0121",
+      "displayName": "Aurelius",
+      "category": "kol_alpha",
+      "tier": "P0",
+      "chainAffinity": "multi",
+      "followerCount": 305399,
+      "notes": "FOMO leaderboard KOL (confirmed); fomoHandle=Aurelius0121; linked wallets=2; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "confirmed",
+      "fomoHandle": "Aurelius0121",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "ebookPriority": "P0"
+    },
+    {
+      "handle": "Samisa_btc",
+      "displayName": "samisa",
+      "category": "kol_alpha",
+      "tier": "P0",
+      "chainAffinity": "multi",
+      "followerCount": 30742,
+      "notes": "FOMO leaderboard KOL (likely); fomoHandle=Samisa_btc; linked wallets=2; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "likely",
+      "fomoHandle": "Samisa_btc",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "ebookPriority": "P0"
+    },
+    {
+      "handle": "dpricedin",
+      "displayName": "pricedin",
+      "category": "kol_alpha",
+      "tier": "P0",
+      "chainAffinity": "multi",
+      "followerCount": 10615,
+      "notes": "FOMO leaderboard KOL (confirmed); fomoHandle=pricedin; linked wallets=2; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "confirmed",
+      "fomoHandle": "pricedin",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "ebookPriority": "P0"
+    },
+    {
+      "handle": "boosteryting",
+      "displayName": "Jack",
+      "category": "kol_alpha",
+      "tier": "P0",
+      "chainAffinity": "multi",
+      "followerCount": 71659,
+      "notes": "FOMO leaderboard KOL (likely); fomoHandle=boosteryting; linked wallets=2; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "likely",
+      "fomoHandle": "boosteryting",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "ebookPriority": "P0"
+    },
+    {
+      "handle": "Pyro",
+      "displayName": "Pyro",
+      "category": "kol_alpha",
+      "tier": "P0",
+      "chainAffinity": "multi",
+      "followerCount": 19302,
+      "notes": "FOMO leaderboard KOL (ambiguous); fomoHandle=Pyro; linked wallets=2; windows from filtered smart-money. Research/alert only.",
+      "enabled": false,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "ambiguous",
+      "fomoHandle": "Pyro",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "ebookPriority": "P0"
+    },
+    {
+      "handle": "rasmr",
+      "displayName": "rasmr",
+      "category": "kol_alpha",
+      "tier": "P0",
+      "chainAffinity": "multi",
+      "followerCount": 84166,
+      "notes": "FOMO leaderboard KOL (likely); fomoHandle=rasmr; linked wallets=2; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "likely",
+      "fomoHandle": "rasmr",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "ebookPriority": "P0"
+    },
+    {
+      "handle": "RugDalio",
+      "displayName": "RugDalio✨",
+      "category": "kol_traffic",
+      "tier": "P1",
+      "chainAffinity": "multi",
+      "followerCount": 40713,
+      "notes": "FOMO leaderboard KOL (likely); fomoHandle=RugDalio; linked wallets=2; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "likely",
+      "fomoHandle": "RugDalio",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "ebookPriority": "P1"
+    },
+    {
+      "handle": "SolSwizzle",
+      "displayName": "Swizzle",
+      "category": "kol_traffic",
+      "tier": "P1",
+      "chainAffinity": "multi",
+      "followerCount": 68738,
+      "notes": "FOMO leaderboard KOL (likely); fomoHandle=SolSwizzle; linked wallets=2; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "likely",
+      "fomoHandle": "SolSwizzle",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "ebookPriority": "P1"
+    },
+    {
+      "handle": "change",
+      "displayName": "change",
+      "category": "kol_traffic",
+      "tier": "P1",
+      "chainAffinity": "multi",
+      "followerCount": 343420,
+      "notes": "FOMO leaderboard KOL (ambiguous); fomoHandle=change; linked wallets=2; windows from filtered smart-money. Research/alert only.",
+      "enabled": false,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "ambiguous",
+      "fomoHandle": "change",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "ebookPriority": "P1"
+    },
+    {
+      "handle": "ether_monk",
+      "displayName": "Ethermonk 📿",
+      "category": "kol_traffic",
+      "tier": "P1",
+      "chainAffinity": "multi",
+      "followerCount": 328543,
+      "notes": "FOMO leaderboard KOL (likely); fomoHandle=ether_monk; linked wallets=2; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "likely",
+      "fomoHandle": "ether_monk",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "ebookPriority": "P1"
+    },
+    {
+      "handle": "Rowdy",
+      "displayName": "Rowdy",
+      "category": "kol_traffic",
+      "tier": "P1",
+      "chainAffinity": "multi",
+      "followerCount": 198857,
+      "notes": "FOMO leaderboard KOL (ambiguous); fomoHandle=Rowdy; linked wallets=2; windows from filtered smart-money. Research/alert only.",
+      "enabled": false,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "ambiguous",
+      "fomoHandle": "Rowdy",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "ebookPriority": "P1"
+    },
+    {
+      "handle": "LehmanFarters",
+      "displayName": "Lehman Farters",
+      "category": "kol_traffic",
+      "tier": "P1",
+      "chainAffinity": "multi",
+      "followerCount": 10163,
+      "notes": "FOMO leaderboard KOL (likely); fomoHandle=LehmanFarters; linked wallets=2; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "likely",
+      "fomoHandle": "LehmanFarters",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "ebookPriority": "P1"
+    },
+    {
+      "handle": "jotagezin",
+      "displayName": "jg",
+      "category": "kol_traffic",
+      "tier": "P1",
+      "chainAffinity": "multi",
+      "followerCount": 128516,
+      "notes": "FOMO leaderboard KOL (likely); fomoHandle=jotagezin; linked wallets=2; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "likely",
+      "fomoHandle": "jotagezin",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "ebookPriority": "P1"
+    },
+    {
+      "handle": "justtesting",
+      "displayName": "Test Account",
+      "category": "kol_traffic",
+      "tier": "P1",
+      "chainAffinity": "multi",
+      "followerCount": 10310,
+      "notes": "FOMO leaderboard KOL (likely); fomoHandle=justtesting; linked wallets=2; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "likely",
+      "fomoHandle": "justtesting",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "ebookPriority": "P1"
+    },
+    {
+      "handle": "397397",
+      "displayName": "Lasercat397",
+      "category": "kol_traffic",
+      "tier": "P1",
+      "chainAffinity": "multi",
+      "followerCount": 114782,
+      "notes": "FOMO leaderboard KOL (ambiguous); fomoHandle=397397; linked wallets=2; windows from filtered smart-money. Research/alert only.",
+      "enabled": false,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "ambiguous",
+      "fomoHandle": "397397",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "ebookPriority": "P1"
+    },
+    {
+      "handle": "Quanterty",
+      "displayName": "Qwerty",
+      "category": "kol_traffic",
+      "tier": "P1",
+      "chainAffinity": "multi",
+      "followerCount": 276765,
+      "notes": "FOMO leaderboard KOL (likely); fomoHandle=Quanterty; linked wallets=2; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "likely",
+      "fomoHandle": "Quanterty",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "ebookPriority": "P1"
+    },
+    {
+      "handle": "NachSOL",
+      "displayName": "Nach",
+      "category": "kol_traffic",
+      "tier": "P1",
+      "chainAffinity": "multi",
+      "followerCount": 19482,
+      "notes": "FOMO leaderboard KOL (likely); fomoHandle=NachSOL; linked wallets=2; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "likely",
+      "fomoHandle": "NachSOL",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "ebookPriority": "P1"
+    },
+    {
+      "handle": "NotARandomUser",
+      "displayName": "User",
+      "category": "kol_traffic",
+      "tier": "P1",
+      "chainAffinity": "multi",
+      "followerCount": 25604,
+      "notes": "FOMO leaderboard KOL (likely); fomoHandle=NotARandomUser; linked wallets=2; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "likely",
+      "fomoHandle": "NotARandomUser",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "ebookPriority": "P1"
+    },
+    {
+      "handle": "cryptolyxe",
+      "displayName": "lyxe",
+      "category": "kol_traffic",
+      "tier": "P1",
+      "chainAffinity": "multi",
+      "followerCount": 38808,
+      "notes": "FOMO leaderboard KOL (likely); fomoHandle=cryptolyxe; linked wallets=2; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "likely",
+      "fomoHandle": "cryptolyxe",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "ebookPriority": "P1"
+    },
+    {
+      "handle": "Visi235",
+      "displayName": "Visionary",
+      "category": "kol_traffic",
+      "tier": "P1",
+      "chainAffinity": "multi",
+      "followerCount": 11843,
+      "notes": "FOMO leaderboard KOL (likely); fomoHandle=Visi235; linked wallets=2; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "likely",
+      "fomoHandle": "Visi235",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "ebookPriority": "P1"
+    },
+    {
+      "handle": "cryptoalbus",
+      "displayName": "Albus",
+      "category": "kol_traffic",
+      "tier": "P1",
+      "chainAffinity": "multi",
+      "followerCount": 34001,
+      "notes": "FOMO leaderboard KOL (likely); fomoHandle=cryptoalbus; linked wallets=2; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "likely",
+      "fomoHandle": "cryptoalbus",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "ebookPriority": "P1"
+    },
+    {
+      "handle": "figaro",
+      "displayName": "figaro",
+      "category": "kol_traffic",
+      "tier": "P1",
+      "chainAffinity": "multi",
+      "followerCount": 10726,
+      "notes": "FOMO leaderboard KOL (likely); fomoHandle=figaro; linked wallets=2; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "likely",
+      "fomoHandle": "figaro",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "ebookPriority": "P1"
+    },
+    {
+      "handle": "Bull_Path",
+      "displayName": "Bull.Path 🫵😹",
+      "category": "kol_traffic",
+      "tier": "P1",
+      "chainAffinity": "multi",
+      "followerCount": 30413,
+      "notes": "FOMO leaderboard KOL (likely); fomoHandle=Bull_Path; linked wallets=2; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "likely",
+      "fomoHandle": "Bull_Path",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "ebookPriority": "P1"
+    },
+    {
+      "handle": "Tekkerrss",
+      "displayName": "Tekkerrss",
+      "category": "kol_traffic",
+      "tier": "P1",
+      "chainAffinity": "multi",
+      "followerCount": 11350,
+      "notes": "FOMO leaderboard KOL (likely); fomoHandle=Tekkerrss; linked wallets=2; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "likely",
+      "fomoHandle": "Tekkerrss",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "ebookPriority": "P1"
+    },
+    {
+      "handle": "smokey0x",
+      "displayName": "SmokΞy",
+      "category": "kol_traffic",
+      "tier": "P1",
+      "chainAffinity": "sol",
+      "followerCount": 46704,
+      "notes": "FOMO leaderboard KOL (likely); fomoHandle=smokey0x; linked wallets=1; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "likely",
+      "fomoHandle": "smokey0x",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        }
+      ],
+      "ebookPriority": "P1"
+    },
+    {
+      "handle": "Binkieee",
+      "displayName": "Binkieee",
+      "category": "kol_traffic",
+      "tier": "P1",
+      "chainAffinity": "multi",
+      "followerCount": 160358,
+      "notes": "FOMO leaderboard KOL (likely); fomoHandle=Binkieee; linked wallets=2; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "likely",
+      "fomoHandle": "Binkieee",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "ebookPriority": "P1"
+    },
+    {
+      "handle": "GuavaGuy2001",
+      "displayName": "Guava Guy 🎀",
+      "category": "kol_traffic",
+      "tier": "P2",
+      "chainAffinity": "multi",
+      "followerCount": 22780,
+      "notes": "FOMO leaderboard KOL (likely); fomoHandle=GuavaGuy2001; linked wallets=2; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "likely",
+      "fomoHandle": "GuavaGuy2001",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "ebookPriority": "P2"
+    },
+    {
+      "handle": "yeon__",
+      "displayName": "Yeon",
+      "category": "kol_traffic",
+      "tier": "P2",
+      "chainAffinity": "multi",
+      "followerCount": 11835,
+      "notes": "FOMO leaderboard KOL (likely); fomoHandle=yeon__; linked wallets=2; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "likely",
+      "fomoHandle": "yeon__",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "base"
+        }
+      ],
+      "ebookPriority": "P2"
+    },
+    {
+      "handle": "FartmanSacks",
+      "displayName": "Fartman Sacks",
+      "category": "kol_traffic",
+      "tier": "P2",
+      "chainAffinity": "sol",
+      "followerCount": 52173,
+      "notes": "FOMO leaderboard KOL (likely); fomoHandle=FartmanSacks; linked wallets=1; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "likely",
+      "fomoHandle": "FartmanSacks",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        }
+      ],
+      "ebookPriority": "P2"
+    },
+    {
+      "handle": "DopamineFeenFr1",
+      "displayName": "DopamineFeenFr1",
+      "category": "kol_traffic",
+      "tier": "P2",
+      "chainAffinity": null,
+      "followerCount": 78621,
+      "notes": "FOMO leaderboard KOL (likely); fomoHandle=DopamineFeenFr1; linked wallets=0; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "likely",
+      "fomoHandle": "DopamineFeenFr1",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [],
+      "ebookPriority": "P2"
+    },
+    {
+      "handle": "Pasterniq",
+      "displayName": "Pasterniq",
+      "category": "kol_traffic",
+      "tier": "P2",
+      "chainAffinity": "multi",
+      "followerCount": 121271,
+      "notes": "FOMO leaderboard KOL (likely); fomoHandle=Pasterniq; linked wallets=2; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "likely",
+      "fomoHandle": "Pasterniq",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "ebookPriority": "P2"
+    },
+    {
+      "handle": "boosted",
+      "displayName": "mk4",
+      "category": "kol_traffic",
+      "tier": "P2",
+      "chainAffinity": "multi",
+      "followerCount": 36938,
+      "notes": "FOMO leaderboard KOL (likely); fomoHandle=boosted; linked wallets=2; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "likely",
+      "fomoHandle": "boosted",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "ebookPriority": "P2"
+    },
+    {
+      "handle": "macdegods",
+      "displayName": "333",
+      "category": "kol_traffic",
+      "tier": "P2",
+      "chainAffinity": "multi",
+      "followerCount": 16844,
+      "notes": "FOMO leaderboard KOL (likely); fomoHandle=macdegods; linked wallets=2; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "likely",
+      "fomoHandle": "macdegods",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "ebookPriority": "P2"
+    },
+    {
+      "handle": "xbrazilzz",
+      "displayName": "BrazilZZ🇧🇷",
+      "category": "kol_traffic",
+      "tier": "P2",
+      "chainAffinity": "multi",
+      "followerCount": 14565,
+      "notes": "FOMO leaderboard KOL (likely); fomoHandle=xbrazilzz; linked wallets=2; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "likely",
+      "fomoHandle": "xbrazilzz",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "ebookPriority": "P2"
+    },
+    {
+      "handle": "metaversejoji",
+      "displayName": "joji",
+      "category": "kol_traffic",
+      "tier": "P2",
+      "chainAffinity": "multi",
+      "followerCount": 31779,
+      "notes": "FOMO leaderboard KOL (likely); fomoHandle=metaversejoji; linked wallets=2; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "likely",
+      "fomoHandle": "metaversejoji",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "ebookPriority": "P2"
+    },
+    {
+      "handle": "dylansdegens",
+      "displayName": "Dylan.Eth",
+      "category": "kol_traffic",
+      "tier": "P2",
+      "chainAffinity": "multi",
+      "followerCount": 25353,
+      "notes": "FOMO leaderboard KOL (likely); fomoHandle=dylansdegens; linked wallets=2; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "likely",
+      "fomoHandle": "dylansdegens",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "ebookPriority": "P2"
+    },
+    {
+      "handle": "0xFalcs",
+      "displayName": "Falcs",
+      "category": "kol_traffic",
+      "tier": "P2",
+      "chainAffinity": "multi",
+      "followerCount": 41449,
+      "notes": "FOMO leaderboard KOL (likely); fomoHandle=0xFalcs; linked wallets=2; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "likely",
+      "fomoHandle": "0xFalcs",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "ebookPriority": "P2"
+    },
+    {
+      "handle": "workethic",
+      "displayName": "workethic",
+      "category": "kol_traffic",
+      "tier": "P2",
+      "chainAffinity": "multi",
+      "followerCount": 10971,
+      "notes": "FOMO leaderboard KOL (likely); fomoHandle=workethic; linked wallets=2; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "likely",
+      "fomoHandle": "workethic",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "ebookPriority": "P2"
+    },
+    {
+      "handle": "0xdedrater",
+      "displayName": "Dedrater",
+      "category": "kol_traffic",
+      "tier": "P2",
+      "chainAffinity": "multi",
+      "followerCount": 14192,
+      "notes": "FOMO leaderboard KOL (likely); fomoHandle=0xdedrater; linked wallets=2; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "likely",
+      "fomoHandle": "0xdedrater",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "ebookPriority": "P2"
+    },
+    {
+      "handle": "hdf",
+      "displayName": "HDF",
+      "category": "kol_traffic",
+      "tier": "P2",
+      "chainAffinity": null,
+      "followerCount": 11529,
+      "notes": "FOMO leaderboard KOL (ambiguous); fomoHandle=hdf; linked wallets=0; windows from filtered smart-money. Research/alert only.",
+      "enabled": false,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "ambiguous",
+      "fomoHandle": "hdf",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [],
+      "ebookPriority": "P2"
+    },
+    {
+      "handle": "DipWheeler",
+      "displayName": "Dip Wheeler",
+      "category": "kol_traffic",
+      "tier": "P2",
+      "chainAffinity": "multi",
+      "followerCount": 98095,
+      "notes": "FOMO leaderboard KOL (likely); fomoHandle=DipWheeler; linked wallets=2; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "likely",
+      "fomoHandle": "DipWheeler",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "ebookPriority": "P2"
+    },
+    {
+      "handle": "MINHxDYNASTY",
+      "displayName": "MXD",
+      "category": "kol_traffic",
+      "tier": "P2",
+      "chainAffinity": "sol",
+      "followerCount": 44575,
+      "notes": "FOMO leaderboard KOL (likely); fomoHandle=MINHxDYNASTY; linked wallets=1; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "likely",
+      "fomoHandle": "MINHxDYNASTY",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        }
+      ],
+      "ebookPriority": "P2"
+    },
+    {
+      "handle": "0xangeryy",
+      "displayName": "angery",
+      "category": "kol_traffic",
+      "tier": "P2",
+      "chainAffinity": "multi",
+      "followerCount": 11756,
+      "notes": "FOMO leaderboard KOL (likely); fomoHandle=0xangeryy; linked wallets=2; windows from filtered smart-money. Research/alert only.",
+      "enabled": true,
+      "source": "fomo-leaderboard",
+      "xHandleConfidence": "likely",
+      "fomoHandle": "0xangeryy",
+      "fomoUserId": "[REDACTED]",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "evm"
+        }
+      ],
+      "ebookPriority": "P2"
+    },
+    {
+      "handle": "aa_AFeng",
+      "displayName": "阿峰_Afeng",
+      "category": "kol_alpha",
+      "tier": "P1",
+      "chainAffinity": "multi",
+      "followerCount": null,
+      "notes": "GMGN track kol stream (maker_info.twitter_username); tags=kol,wash_trader,gmgn_go,top_followed,top_renamed,gmgn,fomo,smart_degen; followers unverified — enabled via top_followed tag proxy. Research/alert only.",
+      "enabled": true,
+      "source": "gmgn-track-kol",
+      "xHandleConfidence": "likely",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "bsc"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "base"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "eth"
+        }
+      ],
+      "ebookPriority": "P1"
+    },
+    {
+      "handle": "Cupseyy",
+      "displayName": "Cupsey",
+      "category": "kol_alpha",
+      "tier": "P2",
+      "chainAffinity": "sol",
+      "followerCount": null,
+      "notes": "GMGN track kol stream (maker_info.twitter_username); tags=kol,photon,wash_trader,arbitrager,axiom,gmgn_go,gmgn; followers unverified — disabled until ≥10k followers confirmed. Research/alert only.",
+      "enabled": false,
+      "source": "gmgn-track-kol",
+      "xHandleConfidence": "likely",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        }
+      ],
+      "ebookPriority": "P2"
+    },
+    {
+      "handle": "alexmaxbid",
+      "displayName": "alexmaxbid",
+      "category": "kol_alpha",
+      "tier": "P2",
+      "chainAffinity": "bsc",
+      "followerCount": null,
+      "notes": "GMGN track kol stream (maker_info.twitter_username); tags=kol,gmgn_go,gmgn; followers unverified — disabled until ≥10k followers confirmed. Research/alert only.",
+      "enabled": false,
+      "source": "gmgn-track-kol",
+      "xHandleConfidence": "likely",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "bsc"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "bsc"
+        }
+      ],
+      "ebookPriority": "P2"
+    },
+    {
+      "handle": "ZephyrTrading",
+      "displayName": "Zephyr",
+      "category": "kol_alpha",
+      "tier": "P1",
+      "chainAffinity": "multi",
+      "followerCount": null,
+      "notes": "GMGN track kol stream (maker_info.twitter_username); tags=kol,wash_trader,gmgn_go,top_followed,top_renamed,gmgn; followers unverified — enabled via top_followed tag proxy. Research/alert only.",
+      "enabled": true,
+      "source": "gmgn-track-kol",
+      "xHandleConfidence": "likely",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "bsc"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "base"
+        }
+      ],
+      "ebookPriority": "P1"
+    },
+    {
+      "handle": "tiger_web3",
+      "displayName": "TIGER",
+      "category": "kol_alpha",
+      "tier": "P2",
+      "chainAffinity": "multi",
+      "followerCount": null,
+      "notes": "GMGN track kol stream (maker_info.twitter_username); tags=kol,gmgn_go,fomo,gmgn; followers unverified — disabled until ≥10k followers confirmed. Research/alert only.",
+      "enabled": false,
+      "source": "gmgn-track-kol",
+      "xHandleConfidence": "likely",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "bsc"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "eth"
+        }
+      ],
+      "ebookPriority": "P2"
+    },
+    {
+      "handle": "fnmilito",
+      "displayName": "milito",
+      "category": "kol_alpha",
+      "tier": "P1",
+      "chainAffinity": "multi",
+      "followerCount": null,
+      "notes": "GMGN track kol stream (maker_info.twitter_username); tags=kol,wash_trader,smart_degen,launchpad_smart,gmgn_go,top_followed,top_renamed,gmgn; followers unverified — enabled via top_followed tag proxy. Research/alert only.",
+      "enabled": true,
+      "source": "gmgn-track-kol",
+      "xHandleConfidence": "likely",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "bsc"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "eth"
+        }
+      ],
+      "ebookPriority": "P1"
+    },
+    {
+      "handle": "matt_willemsen",
+      "displayName": "Matt Willemsen",
+      "category": "kol_alpha",
+      "tier": "P2",
+      "chainAffinity": "multi",
+      "followerCount": null,
+      "notes": "GMGN track kol stream (maker_info.twitter_username); tags=bluechip_owner,kol,gmgn,fomo; followers unverified — disabled until ≥10k followers confirmed. Research/alert only.",
+      "enabled": false,
+      "source": "gmgn-track-kol",
+      "xHandleConfidence": "likely",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "base"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "eth"
+        }
+      ],
+      "ebookPriority": "P2"
+    },
+    {
+      "handle": "NeoCallss",
+      "displayName": "NΞO",
+      "category": "kol_alpha",
+      "tier": "P2",
+      "chainAffinity": "multi",
+      "followerCount": null,
+      "notes": "GMGN track kol stream (maker_info.twitter_username); tags=kol,gmgn_go,fomo,gmgn,arbitrager,sigma; followers unverified — disabled until ≥10k followers confirmed. Research/alert only.",
+      "enabled": false,
+      "source": "gmgn-track-kol",
+      "xHandleConfidence": "likely",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "base"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "eth"
+        }
+      ],
+      "ebookPriority": "P2"
+    },
+    {
+      "handle": "0xSpanny",
+      "displayName": "Spanny",
+      "category": "kol_alpha",
+      "tier": "P2",
+      "chainAffinity": "multi",
+      "followerCount": null,
+      "notes": "GMGN track kol stream (maker_info.twitter_username); tags=kol,gmgn_go,fomo,gmgn,arbitrager; followers unverified — disabled until ≥10k followers confirmed. Research/alert only.",
+      "enabled": false,
+      "source": "gmgn-track-kol",
+      "xHandleConfidence": "likely",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "base"
+        },
+        {
+          "address": "[REDACTED]",
+          "chain": "eth"
+        }
+      ],
+      "ebookPriority": "P2"
+    },
+    {
+      "handle": "LilMoonLambo",
+      "displayName": "LilMoonLambo",
+      "category": "kol_alpha",
+      "tier": "P2",
+      "chainAffinity": "sol",
+      "followerCount": null,
+      "notes": "GMGN track kol stream (maker_info.twitter_username); tags=kol,padre,wash_trader,top_renamed,axiom; followers unverified — disabled until ≥10k followers confirmed. Research/alert only.",
+      "enabled": false,
+      "source": "gmgn-track-kol",
+      "xHandleConfidence": "likely",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        }
+      ],
+      "ebookPriority": "P2"
+    },
+    {
+      "handle": "notdecu",
+      "displayName": "decu",
+      "category": "kol_alpha",
+      "tier": "P1",
+      "chainAffinity": "sol",
+      "followerCount": null,
+      "notes": "GMGN track kol stream (maker_info.twitter_username); tags=photon,kol,wash_trader,arbitrager,padre,top_followed,top_renamed,axiom; followers unverified — enabled via top_followed tag proxy. Research/alert only.",
+      "enabled": true,
+      "source": "gmgn-track-kol",
+      "xHandleConfidence": "likely",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        }
+      ],
+      "ebookPriority": "P1"
+    },
+    {
+      "handle": "jijo_exe",
+      "displayName": "jijo",
+      "category": "kol_alpha",
+      "tier": "P1",
+      "chainAffinity": "sol",
+      "followerCount": null,
+      "notes": "GMGN track kol stream (maker_info.twitter_username); tags=kol,photon,launchpad_smart,arbitrager,top_followed,top_renamed,padre; followers unverified — enabled via top_followed tag proxy. Research/alert only.",
+      "enabled": true,
+      "source": "gmgn-track-kol",
+      "xHandleConfidence": "likely",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        }
+      ],
+      "ebookPriority": "P1"
+    },
+    {
+      "handle": "VeloceSVJ",
+      "displayName": "Veloce",
+      "category": "kol_alpha",
+      "tier": "P2",
+      "chainAffinity": "sol",
+      "followerCount": null,
+      "notes": "GMGN track kol stream (maker_info.twitter_username); tags=axiom,kol,launchpad_smart,gmgn_go,padre,gmgn; followers unverified — disabled until ≥10k followers confirmed. Research/alert only.",
+      "enabled": false,
+      "source": "gmgn-track-kol",
+      "xHandleConfidence": "likely",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        }
+      ],
+      "ebookPriority": "P2"
+    },
+    {
+      "handle": "ottabag",
+      "displayName": "OTTA 💰",
+      "category": "kol_alpha",
+      "tier": "P2",
+      "chainAffinity": "sol",
+      "followerCount": null,
+      "notes": "GMGN track kol stream (maker_info.twitter_username); tags=bullx,kol,app_smart_money,gmgn_go,gmgn,arbitrager,axiom,padre; followers unverified — disabled until ≥10k followers confirmed. Research/alert only.",
+      "enabled": false,
+      "source": "gmgn-track-kol",
+      "xHandleConfidence": "likely",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        }
+      ],
+      "ebookPriority": "P2"
+    },
+    {
+      "handle": "Limfork",
+      "displayName": "Limfork",
+      "category": "kol_alpha",
+      "tier": "P1",
+      "chainAffinity": "sol",
+      "followerCount": null,
+      "notes": "GMGN track kol stream (maker_info.twitter_username); tags=kol,bullx,launchpad_smart,axiom,arbitrager,top_followed,top_renamed,padre; followers unverified — enabled via top_followed tag proxy. Research/alert only.",
+      "enabled": true,
+      "source": "gmgn-track-kol",
+      "xHandleConfidence": "likely",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        }
+      ],
+      "ebookPriority": "P1"
+    },
+    {
+      "handle": "Yennii56",
+      "displayName": "Yenni",
+      "category": "kol_alpha",
+      "tier": "P2",
+      "chainAffinity": "sol",
+      "followerCount": null,
+      "notes": "GMGN track kol stream (maker_info.twitter_username); tags=kol,app_smart_money,arbitrager,axiom,padre; followers unverified — disabled until ≥10k followers confirmed. Research/alert only.",
+      "enabled": false,
+      "source": "gmgn-track-kol",
+      "xHandleConfidence": "likely",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        }
+      ],
+      "ebookPriority": "P2"
+    },
+    {
+      "handle": "Putrickk",
+      "displayName": "Putrick",
+      "category": "kol_alpha",
+      "tier": "P1",
+      "chainAffinity": "sol",
+      "followerCount": null,
+      "notes": "GMGN track kol stream (maker_info.twitter_username); tags=kol,wash_trader,launchpad_smart,arbitrager,top_followed,top_renamed,axiom; followers unverified — enabled via top_followed tag proxy. Research/alert only.",
+      "enabled": true,
+      "source": "gmgn-track-kol",
+      "xHandleConfidence": "likely",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        }
+      ],
+      "ebookPriority": "P1"
+    },
+    {
+      "handle": "0xLake",
+      "displayName": "Lake",
+      "category": "kol_alpha",
+      "tier": "P1",
+      "chainAffinity": "sol",
+      "followerCount": null,
+      "notes": "GMGN track kol stream (maker_info.twitter_username); tags=gmgn,kol,launchpad_smart,gmgn_go,padre,arbitrager,top_followed,top_renamed,axiom; followers unverified — enabled via top_followed tag proxy. Research/alert only.",
+      "enabled": true,
+      "source": "gmgn-track-kol",
+      "xHandleConfidence": "likely",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        }
+      ],
+      "ebookPriority": "P1"
+    },
+    {
+      "handle": "KayTheDoc",
+      "displayName": "Doc 🧲",
+      "category": "kol_alpha",
+      "tier": "P1",
+      "chainAffinity": "sol",
+      "followerCount": null,
+      "notes": "GMGN track kol stream (maker_info.twitter_username); tags=trojan,kol,app_smart_money,smart_degen,arbitrager,padre,top_followed,top_renamed,axiom; followers unverified — enabled via top_followed tag proxy. Research/alert only.",
+      "enabled": true,
+      "source": "gmgn-track-kol",
+      "xHandleConfidence": "likely",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        }
+      ],
+      "ebookPriority": "P1"
+    },
+    {
+      "handle": "theonomix",
+      "displayName": "theo",
+      "category": "kol_alpha",
+      "tier": "P1",
+      "chainAffinity": "sol",
+      "followerCount": null,
+      "notes": "GMGN track kol stream (maker_info.twitter_username); tags=photon,kol,gmgn_go,bluechip_owner,padre,wash_trader,axiom,top_followed,top_renamed,gmgn; followers unverified — enabled via top_followed tag proxy. Research/alert only.",
+      "enabled": true,
+      "source": "gmgn-track-kol",
+      "xHandleConfidence": "likely",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        }
+      ],
+      "ebookPriority": "P1"
+    },
+    {
+      "handle": "radiancebrr",
+      "displayName": "radiance",
+      "category": "kol_alpha",
+      "tier": "P1",
+      "chainAffinity": "sol",
+      "followerCount": null,
+      "notes": "GMGN track kol stream (maker_info.twitter_username); tags=kol,launchpad_smart,smart_degen,wash_trader,padre,arbitrager,top_followed,top_renamed,axiom; followers unverified — enabled via top_followed tag proxy. Research/alert only.",
+      "enabled": true,
+      "source": "gmgn-track-kol",
+      "xHandleConfidence": "likely",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        }
+      ],
+      "ebookPriority": "P1"
+    },
+    {
+      "handle": "chingchong6257",
+      "displayName": "chingchong",
+      "category": "kol_alpha",
+      "tier": "P1",
+      "chainAffinity": "sol",
+      "followerCount": null,
+      "notes": "GMGN track kol stream (maker_info.twitter_username); tags=kol,wash_trader,gmgn,padre,arbitrager,top_followed,top_renamed,axiom; followers unverified — enabled via top_followed tag proxy. Research/alert only.",
+      "enabled": true,
+      "source": "gmgn-track-kol",
+      "xHandleConfidence": "likely",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        }
+      ],
+      "ebookPriority": "P1"
+    },
+    {
+      "handle": "imsheepsol",
+      "displayName": "Sheep",
+      "category": "kol_alpha",
+      "tier": "P2",
+      "chainAffinity": "sol",
+      "followerCount": null,
+      "notes": "GMGN track kol stream (maker_info.twitter_username); tags=kol,wash_trader,gmgn,gmgn_go,axiom,arbitrager,padre; followers unverified — disabled until ≥10k followers confirmed. Research/alert only.",
+      "enabled": false,
+      "source": "gmgn-track-kol",
+      "xHandleConfidence": "likely",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "sol"
+        }
+      ],
+      "ebookPriority": "P2"
+    },
+    {
+      "handle": "feibo03",
+      "displayName": "Cowboy🔶BNB ｜版本之牛",
+      "category": "kol_alpha",
+      "tier": "P1",
+      "chainAffinity": "bsc",
+      "followerCount": null,
+      "notes": "GMGN track kol stream (maker_info.twitter_username); tags=kol,gmgn_go,top_followed,gmgn; followers unverified — enabled via top_followed tag proxy. Research/alert only.",
+      "enabled": true,
+      "source": "gmgn-track-kol",
+      "xHandleConfidence": "likely",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "bsc"
+        }
+      ],
+      "ebookPriority": "P1"
+    },
+    {
+      "handle": "apastala5",
+      "displayName": "api5",
+      "category": "kol_alpha",
+      "tier": "P1",
+      "chainAffinity": "bsc",
+      "followerCount": null,
+      "notes": "GMGN track kol stream (maker_info.twitter_username); tags=wash_trader,kol,fomo,gmgn_go,top_followed,gmgn; followers unverified — enabled via top_followed tag proxy. Research/alert only.",
+      "enabled": true,
+      "source": "gmgn-track-kol",
+      "xHandleConfidence": "likely",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "bsc"
+        }
+      ],
+      "ebookPriority": "P1"
+    },
+    {
+      "handle": "shawncgeek",
+      "displayName": "shawnc 🦅☝️",
+      "category": "kol_alpha",
+      "tier": "P2",
+      "chainAffinity": "bsc",
+      "followerCount": null,
+      "notes": "GMGN track kol stream (maker_info.twitter_username); tags=gmgn_go,kol,gmgn; followers unverified — disabled until ≥10k followers confirmed. Research/alert only.",
+      "enabled": false,
+      "source": "gmgn-track-kol",
+      "xHandleConfidence": "likely",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "bsc"
+        }
+      ],
+      "ebookPriority": "P2"
+    },
+    {
+      "handle": "lanyihou",
+      "displayName": "蓝衣侯-搏杀ai",
+      "category": "kol_alpha",
+      "tier": "P2",
+      "chainAffinity": "bsc",
+      "followerCount": null,
+      "notes": "GMGN track kol stream (maker_info.twitter_username); tags=kol,arbitrager,gmgn; followers unverified — disabled until ≥10k followers confirmed. Research/alert only.",
+      "enabled": false,
+      "source": "gmgn-track-kol",
+      "xHandleConfidence": "likely",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "bsc"
+        }
+      ],
+      "ebookPriority": "P2"
+    },
+    {
+      "handle": "skygmgn",
+      "displayName": "Sky",
+      "category": "kol_alpha",
+      "tier": "P2",
+      "chainAffinity": "bsc",
+      "followerCount": null,
+      "notes": "GMGN track kol stream (maker_info.twitter_username); tags=kol,gmgn_go,gmgn; followers unverified — disabled until ≥10k followers confirmed. Research/alert only.",
+      "enabled": false,
+      "source": "gmgn-track-kol",
+      "xHandleConfidence": "likely",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "bsc"
+        }
+      ],
+      "ebookPriority": "P2"
+    },
+    {
+      "handle": "0xLuckHK",
+      "displayName": "0xLuck",
+      "category": "kol_alpha",
+      "tier": "P2",
+      "chainAffinity": "bsc",
+      "followerCount": null,
+      "notes": "GMGN track kol stream (maker_info.twitter_username); tags=gmgn_go,kol,gmgn; followers unverified — disabled until ≥10k followers confirmed. Research/alert only.",
+      "enabled": false,
+      "source": "gmgn-track-kol",
+      "xHandleConfidence": "likely",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "bsc"
+        }
+      ],
+      "ebookPriority": "P2"
+    },
+    {
+      "handle": "CoCoCookerr",
+      "displayName": "CoCo❕",
+      "category": "kol_alpha",
+      "tier": "P1",
+      "chainAffinity": "bsc",
+      "followerCount": null,
+      "notes": "GMGN track kol stream (maker_info.twitter_username); tags=kol,arbitrager,gmgn_go,top_followed,top_renamed,gmgn; followers unverified — enabled via top_followed tag proxy. Research/alert only.",
+      "enabled": true,
+      "source": "gmgn-track-kol",
+      "xHandleConfidence": "likely",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "bsc"
+        }
+      ],
+      "ebookPriority": "P1"
+    },
+    {
+      "handle": "yesp999",
+      "displayName": "Yesp 🔶",
+      "category": "kol_alpha",
+      "tier": "P2",
+      "chainAffinity": "bsc",
+      "followerCount": null,
+      "notes": "GMGN track kol stream (maker_info.twitter_username); tags=fresh_wallet,kol,gmgn_go,gmgn; followers unverified — disabled until ≥10k followers confirmed. Research/alert only.",
+      "enabled": false,
+      "source": "gmgn-track-kol",
+      "xHandleConfidence": "likely",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "bsc"
+        }
+      ],
+      "ebookPriority": "P2"
+    },
+    {
+      "handle": "HM010169",
+      "displayName": "币圈荒木｜Araki🪵",
+      "category": "kol_alpha",
+      "tier": "P2",
+      "chainAffinity": "bsc",
+      "followerCount": null,
+      "notes": "GMGN track kol stream (maker_info.twitter_username); tags=kol,gmgn_go,gmgn; followers unverified — disabled until ≥10k followers confirmed. Research/alert only.",
+      "enabled": false,
+      "source": "gmgn-track-kol",
+      "xHandleConfidence": "likely",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "bsc"
+        }
+      ],
+      "ebookPriority": "P2"
+    },
+    {
+      "handle": "okmetom",
+      "displayName": "TOM 🦋🔶🅿️",
+      "category": "kol_alpha",
+      "tier": "P2",
+      "chainAffinity": "bsc",
+      "followerCount": null,
+      "notes": "GMGN track kol stream (maker_info.twitter_username); tags=gmgn_go,fresh_wallet,kol,gmgn; followers unverified — disabled until ≥10k followers confirmed. Research/alert only.",
+      "enabled": false,
+      "source": "gmgn-track-kol",
+      "xHandleConfidence": "likely",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "bsc"
+        }
+      ],
+      "ebookPriority": "P2"
+    },
+    {
+      "handle": "SuperL9",
+      "displayName": "Wick李🔶 BNB",
+      "category": "kol_alpha",
+      "tier": "P1",
+      "chainAffinity": "bsc",
+      "followerCount": null,
+      "notes": "GMGN track kol stream (maker_info.twitter_username); tags=app_smart_money,kol,gmgn_go,fomo,top_followed,top_renamed,gmgn; followers unverified — enabled via top_followed tag proxy. Research/alert only.",
+      "enabled": true,
+      "source": "gmgn-track-kol",
+      "xHandleConfidence": "likely",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "bsc"
+        }
+      ],
+      "ebookPriority": "P1"
+    },
+    {
+      "handle": "0xweiqigaoshou",
+      "displayName": "我是围棋高手（耐心/alpha）",
+      "category": "kol_alpha",
+      "tier": "P2",
+      "chainAffinity": "bsc",
+      "followerCount": null,
+      "notes": "GMGN track kol stream (maker_info.twitter_username); tags=kol,gmgn_go,gmgn; followers unverified — disabled until ≥10k followers confirmed. Research/alert only.",
+      "enabled": false,
+      "source": "gmgn-track-kol",
+      "xHandleConfidence": "likely",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "bsc"
+        }
+      ],
+      "ebookPriority": "P2"
+    },
+    {
+      "handle": "casino847",
+      "displayName": "casino",
+      "category": "kol_alpha",
+      "tier": "P1",
+      "chainAffinity": "bsc",
+      "followerCount": null,
+      "notes": "GMGN track kol stream (maker_info.twitter_username); tags=app_smart_money,kol,axiom,smart_degen,fomo,gmgn_go,top_followed,top_renamed,gmgn; followers unverified — enabled via top_followed tag proxy. Research/alert only.",
+      "enabled": true,
+      "source": "gmgn-track-kol",
+      "xHandleConfidence": "likely",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "bsc"
+        }
+      ],
+      "ebookPriority": "P1"
+    },
+    {
+      "handle": "XIGUA0903",
+      "displayName": "西瓜🔶BNB",
+      "category": "kol_alpha",
+      "tier": "P1",
+      "chainAffinity": "bsc",
+      "followerCount": null,
+      "notes": "GMGN track kol stream (maker_info.twitter_username); tags=kol,gmgn_go,top_followed,top_renamed,gmgn; followers unverified — enabled via top_followed tag proxy. Research/alert only.",
+      "enabled": true,
+      "source": "gmgn-track-kol",
+      "xHandleConfidence": "likely",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "bsc"
+        }
+      ],
+      "ebookPriority": "P1"
+    },
+    {
+      "handle": "oooooyoung11",
+      "displayName": "o大（吸吸喜气欧皇扫链版）",
+      "category": "kol_alpha",
+      "tier": "P1",
+      "chainAffinity": "bsc",
+      "followerCount": null,
+      "notes": "GMGN track kol stream (maker_info.twitter_username); tags=kol,wash_trader,top_followed,top_renamed,gmgn; followers unverified — enabled via top_followed tag proxy. Research/alert only.",
+      "enabled": true,
+      "source": "gmgn-track-kol",
+      "xHandleConfidence": "likely",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "bsc"
+        }
+      ],
+      "ebookPriority": "P1"
+    },
+    {
+      "handle": "hzjxhcyy",
+      "displayName": "古月月",
+      "category": "kol_alpha",
+      "tier": "P1",
+      "chainAffinity": "bsc",
+      "followerCount": null,
+      "notes": "GMGN track kol stream (maker_info.twitter_username); tags=kol,smart_degen,gmgn_go,top_followed,gmgn; followers unverified — enabled via top_followed tag proxy. Research/alert only.",
+      "enabled": true,
+      "source": "gmgn-track-kol",
+      "xHandleConfidence": "likely",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "bsc"
+        }
+      ],
+      "ebookPriority": "P1"
+    },
+    {
+      "handle": "tempoapes",
+      "displayName": "Tempo",
+      "category": "kol_alpha",
+      "tier": "P2",
+      "chainAffinity": "bsc",
+      "followerCount": null,
+      "notes": "GMGN track kol stream (maker_info.twitter_username); tags=kol,gmgn_go,gmgn; followers unverified — disabled until ≥10k followers confirmed. Research/alert only.",
+      "enabled": false,
+      "source": "gmgn-track-kol",
+      "xHandleConfidence": "likely",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "bsc"
+        }
+      ],
+      "ebookPriority": "P2"
+    },
+    {
+      "handle": "antpositions",
+      "displayName": "AntPositions(蚂蚁仓）☄️",
+      "category": "kol_alpha",
+      "tier": "P1",
+      "chainAffinity": "bsc",
+      "followerCount": null,
+      "notes": "GMGN track kol stream (maker_info.twitter_username); tags=app_smart_money,wash_trader,kol,axiom,gmgn_go,top_followed,top_renamed,gmgn; followers unverified — enabled via top_followed tag proxy. Research/alert only.",
+      "enabled": true,
+      "source": "gmgn-track-kol",
+      "xHandleConfidence": "likely",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "bsc"
+        }
+      ],
+      "ebookPriority": "P1"
+    },
+    {
+      "handle": "treysocial",
+      "displayName": "Trey",
+      "category": "kol_alpha",
+      "tier": "P2",
+      "chainAffinity": "bsc",
+      "followerCount": null,
+      "notes": "GMGN track kol stream (maker_info.twitter_username); tags=kol,padre,gmgn; followers unverified — disabled until ≥10k followers confirmed. Research/alert only.",
+      "enabled": false,
+      "source": "gmgn-track-kol",
+      "xHandleConfidence": "likely",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "bsc"
+        }
+      ],
+      "ebookPriority": "P2"
+    },
+    {
+      "handle": "YYzzy_diamond",
+      "displayName": "YYYzzy | GDC",
+      "category": "kol_alpha",
+      "tier": "P2",
+      "chainAffinity": "bsc",
+      "followerCount": null,
+      "notes": "GMGN track kol stream (maker_info.twitter_username); tags=fresh_wallet,fomo,kol,gmgn_go,gmgn; followers unverified — disabled until ≥10k followers confirmed. Research/alert only.",
+      "enabled": false,
+      "source": "gmgn-track-kol",
+      "xHandleConfidence": "likely",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "bsc"
+        }
+      ],
+      "ebookPriority": "P2"
+    },
+    {
+      "handle": "New100xGems",
+      "displayName": "New 100x Gems",
+      "category": "kol_alpha",
+      "tier": "P2",
+      "chainAffinity": "bsc",
+      "followerCount": null,
+      "notes": "GMGN track kol stream (maker_info.twitter_username); tags=kol,gmgn_go,gmgn; followers unverified — disabled until ≥10k followers confirmed. Research/alert only.",
+      "enabled": false,
+      "source": "gmgn-track-kol",
+      "xHandleConfidence": "likely",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "bsc"
+        }
+      ],
+      "ebookPriority": "P2"
+    },
+    {
+      "handle": "JOJO_IterLabs",
+      "displayName": "JOJO_IterLabs丨进击社🔴💊",
+      "category": "kol_alpha",
+      "tier": "P2",
+      "chainAffinity": "bsc",
+      "followerCount": null,
+      "notes": "GMGN track kol stream (maker_info.twitter_username); tags=kol,bluechip_owner,gmgn_go,gmgn; followers unverified — disabled until ≥10k followers confirmed. Research/alert only.",
+      "enabled": false,
+      "source": "gmgn-track-kol",
+      "xHandleConfidence": "likely",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "bsc"
+        }
+      ],
+      "ebookPriority": "P2"
+    },
+    {
+      "handle": "alkuap",
+      "displayName": "alkuuu | AP",
+      "category": "kol_alpha",
+      "tier": "P2",
+      "chainAffinity": "base",
+      "followerCount": null,
+      "notes": "GMGN track kol stream (maker_info.twitter_username); tags=kol,gmgn,gmgn_go,fomo; followers unverified — disabled until ≥10k followers confirmed. Research/alert only.",
+      "enabled": false,
+      "source": "gmgn-track-kol",
+      "xHandleConfidence": "likely",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "base"
+        }
+      ],
+      "ebookPriority": "P2"
+    },
+    {
+      "handle": "pheromones_sol",
+      "displayName": "Phero.hl",
+      "category": "kol_alpha",
+      "tier": "P2",
+      "chainAffinity": "base",
+      "followerCount": null,
+      "notes": "GMGN track kol stream (maker_info.twitter_username); tags=kol,gmgn_go,gmgn; followers unverified — disabled until ≥10k followers confirmed. Research/alert only.",
+      "enabled": false,
+      "source": "gmgn-track-kol",
+      "xHandleConfidence": "likely",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "base"
+        }
+      ],
+      "ebookPriority": "P2"
+    },
+    {
+      "handle": "yodacalls",
+      "displayName": "Yoda",
+      "category": "kol_alpha",
+      "tier": "P2",
+      "chainAffinity": "base",
+      "followerCount": null,
+      "notes": "GMGN track kol stream (maker_info.twitter_username); tags=kol,fomo,gmgn_go,gmgn; followers unverified — disabled until ≥10k followers confirmed. Research/alert only.",
+      "enabled": false,
+      "source": "gmgn-track-kol",
+      "xHandleConfidence": "likely",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "base"
+        }
+      ],
+      "ebookPriority": "P2"
+    },
+    {
+      "handle": "VickHaoran",
+      "displayName": "Vick浩然",
+      "category": "kol_alpha",
+      "tier": "P2",
+      "chainAffinity": "base",
+      "followerCount": null,
+      "notes": "GMGN track kol stream (maker_info.twitter_username); tags=kol; followers unverified — disabled until ≥10k followers confirmed. Research/alert only.",
+      "enabled": false,
+      "source": "gmgn-track-kol",
+      "xHandleConfidence": "likely",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "base"
+        }
+      ],
+      "ebookPriority": "P2"
+    },
+    {
+      "handle": "pe___lu",
+      "displayName": "pedrolucio (humble arc 😌🙏)",
+      "category": "kol_alpha",
+      "tier": "P2",
+      "chainAffinity": "base",
+      "followerCount": null,
+      "notes": "GMGN track kol stream (maker_info.twitter_username); tags=kol,fomo,gmgn_go,gmgn; followers unverified — disabled until ≥10k followers confirmed. Research/alert only.",
+      "enabled": false,
+      "source": "gmgn-track-kol",
+      "xHandleConfidence": "likely",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "base"
+        }
+      ],
+      "ebookPriority": "P2"
+    },
+    {
+      "handle": "DarkKnightBTC",
+      "displayName": "Vengeance 🦇",
+      "category": "kol_alpha",
+      "tier": "P2",
+      "chainAffinity": "base",
+      "followerCount": null,
+      "notes": "GMGN track kol stream (maker_info.twitter_username); tags=kol; followers unverified — disabled until ≥10k followers confirmed. Research/alert only.",
+      "enabled": false,
+      "source": "gmgn-track-kol",
+      "xHandleConfidence": "likely",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "base"
+        }
+      ],
+      "ebookPriority": "P2"
+    },
+    {
+      "handle": "NonVitalTooth",
+      "displayName": "KingOfVe33",
+      "category": "kol_alpha",
+      "tier": "P2",
+      "chainAffinity": "base",
+      "followerCount": null,
+      "notes": "GMGN track kol stream (maker_info.twitter_username); tags=kol; followers unverified — disabled until ≥10k followers confirmed. Research/alert only.",
+      "enabled": false,
+      "source": "gmgn-track-kol",
+      "xHandleConfidence": "likely",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "base"
+        }
+      ],
+      "ebookPriority": "P2"
+    },
+    {
+      "handle": "morena_ny1",
+      "displayName": "Morena New York Comité 1",
+      "category": "kol_alpha",
+      "tier": "P2",
+      "chainAffinity": "base",
+      "followerCount": null,
+      "notes": "GMGN track kol stream (maker_info.twitter_username); tags=kol,gmgn_go,gmgn; followers unverified — disabled until ≥10k followers confirmed. Research/alert only.",
+      "enabled": false,
+      "source": "gmgn-track-kol",
+      "xHandleConfidence": "likely",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "base"
+        }
+      ],
+      "ebookPriority": "P2"
+    },
+    {
+      "handle": "0xRell",
+      "displayName": "Rell",
+      "category": "kol_alpha",
+      "tier": "P2",
+      "chainAffinity": "base",
+      "followerCount": null,
+      "notes": "GMGN track kol stream (maker_info.twitter_username); tags=kol,fomo,gmgn_go,gmgn; followers unverified — disabled until ≥10k followers confirmed. Research/alert only.",
+      "enabled": false,
+      "source": "gmgn-track-kol",
+      "xHandleConfidence": "likely",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "base"
+        }
+      ],
+      "ebookPriority": "P2"
+    },
+    {
+      "handle": "andy8052",
+      "displayName": "andy",
+      "category": "kol_alpha",
+      "tier": "P2",
+      "chainAffinity": "base",
+      "followerCount": null,
+      "notes": "GMGN track kol stream (maker_info.twitter_username); tags=kol; followers unverified — disabled until ≥10k followers confirmed. Research/alert only.",
+      "enabled": false,
+      "source": "gmgn-track-kol",
+      "xHandleConfidence": "likely",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "base"
+        }
+      ],
+      "ebookPriority": "P2"
+    },
+    {
+      "handle": "KZMKBL",
+      "displayName": "Kazım",
+      "category": "kol_alpha",
+      "tier": "P2",
+      "chainAffinity": "eth",
+      "followerCount": null,
+      "notes": "GMGN track kol stream (maker_info.twitter_username); tags=kol,gmgn; followers unverified — disabled until ≥10k followers confirmed. Research/alert only.",
+      "enabled": false,
+      "source": "gmgn-track-kol",
+      "xHandleConfidence": "likely",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "eth"
+        }
+      ],
+      "ebookPriority": "P2"
+    },
+    {
+      "handle": "vorgtrom",
+      "displayName": "vorgtrom",
+      "category": "kol_alpha",
+      "tier": "P2",
+      "chainAffinity": "eth",
+      "followerCount": null,
+      "notes": "GMGN track kol stream (maker_info.twitter_username); tags=kol; followers unverified — disabled until ≥10k followers confirmed. Research/alert only.",
+      "enabled": false,
+      "source": "gmgn-track-kol",
+      "xHandleConfidence": "likely",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "eth"
+        }
+      ],
+      "ebookPriority": "P2"
+    },
+    {
+      "handle": "crypto17mile",
+      "displayName": "17MILE 👻",
+      "category": "kol_alpha",
+      "tier": "P2",
+      "chainAffinity": "eth",
+      "followerCount": null,
+      "notes": "GMGN track kol stream (maker_info.twitter_username); tags=kol; followers unverified — disabled until ≥10k followers confirmed. Research/alert only.",
+      "enabled": false,
+      "source": "gmgn-track-kol",
+      "xHandleConfidence": "likely",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "eth"
+        }
+      ],
+      "ebookPriority": "P2"
+    },
+    {
+      "handle": "Siegfried90210",
+      "displayName": "阿伟 Siegfried",
+      "category": "kol_alpha",
+      "tier": "P2",
+      "chainAffinity": "eth",
+      "followerCount": null,
+      "notes": "GMGN track kol stream (maker_info.twitter_username); tags=kol; followers unverified — disabled until ≥10k followers confirmed. Research/alert only.",
+      "enabled": false,
+      "source": "gmgn-track-kol",
+      "xHandleConfidence": "likely",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "eth"
+        }
+      ],
+      "ebookPriority": "P2"
+    },
+    {
+      "handle": "eth200000",
+      "displayName": "金狗王",
+      "category": "kol_alpha",
+      "tier": "P2",
+      "chainAffinity": "eth",
+      "followerCount": null,
+      "notes": "GMGN track kol stream (maker_info.twitter_username); tags=kol,arbitrager; followers unverified — disabled until ≥10k followers confirmed. Research/alert only.",
+      "enabled": false,
+      "source": "gmgn-track-kol",
+      "xHandleConfidence": "likely",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "eth"
+        }
+      ],
+      "ebookPriority": "P2"
+    },
+    {
+      "handle": "gCAN9k",
+      "displayName": "gcan",
+      "category": "kol_alpha",
+      "tier": "P2",
+      "chainAffinity": "eth",
+      "followerCount": null,
+      "notes": "GMGN track kol stream (maker_info.twitter_username); tags=kol; followers unverified — disabled until ≥10k followers confirmed. Research/alert only.",
+      "enabled": false,
+      "source": "gmgn-track-kol",
+      "xHandleConfidence": "likely",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "eth"
+        }
+      ],
+      "ebookPriority": "P2"
+    },
+    {
+      "handle": "Jun666Xx",
+      "displayName": "币圈链丹师🌕",
+      "category": "kol_alpha",
+      "tier": "P2",
+      "chainAffinity": "eth",
+      "followerCount": null,
+      "notes": "GMGN track kol stream (maker_info.twitter_username); tags=kol,gmgn,arbitrager; followers unverified — disabled until ≥10k followers confirmed. Research/alert only.",
+      "enabled": false,
+      "source": "gmgn-track-kol",
+      "xHandleConfidence": "likely",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "eth"
+        }
+      ],
+      "ebookPriority": "P2"
+    },
+    {
+      "handle": "hotlneblng_",
+      "displayName": "hotlneblng",
+      "category": "kol_alpha",
+      "tier": "P2",
+      "chainAffinity": "eth",
+      "followerCount": null,
+      "notes": "GMGN track kol stream (maker_info.twitter_username); tags=kol; followers unverified — disabled until ≥10k followers confirmed. Research/alert only.",
+      "enabled": false,
+      "source": "gmgn-track-kol",
+      "xHandleConfidence": "likely",
+      "linkedWallets": [
+        {
+          "address": "[REDACTED]",
+          "chain": "eth"
+        }
+      ],
+      "ebookPriority": "P2"
+    }
+  ],
+  "fomoGmgnBridge": "config/fomo-gmgn-kol-bridge.json",
+  "fomoGmgnNote": "Fomo LB KOLs + GMGN track kol handles added 2026-09-24 CST. Ambiguous Fomo handles disabled. SocialData not configured."
+}

@@ -104,19 +104,20 @@ export function scoreSmartMoneyWithCompleteness(token, holderSample, aggregateSm
       noteEn += ` (historical ${aggregateSmart} all exited)`;
     }
   }
-  // Case 2: Sample incomplete - use degraded historical value
+  // Case 2: Sample incomplete - CANNOT score, unknown status
+  // ❌ 用户规则：只有实时仍持仓才能加分，历史/aggregate仅展示不加分
   else if (status.unknown) {
-    score = aggregateSmart * 0.3;  // 30% weight for historical uncertain data
-    confidence = 'LOW';
-    note = `样本不完整(${status.coverage})，降权使用历史聚合${aggregateSmart}个`;
-    noteEn = `Sample incomplete (${holderSample?.coverageEn || 'unknown'}), degraded historical aggregate ${aggregateSmart}`;
+    score = 0;  // ❌ NO scoring for unknown status
+    confidence = 'UNKNOWN';
+    note = `样本不完整(${status.coverage})，状态未知，无法加分 (历史aggregate=${aggregateSmart}仅供参考)`;
+    noteEn = `Sample incomplete (${holderSample?.coverageEn || 'unknown'}), status unknown, cannot score (historical aggregate=${aggregateSmart} for reference only)`;
   }
-  // Case 3: On board but no sample data
+  // Case 3: On board but no sample data - also cannot score
   else if (status.onTopBoard) {
-    score = aggregateSmart * 0.5;  // 50% weight - better than unknown but not confirmed
-    confidence = 'MEDIUM';
-    note = `仍在榜但无当前样本，使用历史${aggregateSmart}个(降权)`;
-    noteEn = `Still on board but no current sample, using historical ${aggregateSmart} (degraded)`;
+    score = 0;  // ❌ NO scoring without confirmed sample
+    confidence = 'LOW';
+    note = `仍在榜但无当前样本，无法确认持仓，无法加分 (历史${aggregateSmart}个仅供参考)`;
+    noteEn = `Still on board but no current sample, cannot confirm holdings, cannot score (historical ${aggregateSmart} for reference only)`;
   }
   
   return {
