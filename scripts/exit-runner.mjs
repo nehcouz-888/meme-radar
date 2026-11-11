@@ -37,9 +37,17 @@ const QUEUE_FILE = path.join(EXIT_DIR, 'alert-queue.jsonl');
 const LEDGER_FILE = path.join(STATE_DIR, 'fomo-credits-ledger.json');
 const SCAN_RESULTS_DIR = process.env.SCAN_RESULTS_DIR || path.join(REPO_ROOT, '../scan-accum/fomo-free');
 
+// ✅ Budget is 150k CREDITS (not dollars!)
+// Current usage ~59k credits used this month
 const MONTHLY_BUDGET = Number(process.env.FOMO_MONTHLY_CREDIT_BUDGET || 150000);
 const REFRESH_INTERVAL_HOURS = Number(process.env.EXIT_REFRESH_INTERVAL_HOURS || 0); // 0 = auto-calculate
 const FREE_SOURCE_GAP_MS = Number(process.env.FREE_SOURCE_GAP_MS || 3000);
+
+// ✅ Explicit exit monitoring budget allocation (default 30% of total budget)
+// Remaining 70% stays available for scan operations
+// Both share the same ledger
+const EXIT_BUDGET_SHARE = Number(process.env.EXIT_BUDGET_SHARE || 0.3);
+const FREE_COVERAGE_RATIO = Number(process.env.EXIT_FREE_COVERAGE_RATIO || 0.5);
 
 // Ensure directories
 for (const dir of [STATE_DIR, EXIT_DIR, path.dirname(SCAN_RESULTS_DIR)]) {
@@ -112,11 +120,19 @@ function recordCost(cost) {
 }
 
 /**
- * Free source: Mock GeckoTerminal top holders
- * Real implementation would call GET /networks/:network/tokens/:address
+ * Free source: GeckoTerminal top holders
+ * Real implementation: GET /networks/:network/pools/:pool_address
  */
 const lastFreeCall = {};
+const CHAIN_MAP = { sol: 'solana', bsc: 'bsc', base: 'base', eth: 'ethereum' };
+
 async function getFreeHolders(chain, address) {
+  const network = CHAIN_MAP[chain];
+  if (!network) {
+    log(`[FREE] Unsupported chain: ${chain}`);
+    return null;
+  }
+  
   const key = `${chain}:${address}`;
   const wait = (lastFreeCall[key] || 0) + FREE_SOURCE_GAP_MS - Date.now();
   if (wait > 0) {
@@ -124,11 +140,32 @@ async function getFreeHolders(chain, address) {
   }
   lastFreeCall[key] = Date.now();
   
-  // Mock: in real implementation, call GeckoTerminal or DexScreener
-  log(`[FREE] Mock call for ${chain}:${address} (rate-limited)`);
-  
-  // Return null to indicate no free data available (would use Fomo fallback)
-  return null;
+  try {
+    // ✅ Real GeckoTerminal API call (token info, not full holder list)
+    // Note: GT doesn't provide holder addresses, only counts
+    // Return null to fall back to Fomo for actual holder data
+    const url = `https://api.geckoterminal.com/api/v2/networks/${network}/tokens/${address}`;
+    const res = await fetch(url, {
+      headers: { 'accept': 'application/json' },
+      signal: AbortSignal.timeout(10000)
+    });
+    
+    if (!res.ok) {
+      log(`[FREE] GeckoTerminal ${chain}:${address} HTTP ${res.status}`);
+      return null;
+    }
+    
+    const data = await res.json();
+    
+    // GT doesn't provide holder addresses, only holder count
+    // Return null to indicate Fomo needed for detailed holder data
+    log(`[FREE] GeckoTerminal ${chain}:${address} - holder count data unavailable, fallback to Fomo`);
+    return null;
+    
+  } catch (error) {
+    log(`[FREE] GeckoTerminal ${chain}:${address} error: ${error.message}`);
+    return null;
+  }
 }
 
 /**
@@ -147,24 +184,58 @@ async function getFomoHolders(chain, address) {
   try {
     const keyFile = path.join(STATE_DIR, 'fomo-api-key');
     apiKey = fs.readFileSync(keyFile, 'utf8').trim();
-  } catch {
-    log('No Fomo API key file found');
+  } catch (error) {
+    log(`[FOMO] No API key file: ${error.message}`);
     return null;
   }
   
   if (!apiKey) {
-    log('Fomo API key empty');
+    log('[FOMO] API key empty');
     return null;
   }
   
-  log(`[FOMO] Calling /v2/tokens/${chain}:${address}/holders (est. ${estCost} credits)`);
-  
-  // Real API call would go here
-  // For offline testing, return null
-  log('[OFFLINE] Skipping real Fomo API call');
-  
-  // Mock response for testing
-  return null;
+  try {
+    // ✅ Real Fomo API call
+    const url = `https://api.fomoapi.io/v2/tokens/${chain}:${address}/holders`;
+    log(`[FOMO] Calling ${url} (est. ${estCost} credits)`);
+    
+    const res = await fetch(url, {
+      headers: {
+        'authorization': `Bearer ${apiKey}`,
+        'accept': 'application/json'
+      },
+      signal: AbortSignal.timeout(20000)
+    });
+    
+    const cost = Number(res.headers.get('x-credits-cost') || estCost);
+    const remaining = res.headers.get('x-credits-remaining');
+    
+    if (!res.ok) {
+      log(`[FOMO] HTTP ${res.status}, cost=${cost}, remaining=${remaining}`);
+      return null;
+    }
+    
+    const data = await res.json();
+    recordCost(cost);
+    
+    log(`[FOMO] Success, cost=${cost}, remaining=${remaining}, holders=${(data.smartWallets || []).length}`);
+    
+    return {
+      smartWallets: (data.smartWallets || []).map(w => ({
+        address: w.address,
+        tags: w.tags || [],
+        amount: w.amount,
+        amountUsd: w.amountUsd
+      })),
+      totalSampleSize: data.totalSampleSize || (data.smartWallets || []).length,
+      sampleComplete: Boolean(data.sampleComplete),
+      totalHolderCount: data.totalHolderCount || null
+    };
+    
+  } catch (error) {
+    log(`[FOMO] Error: ${error.message}`);
+    return null;
+  }
 }
 
 /**
@@ -205,12 +276,17 @@ async function main() {
     log(`Watchlist updated: ${result.total} total items`);
   }
   
-  // 3. Calculate refresh interval
+  // 3. Calculate refresh interval with explicit budget allocation
   const interval = exitRunner.calculateRefreshInterval(
     watchlist.items.length,
-    MONTHLY_BUDGET - ledger.spent
+    MONTHLY_BUDGET - ledger.spent,
+    {
+      exitBudgetShare: EXIT_BUDGET_SHARE,
+      freeCoverageRatio: FREE_COVERAGE_RATIO
+    }
   );
   log('Recommended interval:', interval);
+  log(`Exit budget: ${interval.exitBudgetAllocated} credits (${EXIT_BUDGET_SHARE*100}% of total)`);
   
   const effectiveInterval = REFRESH_INTERVAL_HOURS || interval.intervalHours;
   log(`Using interval: ${effectiveInterval}h (${REFRESH_INTERVAL_HOURS ? 'manual' : 'calculated'})`);

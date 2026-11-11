@@ -268,10 +268,21 @@ export function analyzeAndCreateAlerts(item) {
   
   const exited = [...prevAddresses].filter(a => !currAddresses.has(a));
   const entered = [...currAddresses].filter(a => !prevAddresses.has(a));
-  const netChange = entered.length - exited.length;
+  const holderCountChange = entered.length - exited.length;
   
-  // Event 1: Full exit (2→0 with complete samples)
+  // Event 1: Full exit (2→0 with complete samples AND balance evidence)
   if (exited.length === prevAddresses.size && currAddresses.size === 0 && prevAddresses.size > 0) {
+    // ✅ FULL_EXIT requires balance evidence (not just holder count)
+    // Check if we have actual balance/amount changes
+    const prevTotalAmount = prev.smartWallets.reduce((sum, w) => sum + (w.amount || 0), 0);
+    const currTotalAmount = curr.smartWallets.reduce((sum, w) => sum + (w.amount || 0), 0);
+    
+    // If no amount data, mark as incomplete evidence
+    if (prevTotalAmount === 0 || !prev.smartWallets.every(w => w.amount !== undefined)) {
+      log(`FULL_EXIT skipped for ${item.chain}:${item.symbol} - no balance evidence (holder count only)`);
+      return alerts;
+    }
+    
     alerts.push({
       type: 'FULL_EXIT',
       chain: item.chain,
@@ -279,36 +290,54 @@ export function analyzeAndCreateAlerts(item) {
       symbol: item.symbol,
       severity: 'CRITICAL',
       exitedCount: exited.length,
-      message: `完整样本确认：所有${exited.length}个聪明钱已退出 ${item.symbol}`,
-      messageEn: `Confirmed: All ${exited.length} smart money exited ${item.symbol}`,
+      balanceChange: {
+        prev: prevTotalAmount,
+        curr: currTotalAmount,
+        percentChange: -100
+      },
+      message: `完整样本确认：所有${exited.length}个聪明钱已退出 ${item.symbol}（余额由${prevTotalAmount.toFixed(0)}归零）`,
+      messageEn: `Confirmed: All ${exited.length} smart money exited ${item.symbol} (balance from ${prevTotalAmount.toFixed(0)} to 0)`,
       evidence: {
-        prevSnapshot: { count: prevAddresses.size, complete: true },
-        currSnapshot: { count: currAddresses.size, complete: true },
+        prevSnapshot: { count: prevAddresses.size, totalAmount: prevTotalAmount, complete: true },
+        currSnapshot: { count: currAddresses.size, totalAmount: currTotalAmount, complete: true },
         exitedWallets: exited.slice(0, 5) // First 5 for privacy
       },
       eventTime: curr.capturedAt
     });
   }
-  // Event 2: Net selling pressure (more exits than entries)
-  else if (exited.length > 0 && netChange < 0) {
+  // Event 2: Holder count change (NOT net selling pressure - that requires trade volume)
+  else if (exited.length > 0 && holderCountChange < 0) {
     alerts.push({
-      type: 'NET_SELLING_PRESSURE',
+      type: 'HOLDER_COUNT_DECLINE',
       chain: item.chain,
       address: item.address,
       symbol: item.symbol,
-      severity: exited.length >= 3 ? 'HIGH' : exited.length >= 2 ? 'MEDIUM' : 'LOW',
+      severity: exited.length >= 3 ? 'MEDIUM' : 'LOW',
       exitedCount: exited.length,
       enteredCount: entered.length,
-      netChange,
-      message: `净卖压 ${item.symbol}: ${exited.length}退出, ${entered.length}新进, 净${netChange}`,
-      messageEn: `Net selling ${item.symbol}: ${exited.length} out, ${entered.length} in, net ${netChange}`,
+      holderCountChange,
+      message: `持仓人数下降 ${item.symbol}: ${exited.length}退出, ${entered.length}新进, 净${holderCountChange}人`,
+      messageEn: `Holder count decline ${item.symbol}: ${exited.length} out, ${entered.length} in, net ${holderCountChange}`,
       evidence: {
         exitedWallets: exited.slice(0, 3),
         enteredWallets: entered.slice(0, 3)
       },
+      note: '持仓人数变动，非净卖压（净卖压需要成交量数据）',
       eventTime: curr.capturedAt
     });
   }
+  
+  // Event 2b: Net selling pressure (requires actual trade volume data)
+  // ❌ Currently NOT implemented - requires integration with trade volume sources
+  // TODO: Integrate with Fomo trade history or DEX transaction data for real buy/sell volumes
+  // Sample structure (for future implementation):
+  // if (prev.tradeVolume && curr.tradeVolume) {
+  //   const sellVolume = curr.tradeVolume.sell - prev.tradeVolume.sell;
+  //   const buyVolume = curr.tradeVolume.buy - prev.tradeVolume.buy;
+  //   if (sellVolume > buyVolume * 1.5) {
+  //     alerts.push({ type: 'NET_SELLING_PRESSURE', ... });
+  //   }
+  // }
   
   return alerts;
 }
@@ -357,13 +386,32 @@ export function writeAlertsToQueue(alerts, queueFile) {
 /**
  * Calculate recommended refresh interval
  * Based on watchlist size and budget
+ * 
+ * @param {number} watchlistSize - Number of tokens in watchlist
+ * @param {number} monthlyBudget - Monthly credit budget (NOT dollars, Fomo API credits)
+ * @param {Object} options - Configuration options
+ * @param {number} options.avgCostPerToken - Average cost per token refresh (default: 250 credits)
+ * @param {number} options.freeCoverageRatio - Expected coverage from free sources 0-1 (default: 0.5)
+ * @param {number} options.exitBudgetShare - Share of monthly budget for exit monitoring 0-1 (default: 0.3)
+ * @returns {Object} Interval calculation with formula
  */
-export function calculateRefreshInterval(watchlistSize, monthlyBudget, avgCostPerToken = 250) {
-  // Conservative: assume 50% coverage from free sources
-  const effectiveCost = avgCostPerToken * 0.5;
+export function calculateRefreshInterval(watchlistSize, monthlyBudget, options = {}) {
+  const {
+    avgCostPerToken = 250,
+    freeCoverageRatio = Number(process.env.EXIT_FREE_COVERAGE_RATIO || 0.5),
+    exitBudgetShare = Number(process.env.EXIT_BUDGET_SHARE || 0.3)
+  } = options;
   
-  // Monthly capacity
-  const monthlyRefreshes = Math.floor(monthlyBudget / effectiveCost);
+  // ✅ Explicit budget allocation (not /2 to hide expansion)
+  // Exit monitoring gets configured share of total budget
+  // Remaining budget stays available for scan operations
+  const exitMonthlyBudget = Math.floor(monthlyBudget * exitBudgetShare);
+  
+  // Effective cost after free source coverage
+  const effectiveCost = avgCostPerToken * (1 - freeCoverageRatio);
+  
+  // Monthly capacity for exit monitoring only
+  const monthlyRefreshes = Math.floor(exitMonthlyBudget / effectiveCost);
   const perTokenRefreshesPerMonth = Math.floor(monthlyRefreshes / Math.max(1, watchlistSize));
   
   // Convert to hours interval
@@ -373,8 +421,11 @@ export function calculateRefreshInterval(watchlistSize, monthlyBudget, avgCostPe
   return {
     intervalHours,
     perTokenRefreshesPerMonth,
+    exitBudgetAllocated: exitMonthlyBudget,
+    exitBudgetShare,
+    freeCoverageRatio,
     monthlyBudgetUsed: perTokenRefreshesPerMonth * watchlistSize * effectiveCost,
-    formula: `${monthlyBudget} / (${avgCostPerToken} * 0.5) / ${watchlistSize} tokens = ${perTokenRefreshesPerMonth} refreshes/token/month = every ${intervalHours}h`
+    formula: `${monthlyBudget} credits * ${exitBudgetShare} exit_share = ${exitMonthlyBudget} → ${exitMonthlyBudget} / (${avgCostPerToken} * ${1-freeCoverageRatio} effective) / ${watchlistSize} tokens = ${perTokenRefreshesPerMonth} refreshes/token/month = every ${intervalHours}h`
   };
 }
 

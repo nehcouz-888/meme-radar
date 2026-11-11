@@ -12,10 +12,6 @@ import path from 'node:path';
 import { spilloverConfig, isLeader, pickFollowers, spilloverBonus, hardFilterConfig, evaluateEvmFollower, volumeCheck, solBundleCheck } from '/workspace/meme-radar-run/meme-radar-branch/src/spillover.mjs'; // SPILLOVER_ENABLED=0 to disable (2026-10-18)
 import { evaluateAgeWindow, ageWindowConfig } from '/workspace/meme-radar-run/meme-radar-branch/src/age-window.mjs'; // AGE_WINDOW=0 to disable (2026-10-24 narrative early)
 
-// ✅ Audit fix modules (2026-11-12)
-import { categorizeByMarketCap, marketCapScoreModifier } from '/workspace/src/modules/market-cap-tiers.mjs';
-import { createHolderSample, scoreSmartMoneyWithCompleteness } from '/workspace/src/modules/holder-sample.mjs';
-
 const ROOT = '/workspace/meme-radar-run/meme-radar-branch';
 const STATE = path.join(ROOT, 'state');
 const OUT_DIR = process.env.REPORT_OUT_DIR || '/workspace/ebooks/out';
@@ -189,75 +185,15 @@ async function enrichRisk(sorted) {
 function score(c, smart) {
   const notes = [], flags = []; let s = 10, reject = null;
   const k = c.chain === 'sol' ? c.address : c.address.toLowerCase();
-  
-  // ✅ Market cap tiering (Fix #1) - NO <$100k hard limit
-  const tierInfo = categorizeByMarketCap(c.mcap || 0, c.ageH);
-  c.marketCapTier = tierInfo.tier;
-  c.marketCapBand = tierInfo.marketCapBand;
-  
-  // ✅ Holder sample completeness (Fix #2 & #3)
-  const holders = smart.holding.get(k);
-  const liveHolders = c.fomoHoldersLive;
-  
-  // Create holder sample with completeness tracking
-  const holderSample = liveHolders ? createHolderSample(
-    liveHolders.map(h => ({ 
-      address: h, 
-      tags: SMART_HANDLES.has(h.toLowerCase()) ? ['smart_degen'] : [] 
-    })),
-    {
-      totalHolderCount: liveHolders.length,
-      source: 'fomo:token-holders',
-      sampleComplete: true,
-      capturedAt: Date.now()
-    }
-  ) : (holders ? createHolderSample(
-    [...holders].map(h => ({ address: h, tags: ['smart_degen'] })),
-    {
-      totalHolderCount: null,
-      source: 'fomo:leaderboard-topTokens',
-      sampleComplete: false,
-      capturedAt: Date.now()
-    }
-  ) : null);
-  
-  // ✅ Score smart money with NO historical fallback (Fix #3)
-  const aggregateSmart = 0;
-  const smartResult = holderSample ? scoreSmartMoneyWithCompleteness(
-    { rank: c.fomo?.trendingRank },
-    holderSample,
-    aggregateSmart
-  ) : { 
-    score: 0, 
-    smartWallets: 0, 
-    confidence: 'UNKNOWN', 
-    note: '无持仓数据',
-    sampleComplete: false
-  };
-  
-  const stillHolding = smartResult.smartWallets;
-  c.smart = { 
-    stillHolding,
-    fomoUsersHolding: liveHolders?.length ?? null,
-    handles: holderSample?.wallets.slice(0, 8).map(w => w.address) || [],
-    src: holderSample?.source || 'none',
-    sampleComplete: smartResult.sampleComplete,
-    coverage: smartResult.coverage,
-    confidence: smartResult.confidence
-  };
-  
-  if (c.liq == null) return { ...c, score: 0, tier: 'ignore', status: 'NO_MARKET_DATA', notes: ['DexScreener 无数据'], flags, marketCapTier: tierInfo.tier };
+  const holders = smart.holding.get(k); const liveHolders = c.fomoHoldersLive; // from /token/{addr}/holders when called
+  // live /holders lists every tracked Fomo user; only those in the smart set (24h leaderboard + KOL bridge) count
+  const liveSmart = liveHolders != null ? liveHolders.filter(h => SMART_HANDLES.has(h.toLowerCase())) : null;
+  const stillHolding = liveSmart != null ? new Set([...liveSmart, ...(holders || [])]).size : (holders ? holders.size : 0);
+  c.smart = { stillHolding, fomoUsersHolding: liveHolders?.length ?? null, handles: (liveSmart != null ? [...new Set([...liveSmart, ...(holders || [])])] : [...(holders || [])]).slice(0, 8), src: liveHolders != null ? 'fomo:token-holders(live)' : 'fomo:leaderboard-topTokens' };
+  if (c.liq == null) return { ...c, score: 0, tier: 'ignore', status: 'NO_MARKET_DATA', notes: ['DexScreener 无数据'], flags };
   if (c.liq < 5000) reject = 'liq<5k';
   s += c.liq < 10e3 ? 5 : c.liq < 50e3 ? 12 : c.liq < 200e3 ? 15 : 10;
-  
-  // ✅ Tier-based mcap scoring (not binary)
-  if (c.mcap != null) {
-    if (tierInfo.tier === 'EMBRYONIC') s += c.mcap >= 10e3 && c.mcap <= 50e3 ? 12 : 4;
-    else if (tierInfo.tier === 'EARLY') s += c.mcap >= 50e3 && c.mcap <= 200e3 ? 12 : 6;
-    else if (tierInfo.tier === 'GROWTH') s += c.mcap >= 200e3 && c.mcap <= 1e6 ? 10 : 4;
-    else s += 4;
-  }
-  
+  if (c.mcap != null) s += c.mcap >= 30e3 && c.mcap <= 1e6 ? 12 : c.mcap < 30e3 ? 4 : c.mcap <= 5e6 ? 6 : 0;
   if (c.vol24 != null && c.liq) { const r = c.vol24 / c.liq; s += r > 3 ? 10 : r > 1 ? 6 : 0; }
   if (c.buys1h != null && c.sells1h != null) { if (c.buys1h > 1.2 * c.sells1h) s += 6; if (c.buys1h + c.sells1h > 200) s += 5; }
   if (c.chg1h != null) { if (c.chg1h > 0) s += 4; if (c.chg1h < -30) { s -= 10; flags.push('1h跌>30%'); } }
@@ -265,12 +201,7 @@ function score(c, smart) {
   if (c.ageH != null) s += c.ageH < 24 ? 8 : c.ageH < 72 ? 5 : c.ageH > 720 ? -5 : 0;
   if (c.fomo.trendingRank != null) s += c.fomo.trendingRank <= 10 ? 8 : c.fomo.trendingRank <= 30 ? 5 : 2;
   if ((c.fomo.fomoHolders || 0) > 50) s += 4;
-  
-  // ✅ Smart money scoring from holder sample (NO historical fallback)
-  const smartPts = smartResult.score;
-  s += smartPts;
-  notes.push(`聪明钱[${smartResult.note}；计分+${smartPts}]${c.smart.fomoUsersHolding != null ? `；Fomo 用户持仓${c.smart.fomoUsersHolding}(不计分)` : ''}`);
-  
+  const smartPts = Math.min(18, stillHolding * 6); s += smartPts; notes.push(`聪明钱[仍持仓${stillHolding}个(${c.smart.src})；计分+${smartPts}]${c.smart.fomoUsersHolding != null ? `；Fomo 用户持仓${c.smart.fomoUsersHolding}(不计分)` : ''}`);
   if (c.jup) {
     if (c.jup.isSus) reject = reject || 'jupiter isSus';
     if (c.jup.mintOff === false || c.jup.freezeOff === false) reject = reject || 'mint/freeze 权限未放弃';
@@ -280,13 +211,12 @@ function score(c, smart) {
     else if (c.jup.devMints != null && c.jup.devMints >= 5) { s -= 15; flags.push(`dev发币${c.jup.devMints}次(Jupiter)`); }
     if (c.jup.devBalancePct != null && c.jup.devBalancePct > 10) { s -= 10; flags.push(`dev持仓${c.jup.devBalancePct.toFixed(1)}%`); }
   }
-  
   { const st = c.jup?.stats24h || {};
     const w = washTemplateCheck({ organicScore: c.jup?.organicScore, createdAt: c.jup?.createdAt, graduatedAt: c.jup?.graduatedAt, holders: c.jup?.holders, traders: st.numTraders,
       buyVol: st.buyVolume, sellVol: st.sellVolume, buyOrganicVol: st.buyOrganicVolume, sellOrganicVol: st.sellOrganicVolume, volume: c.vol24, txns: c.dsTxns24,
       rugRisks: c.rug ? c.rug.risks.map(r => r.name) : null, hasSocials: c.hasSocials === true || c.jup?.socials === true ? true : (c.jup || c.hasSocials === false) ? false : null });
     c.wash = w; if (w.reject) { reject = reject || `wash_trade_template: ${w.signals.join('/')}`; flags.push('wash_trade_template'); } }
-  
+  // ---- age window 15-90 min (2026-10-24 narrative early). AGE_WINDOW=0 disables ----
   { const w0 = c.wash; const aw = evaluateAgeWindow({
       ageH: c.ageH, createdAt: c.jup?.createdAt, holders: c.jup?.holders ?? c.jup?.holderCount, traders: (c.jup?.stats24h || {}).numTraders,
       holdersPrev: c.holdersPrev, tradersPrev: c.tradersPrev,
@@ -302,15 +232,13 @@ function score(c, smart) {
       for (const f of aw.flags) if (!flags.includes(f)) flags.push(f);
     }
   }
-  
   if (c.rug?.risks?.some(r => r.level === 'danger')) reject = reject || `RugCheck danger: ${c.rug.risks.filter(r => r.level === 'danger').map(r => r.name).join('/')}`;
-  
-  if (c.goplus) {
+  if (c.goplus) { // BSC follower security (GoPlus, keyless) — honeypot / un-sellable / high tax => HARD_REJECT
     if (c.goplus.honeypot) reject = reject || 'GoPlus honeypot';
     else if (c.goplus.cannotSellAll) reject = reject || 'GoPlus cannot_sell_all';
     else if ((c.goplus.buyTax ?? 0) > 0.1 || (c.goplus.sellTax ?? 0) > 0.1) reject = reject || `GoPlus 税率 买${c.goplus.buyTax}/卖${c.goplus.sellTax}>10%`;
   }
-  
+  // ---- 2026-10-20 hard filter (SPILLOVER_HARD_FILTER=0 disables) ----
   const HF = hardFilterConfig(); let downgrade = [];
   if (HF.enabled && c.followerEval) { const fe = c.followerEval;
     if (fe.reject.length) reject = reject || `跟随者硬过滤: ${fe.reject.join('; ')}`;
@@ -323,7 +251,7 @@ function score(c, smart) {
   if (downgrade.length) { flags.push('降级仅提示'); notes.push(`降级(不给外溢加分、不进观察): ${downgrade.join('; ')}`); if (c.spillover?.bonus) c.spillover.bonus = 0; }
   if (c.spillover?.bonus) { s += c.spillover.bonus; notes.push(`跨链外溢+${c.spillover.bonus}[龙头 ${c.spillover.leaderSymbol} ${c.spillover.leaderChain}/${c.spillover.leaderCA} mcap=${c.spillover.leaderMcap}; ${c.spillover.why.join(',')}]`); }
   if (c.spilloverLeaderOf?.length) notes.push(`外溢龙头→跟随：${c.spilloverLeaderOf.join('、')}`);
-  
+  // ---- OG 萌芽 (2026-10-18): low mcap AND certainty (KOL / still-holding smart money). OG_ENABLED=0 disables ----
   c.og = null;
   if (OG.enabled && !reject && c.mcap != null && c.mcap >= OG.minMcap && c.mcap < OG.maxMcap) {
     const kolW = c.smart.handles.filter(h => KOL_HANDLES.has(String(h).toLowerCase()));
@@ -339,7 +267,6 @@ function score(c, smart) {
       s += b; c.og = { bonus: b, why }; flags.push('OG'); notes.push(`OG萌芽+${b}[市值${fmtK(c.mcap)}<${fmtK(OG.maxMcap)}; ${why.join('; ')}]`);
     }
   }
-  
   s = Math.max(0, Math.min(100, Math.round(s)));
   const unknown = ['bundler', 'sniper', 'rat/insider'];
   if (!(c.jup && c.jup.devMints != null)) unknown.push('dev serial mints');
@@ -350,7 +277,7 @@ function score(c, smart) {
   if (downgrade.length && tier !== 'reject') tier = 'ignore';
   if (tooBig && tier !== 'reject') { tier = 'ignore'; notes.push('市值>$20M 非早期，不入观察'); }
   const rawTier = tier; if (tier === 'hot') { tier = 'watch'; notes.push('原始≥70 → 降级模式封顶观察'); }
-  return { ...c, score: s, rawTier, tier, status: reject ? 'HARD_REJECT' : 'WAIT_RECHECK', rejectReason: reject, unknown, notes, flags, marketCapTier: tierInfo.tier };
+  return { ...c, score: s, rawTier, tier, status: reject ? 'HARD_REJECT' : 'WAIT_RECHECK', rejectReason: reject, unknown, notes, flags };
 }
 
 // OG 萌芽 config + KOL sets (bridge entries >= minFollowersKol; optional local mentions file, absent = no X data)
@@ -488,4 +415,34 @@ fs.mkdirSync(OUT_DIR, { recursive: true });
 fs.writeFileSync(path.join(OUT_DIR, 'fullchain-scan-report.md'), L.join('\n'));
 const strip = ({ fomoHoldersLive, ...x }) => x;
 fs.writeFileSync(path.join(OUT_DIR, 'fullchain-scan-results.json'), JSON.stringify({ generatedAt: STAMP, mode: 'fomo_free', degraded: true, chains: CHAINS, fomo: { ...fomoRun, monthSpent: ledger.spent, monthBudget: MONTHLY_BUDGET, leaderboardFetchedAt: smart.fetchedAt }, metrics, errors: [...new Set(errors)], byChain, spillover: { enabled: SPILL.enabled, followers: SPILL.followers, log: spillLog }, results: scored.map(strip) }, null, 1));
+
+// ✅ Register top candidates to exit watchlist (chain:CA)
+try {
+  const { registerFromScanResults, loadWatchlist, saveWatchlist } = await import(path.join(ROOT, 'src/modules/exit-runner-production.mjs'));
+  const WATCHLIST_FILE = path.join(STATE, 'exit-watchlist.json');
+  const topCandidates = valid.filter(x => x.status !== 'HARD_REJECT' && x.tier === 'watch').slice(0, 20);
+  
+  if (topCandidates.length > 0) {
+    const scanOutput = {
+      scannedAt: STAMP,
+      source: 'fomo_free',
+      candidates: topCandidates.map(c => ({
+        chain: c.chain,
+        address: c.address,
+        symbol: c.symbol,
+        rank: c.score,
+        mcap: c.mcap,
+        liquidity_usd: c.liq
+      }))
+    };
+    
+    const watchlist = loadWatchlist(WATCHLIST_FILE);
+    const result = registerFromScanResults(scanOutput, watchlist, 'fomo_free');
+    saveWatchlist(WATCHLIST_FILE, result.watchlist);
+    log(`exit_watchlist: registered ${result.registered.length} new, total ${result.total}`);
+  }
+} catch (e) {
+  log(`exit_watchlist registration failed: ${e.message}`);
+}
+
 console.log(JSON.stringify({ mode: 'fomo_free', discovered: cands.size, scored: valid.length, watch: valid.filter(x => x.tier === 'watch').length, reject: rej.length, top: valid.filter(x => x.status !== 'HARD_REJECT').slice(0, 5).map(x => `${x.symbol}:${x.chain}:${x.score}`), fomo: fomoRun, monthSpent: ledger.spent, requests: metrics.requests, errors: [...new Set(errors)].length }));

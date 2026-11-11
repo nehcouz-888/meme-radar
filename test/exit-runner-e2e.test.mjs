@@ -423,7 +423,7 @@ test('calculateRefreshInterval: 推荐间隔由公式算出', () => {
   assert.ok(result3.intervalHours >= result1.intervalHours);
 });
 
-test('Net selling pressure alert', async () => {
+test('Holder count decline alert (not net selling pressure)', async () => {
   const tmpDir = path.join(__dirname, '../.tmp-exit-pressure-' + Date.now());
   fs.mkdirSync(tmpDir, { recursive: true });
   
@@ -446,7 +446,7 @@ test('Net selling pressure alert', async () => {
     watchlist = loadWatchlist(watchlistFile);
     const item = watchlist.items[0];
     
-    // First: 5 holders
+    // First: 5 holders with amounts
     const mockGetters1 = {
       getFreeHolders: async () => ({
         smartWallets: [
@@ -463,7 +463,7 @@ test('Net selling pressure alert', async () => {
     
     await refreshHoldings(item, mockGetters1, {});
     
-    // Second: 3 exited, 1 new entered (net -2)
+    // Second: 3 exited, 1 new entered (net -2 holders)
     const mockGetters2 = {
       getFreeHolders: async () => ({
         smartWallets: [
@@ -479,14 +479,16 @@ test('Net selling pressure alert', async () => {
     
     await refreshHoldings(item, mockGetters2, {});
     
-    // Should generate NET_SELLING_PRESSURE alert
+    // ✅ Should generate HOLDER_COUNT_DECLINE (not NET_SELLING_PRESSURE)
+    // NET_SELLING_PRESSURE requires actual trade volume data
     const alerts = analyzeAndCreateAlerts(item);
     assert.strictEqual(alerts.length, 1);
-    assert.strictEqual(alerts[0].type, 'NET_SELLING_PRESSURE');
+    assert.strictEqual(alerts[0].type, 'HOLDER_COUNT_DECLINE');
     assert.strictEqual(alerts[0].exitedCount, 3);
     assert.strictEqual(alerts[0].enteredCount, 1);
-    assert.strictEqual(alerts[0].netChange, -2);
-    assert.strictEqual(alerts[0].severity, 'HIGH');  // 3 exits = HIGH
+    assert.strictEqual(alerts[0].holderCountChange, -2);
+    assert.strictEqual(alerts[0].severity, 'MEDIUM');  // 3 exits = MEDIUM
+    assert.ok(alerts[0].note.includes('持仓人数变动'));
     
   } finally {
     fs.rmSync(tmpDir, { recursive: true, force: true });
