@@ -117,7 +117,7 @@ export function translateGmgnError(error) {
 export function discoveryRequestArgs(chain = 'robinhood') {
   const common = [
     '--chain', chain, '--min-created', '5m', '--max-created', '10080m',
-    '--min-marketcap', '10000', '--max-marketcap', '150000', '--min-liquidity', '3000'
+    '--min-liquidity', '3000'
   ];
   return {
     trenches: ['market', 'trenches', '--type', 'completed', '--limit', '80', '--filter-preset', 'safe', '--sort-by', 'volume_1h', '--direction', 'desc', ...common, '--raw'],

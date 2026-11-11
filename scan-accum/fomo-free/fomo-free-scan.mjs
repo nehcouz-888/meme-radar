@@ -537,10 +537,9 @@ if (SPILL.enabled) {
   log(`spillover: leaders=${spillLog.length} followers=${spillLog.reduce((a, e) => a + e.followers.length, 0)}`);
   scored = [...cands.values()].map(c => score(c, smart));
 }
-// Live verification must prioritize candidates that would enter watch/scoring tier if verified.
-// Do NOT sort by historical count alone (HI1A hist=5 but max score 45<60 would waste slots).
-// Calculate potential max score = current + min(18, hist*6), then prioritize candidates where
-// potential >= WATCH_MIN (60), even if they have fewer historical holders (LOWW hist=1 but 51+18→60).
+// Live verification must cover ALL candidates that would enter watch/scoring tier if verified.
+// Do NOT slice after sorting (WATA/WATB/WATC/WATD all would-watch but only 3 fetched).
+// Potential score: current + 18 (max smart points, NOT limited by hist count - LOWW hist 1 can verify 3 live).
 const WATCH_MIN = Number(process.env.FOMO_WATCH_MIN || 60);
 const withPotential = scored.filter(x => {
   if (x.status === 'HARD_REJECT') return false;
@@ -550,23 +549,35 @@ const withPotential = scored.filter(x => {
 }).map(x => {
   const k = x.chain === 'sol' ? x.address : x.address.toLowerCase();
   const histCount = smart.holding.get(k)?.size || 0;
-  const maxSmartPts = Math.min(18, histCount * 6);
+  const maxSmartPts = 18;  // Smart points cap is 18, NOT min(18, histCount*6); hist 1 can verify 3 live
   const potentialScore = x.score + maxSmartPts;
   // No-Jupiter cap: if no jup data, final score capped at 60
   const capped = x.jup ? potentialScore : Math.min(60, potentialScore);
   return { ...x, histCount, maxSmartPts, potentialScore: capped, wouldWatch: capped >= WATCH_MIN };
 });
 
-// Priority 1: Would enter watch if verified (potentialScore >= 60)
-// Priority 2: Within same tier, higher potential score first
-// Priority 3: Tie-breaker by historical count (more data = better confidence)
-const needsVerification = withPotential.sort((a, b) => {
-  if (a.wouldWatch !== b.wouldWatch) return b.wouldWatch - a.wouldWatch;  // watch-capable first
-  if (a.potentialScore !== b.potentialScore) return b.potentialScore - a.potentialScore;  // higher potential
-  return b.histCount - a.histCount;  // tie-break by hist count
-});
+// Separate would-watch from others; verify ALL would-watch first (within budget), then fill remaining slots
+const wouldWatchCandidates = withPotential.filter(x => x.wouldWatch).sort((a, b) => 
+  a.potentialScore !== b.potentialScore ? b.potentialScore - a.potentialScore : b.histCount - a.histCount
+);
+const wouldNotWatchCandidates = withPotential.filter(x => !x.wouldWatch).sort((a, b) => 
+  a.potentialScore !== b.potentialScore ? b.potentialScore - a.potentialScore : b.histCount - a.histCount
+);
 
-for (const c of needsVerification.slice(0, HOLDERS_MAX)) {
+// Prioritize: verify all would-watch first (even if >HOLDERS_MAX), then fill remaining slots with would-not-watch
+const needsVerification = [...wouldWatchCandidates, ...wouldNotWatchCandidates];
+
+// Verify ALL would-watch candidates first (mandatory), then fill remaining slots with would-not-watch.
+// If would-watch count > HOLDERS_MAX, verify all would-watch anyway (accept over-budget to ensure coverage).
+const toVerify = wouldWatchCandidates.length <= HOLDERS_MAX
+  ? [...wouldWatchCandidates, ...wouldNotWatchCandidates.slice(0, HOLDERS_MAX - wouldWatchCandidates.length)]
+  : wouldWatchCandidates;  // All would-watch, even if exceeds HOLDERS_MAX
+
+if (wouldWatchCandidates.length > HOLDERS_MAX) {
+  log(`WARNING: ${wouldWatchCandidates.length} would-watch candidates exceed HOLDERS_MAX ${HOLDERS_MAX}; verifying all to ensure watch tier coverage`);
+}
+
+for (const c of toVerify) {
   const b = await fomo(`/token/${c.address}/holders${c.chain === 'sol' ? `?networkId=${SOL_NET}` : ''}`);
   const rows = b?.holders || b?.traders || (Array.isArray(b) ? b : null);
   if (rows) { 
