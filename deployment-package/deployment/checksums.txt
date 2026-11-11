@@ -1,4 +1,5 @@
 fbf5b12d70bdca7571052139405ed96ac1f2ffea13bd63dd2e80f5f4ec0e40ef  ./test/x-monitor.test.mjs
+92f3140aae24fb3c369878799f0174679960c23fc381876aef8f6bf578fffe0f  ./test/narrative-daily-ttl.test.mjs
 119a73331503f133493d3787e020af4e059c17061c7ae1c8312e992b0cd1cd87  ./test/position-analysis.test.mjs
 1d22180f4b96ca1e4823081911ff66540c53624e5a96b29b9991876d2e740896  ./test/soft-mention.test.mjs
 925a764bfc0d6f0345d20b1edf75beea8238368e3fd15cbfb660e3159a8a11df  ./test/gmgn-key-store.test.mjs
@@ -9,6 +10,7 @@ d4e0543fae0d3a8fe6b9e1e552ef022cfa5ee505157b5e552a05bc9796e39ed1  ./test/scanner
 b87c9594db1749b486c3dee6c1a27fd131ffd129c0371d91c1fab63cfdcb1194  ./test/secondary.test.mjs
 25d9885841c8735d457a2079f0b4dff95d0450d7d1be1bf5b2d98ee026aaa140  ./test/distribution.test.mjs
 e4e06862d66bc090c0b298fd5c4a6196bde07a7d57c55717292bf2f13b75f8aa  ./test/holder-sample.test.mjs
+d1425c79df70e95f454913178856336e7aea5a2f8776f432d6252339c0945241  ./test/narrative-daily-runner-e2e.test.mjs
 94984b5e953492a7e66c187d5c0c85d28047c3b8587f9b03ce2f089118224519  ./test/scoring.test.mjs
 15914894b2524b021ef6f799ec314e7fbca11cf96fa61b32086d452307dd5bfc  ./test/exit-monitoring.test.mjs
 ff4ce48e62decd7bb3546ea513878e291067fd5471061b57a2a86f3ad25614be  ./test/ui.test.mjs
@@ -21,6 +23,7 @@ c6c3d3741abf8b2c37db194c5c8ba44be0b14d5ea7d9a9e151e059631354a2ae  ./test/gmgn-on
 0937677f0f229e9a60ca6bfdcefe3c5f3a0f91d0994b060c9a22630150eab5ab  ./test/e2e-exit-monitoring.test.mjs
 84abb28989d51dd09021ffbc6259ddbb0c6e8b2fbf00e89e4ebb33dd2e1118dd  ./test/gmgn.test.mjs
 5cc5e93cbac508374887ff50bd62196aeb6d0cca5cb18e1e579c75525f3b95ba  ./test/market-cap-tiers.test.mjs
+9e2d7854fc63c6c934422e4b36d8e7e07c0c3340d6ec0e38fce8db59a5979b34  ./src/narrative-daily.mjs
 1e38aa105c78779335466528de1ff009588deb2689cda9e9bd2dcb830d31c8e1  ./src/modules/market-cap-tiers.mjs
 e83468b9de3807ae12148912b37c2d672ec8e998af70cb2c3400ca9c7a9e1d00  ./src/modules/narrative-daily-production.mjs
 2016618639d595e6333b2cf5eb088dadee73ff2403d845ef7e4b7919adfc976b  ./src/modules/exit-downgrade-production.mjs
@@ -32,6 +35,7 @@ bcfaadc0f8f86ac71e3237eabffc72b1be0432c134976a057ed870c49448b42d  ./README.md
 48eef073f18a11a04aaad0ebec5667d981ecb7e15057b2bb57f38efc07267d77  ./scripts/fomo-free-scan.mjs
 632ec979ebb550adfeb67b0e34f824ce8ee9e90edece7a66a9f22303ded51a34  ./scripts/exit-downgrade-run-integrated.mjs
 ce4d8eee69acea49e6c9bda723561401217208aff0023a237c6f7e5f858315a2  ./scripts/fomo-free-scan-integrated.mjs
+3295a47f554d9b0878bb880d9335ea76b97b6dbb90d6a08e38693925f617a04b  ./scripts/narrative-daily-run.mjs
 8fe24f540a78ffdcf6d00664deebf87f4dc458244dda5800da37a6465e68e4d3  ./deployment/CONFIG-MERGE-GUIDE.md
 626bc5a7dd38eca5d12c3f7557c189c0850ee43c73896bdac747affb925dadfb  ./deployment/backup.sh
 b6ec3f316beb8fef5babd563d76ef21f56ff4b44ea67d0d77a654c6262b7377d  ./deployment/rollback.sh
