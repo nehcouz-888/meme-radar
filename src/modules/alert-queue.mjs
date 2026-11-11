@@ -59,6 +59,28 @@ export function saveQueue(queueFile, items) {
 }
 
 /**
+ * Add pending alert to queue (原子追加)
+ * @param {string} queueFile - 队列文件路径
+ * @param {Object} alert - 待添加的alert
+ */
+export function addPendingAlert(queueFile, alert) {
+  const item = {
+    ...alert,
+    status: 'pending',
+    createdAt: alert.createdAt || new Date().toISOString()
+  };
+  
+  try {
+    const line = JSON.stringify(item) + '\n';
+    fs.appendFileSync(queueFile, line, 'utf8');
+    return true;
+  } catch (e) {
+    console.error(`Failed to add pending alert: ${e.message}`);
+    return false;
+  }
+}
+
+/**
  * Claim pending alerts (带lease)
  * @param {string} queueFile - 队列文件路径
  * @param {Object} options - 配置
@@ -142,27 +164,45 @@ export function claimPendingAlerts(queueFile, options = {}) {
  * @param {Object} options - 配置
  */
 export function acknowledgeDelivered(queueFile, eventIds, options = {}) {
-  const { now = Date.now() } = options;
+  const { now = Date.now(), leaseId } = options;
   
   const items = loadQueue(queueFile);
-  const acked = [];
+  const acknowledged = [];
+  const failed = [];
+  const skipped = [];
   const updated = [];
   
   const eventIdSet = new Set(eventIds);
   
   for (const item of items) {
     if (eventIdSet.has(item.eventId)) {
-      // ✅ 只有claimed或sent状态才能ack为delivered
-      if (item.status === 'claimed' || item.status === 'sent') {
+      // ✅ claimed状态必须验证leaseId
+      if (item.status === 'claimed') {
+        if (leaseId && item.leaseId === leaseId) {
+          const deliveredItem = {
+            ...item,
+            status: 'delivered',
+            deliveredAt: new Date(now).toISOString()
+          };
+          acknowledged.push(deliveredItem);
+          updated.push(deliveredItem);
+        } else {
+          // leaseId不匹配，拒绝ack
+          failed.push({ eventId: item.eventId, reason: 'lease_mismatch', status: item.status, itemLeaseId: item.leaseId?.slice(0, 8), providedLeaseId: leaseId?.slice(0, 8) });
+          updated.push(item);
+        }
+      } else if (item.status === 'sent') {
+        // sent状态可以直接ack（已通过之前的lease验证）
         const deliveredItem = {
           ...item,
           status: 'delivered',
           deliveredAt: new Date(now).toISOString()
         };
-        acked.push(deliveredItem);
+        acknowledged.push(deliveredItem);
         updated.push(deliveredItem);
       } else {
-        // 已经delivered或其他状态，保留
+        // 已经delivered或其他状态，跳过
+        skipped.push({ eventId: item.eventId, status: item.status, reason: 'invalid_status' });
         updated.push(item);
       }
     } else {
@@ -171,9 +211,9 @@ export function acknowledgeDelivered(queueFile, eventIds, options = {}) {
   }
   
   if (saveQueue(queueFile, updated)) {
-    return { acked: acked.length, eventIds: acked.map(a => a.eventId) };
+    return { acknowledged, failed, skipped, total: items.length };
   } else {
-    return { acked: 0, error: 'failed_to_save' };
+    return { acknowledged: [], failed, skipped, error: 'failed_to_save' };
   }
 }
 

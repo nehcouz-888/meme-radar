@@ -1,0 +1,211 @@
+{
+  "version": 2,
+  "purpose": "Alert-only FOMO buy watch: unipcs + month-top9. Notify when buy is a new position and buyUsd/totalValueUsd >= 5%. Never trade, never post X.",
+  "delivery": "grok-bot-chat-via-parent-routine",
+  "apiBase": "https://api.fomoapi.io",
+  "wsAlerts": "wss://api.fomoapi.io/ws/alerts",
+  "apiKeyFile": "~/.config/fomo/api-key",
+  "traders": [
+    {
+      "handle": "unipcs",
+      "userId": "[REDACTED]",
+      "wallets": {
+        "solana": "2heJbC32Tpfcb3nbUb5ER61K11FGZVfVGtVnDm6LDogF",
+        "evm": "0x0a6ebed0155edb4b21d92ad02897a626cd90119e"
+      },
+      "profileUrl": "https://fomo.family/u/unipcs",
+      "enabled": true,
+      "alertRule": {
+        "minPortfolioPct": 0.05,
+        "requireNewPosition": true,
+        "note": "unified pct_5 + new-position; same as month-top9"
+      },
+      "source": "manual"
+    },
+    {
+      "handle": "ExactTallTakin",
+      "userId": "[REDACTED]",
+      "displayName": "ExactTallTakin",
+      "wallets": {
+        "solana": "AGdtsMmphhymH5wYW3dWKSkAxpLYRrNDCTFAfuq8ii9v",
+        "evm": "0x6434454a2f00b3dbbf714de40c71c86857f881a3"
+      },
+      "profileUrl": "https://fomo.family/u/ExactTallTakin",
+      "enabled": true,
+      "source": "fomo-leaderboard-30d",
+      "rank30d": 1,
+      "alertRule": {
+        "minPortfolioPct": 0.05,
+        "requireNewPosition": true
+      }
+    },
+    {
+      "handle": "bystevenr",
+      "userId": "[REDACTED]",
+      "displayName": "bystevenr",
+      "wallets": {
+        "solana": "AH75Bn6QHSt5K2Ad4p1otns3JTwpSJWZTwiwKWNhmnKx",
+        "evm": "0xd0b3f02a7ce7669acb6eaf251e719f62426be440"
+      },
+      "profileUrl": "https://fomo.family/u/bystevenr",
+      "enabled": true,
+      "source": "fomo-leaderboard-30d",
+      "rank30d": 2,
+      "alertRule": {
+        "minPortfolioPct": 0.05,
+        "requireNewPosition": true
+      }
+    },
+    {
+      "handle": "000000",
+      "userId": "[REDACTED]",
+      "displayName": "000000",
+      "wallets": {
+        "solana": "5XUNoSihvRq8Crj2FbPfB5bvBHhfWoxwy8ZTH7djSroE",
+        "evm": "0xd4236c1a986cdf6ec1cb25000000433cf694e48c"
+      },
+      "profileUrl": "https://fomo.family/u/000000",
+      "enabled": true,
+      "source": "fomo-leaderboard-30d",
+      "rank30d": 3,
+      "alertRule": {
+        "minPortfolioPct": 0.05,
+        "requireNewPosition": true
+      }
+    },
+    {
+      "handle": "_benjitrades",
+      "userId": "[REDACTED]",
+      "displayName": "_benjitrades",
+      "wallets": {
+        "solana": "9PB1RLFsp65qLJ1SQMmcx2ff8Zn6cPYkYqMCWUfVC3sc",
+        "evm": "0xcb909debbf7640dfc192c4e58d7ee34096c7dfa0"
+      },
+      "profileUrl": "https://fomo.family/u/_benjitrades",
+      "enabled": true,
+      "source": "fomo-leaderboard-30d",
+      "rank30d": 4,
+      "alertRule": {
+        "minPortfolioPct": 0.05,
+        "requireNewPosition": true
+      }
+    },
+    {
+      "handle": "BtheBezel",
+      "userId": "[REDACTED]",
+      "displayName": "B The Bezel",
+      "wallets": {
+        "solana": "HWYpE693cw8AWxHSynrHhUsKDbfzubAFYWpTcMZdNWKR",
+        "evm": "0x15c6a76136b597c7896dca6da7b3319daffc987e"
+      },
+      "profileUrl": "https://fomo.family/u/BtheBezel",
+      "enabled": true,
+      "source": "fomo-leaderboard-30d",
+      "rank30d": 5,
+      "alertRule": {
+        "minPortfolioPct": 0.05,
+        "requireNewPosition": true
+      }
+    },
+    {
+      "handle": "0xstanczyk",
+      "userId": "[REDACTED]",
+      "displayName": "Stańczyk",
+      "wallets": {
+        "solana": "EjhX8RakDRQzxg8YHAPDvVNPp2eog8bWX26KDmhivBhf",
+        "evm": "0xcf4c0955739ac06b3955b14dccb885e65ababe09"
+      },
+      "profileUrl": "https://fomo.family/u/0xstanczyk",
+      "enabled": true,
+      "source": "fomo-leaderboard-30d",
+      "rank30d": 6,
+      "alertRule": {
+        "minPortfolioPct": 0.05,
+        "requireNewPosition": true
+      }
+    },
+    {
+      "handle": "JamJam0407",
+      "userId": "[REDACTED]",
+      "displayName": "JamJam0407",
+      "wallets": {
+        "solana": "7wJuPD1Pj8g5xh5bwgqbYTc7G6nz7VBGJUCxHCBwcHeG",
+        "evm": "0x060cbefc4f8a7661cb91ac9c9f42f61702ca1cdf"
+      },
+      "profileUrl": "https://fomo.family/u/JamJam0407",
+      "enabled": true,
+      "source": "fomo-leaderboard-30d",
+      "rank30d": 7,
+      "alertRule": {
+        "minPortfolioPct": 0.05,
+        "requireNewPosition": true
+      }
+    },
+    {
+      "handle": "end837",
+      "userId": "[REDACTED]",
+      "displayName": "end",
+      "wallets": {
+        "solana": "5DBkonys2H4qHr5x9CCeXPLSWEFbnnLFP1RdfxjJgzvy",
+        "evm": "0x24fb52e17e3d4fd62a119b8f53c1a3f3bfe65c2f"
+      },
+      "profileUrl": "https://fomo.family/u/end837",
+      "enabled": true,
+      "source": "fomo-leaderboard-30d",
+      "rank30d": 8,
+      "alertRule": {
+        "minPortfolioPct": 0.05,
+        "requireNewPosition": true
+      }
+    },
+    {
+      "handle": "heat",
+      "userId": "[REDACTED]",
+      "displayName": "heat",
+      "wallets": {
+        "solana": "EwJYY4q2rcrdEH26doRbYX9JxbpYPSNZvRLgzhPKi418",
+        "evm": "0xe827d8e091a0a5f44981f188f7faf8b43c5f9a5f"
+      },
+      "profileUrl": "https://fomo.family/u/heat",
+      "enabled": true,
+      "source": "fomo-leaderboard-30d",
+      "rank30d": 9,
+      "alertRule": {
+        "minPortfolioPct": 0.05,
+        "requireNewPosition": true
+      }
+    }
+  ],
+  "alertTypes": [
+    "buy"
+  ],
+  "minUsdHint": 3000,
+  "seenMax": 5000,
+  "heartbeatEveryMs": 30000,
+  "reconnect": {
+    "initialMs": 2000,
+    "maxMs": 60000
+  },
+  "seedSeenOnEmpty": true,
+  "seedCreditsNote": "One REST GET /v2/alerts per NEW trader (~125 credits) only when that handle is not yet in state/seeded-traders.json, to avoid replaying historical buys as live alerts.",
+  "transferFilter": {
+    "enabled": true,
+    "rules": [
+      "Skip if type/alertType is transfer (or deposit/receive)",
+      "Skip if transferId set and swapId empty",
+      "Skip if text looks like received/transfer-in without bought",
+      "When tradeId present: GET /v2/trades/{id}; skip if transferredInAmount>0 and boughtAmount<=0 (or transfers-only, no swaps)"
+    ],
+    "verifyTradeDetail": true,
+    "verifyCreditCostHint": 250
+  },
+  "portfolioPct": {
+    "enabled": true,
+    "balancesPath": "/v2/users/{handle}/balances",
+    "creditCostHint": 250,
+    "fallbackWhenNoTotal": "minUsdHint",
+    "fallbackNote": "If balances totalValueUsd unavailable: require buyUsd >= minUsdHint (3000) and annotate 总资产未知; still apply new-position best-effort.",
+    "newPositionNote": "After buy, priorEst = max(0, holding.valueUsd - buyUsd). New if no holding / amount~0 / priorEst < max($1, 5% of buy). If balances fail: alert with 是否新仓未知 when pct/fallback passes."
+  },
+  "wsNote": "One process opens one WS per enabled trader (type=buy, 0 credits each)."
+}
