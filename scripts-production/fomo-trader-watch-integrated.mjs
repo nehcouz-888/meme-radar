@@ -26,7 +26,9 @@ const HB_FILE = path.join(STATE, 'heartbeat.json');
 const DAEMON_LOG = path.join(LOG_DIR, 'daemon.log');
 const SKIP_LOG = path.join(LOG_DIR, 'skipped-transfers.jsonl');
 const SKIP_PCT_LOG = path.join(LOG_DIR, 'skipped-pct.jsonl');
+const LEDGER_FILE = path.join(STATE, 'fomo-credits-ledger.json');
 const CST_OFFSET_MS = 8 * 3600_000;
+const MONTHLY_BUDGET = Number(process.env.FOMO_MONTHLY_CREDIT_BUDGET || 150000);
 
 for (const d of [STATE, PENDING, ARCHIVE, LOG_DIR]) fs.mkdirSync(d, { recursive: true });
 
@@ -192,15 +194,40 @@ function formatUsd(n) {
   return `约 $${Math.round(v).toLocaleString('en-US')}`;
 }
 
+/**
+ * Extract verified trade amount (strict evidence)
+ * tradeUsd null + only positionValue/ambiguous usdValue → unknown
+ */
 function pickBuyUsd(ev) {
-  const n = Number(
-    ev.tradeUsd ?? ev.usdValue ?? ev.positionValueUsd ?? ev.sizeUsd ?? ev.valueUsd,
-  );
-  return Number.isFinite(n) && n > 0 ? n : null;
+  // ✅ B4: Strict trade amount evidence
+  const tradeUsd = Number(ev.tradeUsd);
+  if (Number.isFinite(tradeUsd) && tradeUsd > 0) {
+    return { amount: tradeUsd, source: 'tradeUsd', verified: true };
+  }
+  
+  // usdValue ambiguous (could be trade or position), sizeUsd/valueUsd also ambiguous
+  const fallback = Number(ev.usdValue ?? ev.sizeUsd ?? ev.valueUsd);
+  if (Number.isFinite(fallback) && fallback > 0) {
+    return { amount: fallback, source: 'ambiguous_usdValue', verified: false };
+  }
+  
+  // positionValueUsd is post-trade position, not trade amount
+  const position = Number(ev.positionValueUsd);
+  if (Number.isFinite(position) && position > 0) {
+    return { amount: position, source: 'positionValue_not_trade', verified: false };
+  }
+  
+  return { amount: null, source: 'none', verified: false };
 }
 
 function pickSize(ev) {
-  return formatUsd(pickBuyUsd(ev));
+  const info = pickBuyUsd(ev);
+  if (!info.amount) return null;
+  const label = formatUsd(info.amount);
+  if (!info.verified) {
+    return label ? label + ' (未验证)' : null;
+  }
+  return label;
 }
 
 function pickSymbol(ev) {
@@ -413,38 +440,37 @@ async function fetchPortfolioContext(handle, key, ev) {
 }
 
 /**
- * New position: no holding / amount~0 / priorEst = holdingValue - buyUsd is tiny.
- * Balances are post-buy, so priorEst approximates pre-buy value of this token.
+ * New position: requires explicit evidence, not post-buy estimation
+ * ✅ B4: No prior balance proof = cannot claim definite new position
  */
-function judgeNewPosition(portfolio, buyUsd) {
+function judgeNewPosition(portfolio, buyInfo) {
   if (!portfolio?.ok) {
     return { isNew: null, unknown: true, label: '是否新仓未知' };
   }
   const hv = portfolio.holdingValueUsd || 0;
   const amt = portfolio.holdingAmount || 0;
+  
+  // No holding = likely new
   if (!portfolio.holding || amt <= 0 || hv <= 0) {
     return { isNew: true, unknown: false, label: '新开仓', priorEst: 0 };
   }
-  const buy = Number(buyUsd) || 0;
-  const priorEst = Math.max(0, hv - buy);
-  const thresh = Math.max(1, buy * 0.05);
-  if (priorEst < thresh) {
-    return { isNew: true, unknown: false, label: '新开仓', priorEst, holdingValueUsd: hv };
-  }
+  
+  // ✅ Cannot deduce prior balance from post-buy position without explicit prior snapshot
+  // Post-buy position - buy estimate is unreliable (time gap, price change, multiple trades)
   return {
-    isNew: false,
-    unknown: false,
-    label: '加仓(非新币)',
-    priorEst,
+    isNew: null,
+    unknown: true,
+    label: '是否新仓未知（无交易前余额证据）',
     holdingValueUsd: hv,
+    note: '持仓价值无法推定交易前状态'
   };
 }
 
 /**
- * Apply alertRule: minPortfolioPct + requireNewPosition.
- * Fallback when no totalValueUsd: minUsdHint (documented in config.portfolioPct.fallbackWhenNoTotal).
+ * Apply alertRule with strict evidence requirements
+ * ✅ B4: Unknown trade amount cannot satisfy $3000 threshold with position value
  */
-function evaluateAlertRule(trader, buyUsd, portfolio, newPos) {
+function evaluateAlertRule(trader, buyInfo, portfolio, newPos) {
   const rule = trader.alertRule || {};
   const minPct = Number(rule.minPortfolioPct);
   const requireNew = rule.requireNewPosition === true;
@@ -452,12 +478,24 @@ function evaluateAlertRule(trader, buyUsd, portfolio, newPos) {
 
   let pct = null;
   let pctInfo = null;
-  let passPct = true;
 
   if (Number.isFinite(minPct) && minPct > 0) {
     const total = portfolio?.ok ? portfolio.totalValueUsd : null;
+    const buyUsd = buyInfo.verified ? buyInfo.amount : null;
+    
     if (total != null && total > 0 && buyUsd != null) {
       pct = buyUsd / total;
+      // ✅ >100% = data timing/evidence anomaly, do not fabricate
+      if (pct > 1.0) {
+        return {
+          pass: false,
+          reason: 'pct_over_100_evidence_anomaly',
+          pctInfo: { pct, pctLabel: `${(pct * 100).toFixed(1)}%`, totalValueUsd: total, buyUsd, anomaly: true },
+          newPosInfo: newPos,
+          note: '买入金额>总资产，数据时差或证据异常'
+        };
+      }
+      
       const pctLabel = `${(pct * 100).toFixed(1)}%`;
       pctInfo = { pct, pctLabel, totalValueUsd: total, buyUsd };
       if (pct < minPct) {
@@ -469,8 +507,21 @@ function evaluateAlertRule(trader, buyUsd, portfolio, newPos) {
         };
       }
     } else {
-      // degrade: minUsdHint
-      const buy = buyUsd ?? 0;
+      // ✅ Total unknown: only verified trade amount can satisfy minUsdHint
+      if (!buyInfo.verified || buyInfo.amount == null) {
+        return {
+          pass: false,
+          reason: 'trade_amount_unknown_cannot_apply_threshold',
+          pctInfo: {
+            fallback: `成交额未知（${buyInfo.source}），无法应用$${minUsdHint}阈值`,
+            buyInfo
+          },
+          newPosInfo: newPos,
+          note: '可记研究日志，不作达标提醒'
+        };
+      }
+      
+      const buy = buyInfo.amount;
       if (buy < minUsdHint) {
         return {
           pass: false,
@@ -483,7 +534,7 @@ function evaluateAlertRule(trader, buyUsd, portfolio, newPos) {
         };
       }
       pctInfo = {
-        fallback: `总资产未知，已按 minUsdHint $${minUsdHint} 放行`,
+        fallback: `总资产未知，已按verified tradeUsd $${buy.toFixed(0)} ≥ minUsdHint $${minUsdHint}放行`,
         buyUsd: buy,
       };
     }
@@ -516,6 +567,7 @@ function emitAlert({ trader, ev, when, source, pctInfo, newPosInfo }) {
     pctInfo,
     newPosInfo,
   });
+  const buyInfo = pickBuyUsd(ev);
   const meta = {
     eventId,
     handle: trader.handle,
@@ -528,7 +580,9 @@ function emitAlert({ trader, ev, when, source, pctInfo, newPosInfo }) {
     tradeUsd: ev.tradeUsd ?? null,
     usdValue: ev.usdValue ?? null,
     positionValueUsd: ev.positionValueUsd ?? null,
-    buyUsd: pickBuyUsd(ev),
+    buyInfo: buyInfo,
+    buyUsd: buyInfo.verified ? buyInfo.amount : null,
+    buyUsdUnverified: !buyInfo.verified,
     portfolioPct: pctInfo?.pct ?? null,
     totalValueUsd: pctInfo?.totalValueUsd ?? null,
     newPosition: newPosInfo?.isNew ?? null,
@@ -555,13 +609,66 @@ function emitAlert({ trader, ev, when, source, pctInfo, newPosInfo }) {
   return true;
 }
 
-async function restGet(apiPath, key) {
+/**
+ * Shared monthly ledger (same as scanner)
+ */
+function monthKey() {
+  const d = new Date();
+  return `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, '0')}`;
+}
+
+function readLedger() {
+  try {
+    const l = JSON.parse(fs.readFileSync(LEDGER_FILE, 'utf8'));
+    if (l.month === monthKey()) return l;
+  } catch {}
+  return { month: monthKey(), spent: 0, calls: 0, lastRemaining: null, log: [] };
+}
+
+let ledger = readLedger();
+
+function saveLedger() {
+  ledger.log = ledger.log.slice(-200);
+  fs.writeFileSync(LEDGER_FILE + '.tmp', JSON.stringify(ledger, null, 1));
+  fs.renameSync(LEDGER_FILE + '.tmp', LEDGER_FILE);
+}
+
+/**
+ * ✅ B8: Budget-guarded REST call with shared ledger
+ */
+async function restGet(apiPath, key, estCost = 250) {
+  // ✅ Pre-flight budget check
+  if (ledger.spent + estCost > MONTHLY_BUDGET) {
+    log(`BUDGET SKIP ${apiPath} (${ledger.spent}+${estCost} > ${MONTHLY_BUDGET})`);
+    return { ok: false, status: 0, cost: 0, rem: null, body: {}, budgetExceeded: true };
+  }
+  
   const url = `${CFG.apiBase}${apiPath}`;
   const res = await fetch(url, {
     headers: { authorization: `Bearer ${key}`, accept: 'application/json' },
   });
-  const cost = res.headers.get('x-credits-cost');
-  const rem = res.headers.get('x-credits-remaining');
+  
+  const costHeader = res.headers.get('x-credits-cost');
+  const remHeader = res.headers.get('x-credits-remaining');
+  const cost = Number(costHeader) || (res.ok ? estCost : 0);
+  const rem = remHeader !== null ? Number(remHeader) : null;
+  
+  // ✅ Record actual cost
+  if (rem !== null) {
+    ledger.spent = Math.max(ledger.spent, Number(process.env.FOMO_PLAN_CREDITS || 250000) - rem - cost);
+    ledger.lastRemaining = rem;
+  }
+  ledger.spent += cost;
+  ledger.calls++;
+  ledger.log.push({
+    at: new Date().toISOString(),
+    path: apiPath.split('?')[0],
+    cost,
+    remaining: rem,
+    ok: res.ok
+  });
+  saveLedger();
+  
   const body = await res.json().catch(() => ({}));
   return { ok: res.ok, status: res.status, cost, rem, body };
 }
@@ -831,7 +938,7 @@ async function runSocket({ trader, key, seen }) {
         return;
       }
 
-      const buyUsd = pickBuyUsd(ev);
+      const buyInfo = pickBuyUsd(ev);
       const needsPortfolio =
         Number(trader.alertRule?.minPortfolioPct) > 0 ||
         trader.alertRule?.requireNewPosition === true;
@@ -848,8 +955,8 @@ async function runSocket({ trader, key, seen }) {
         }
       }
 
-      const newPos = judgeNewPosition(portfolio, buyUsd);
-      const decision = evaluateAlertRule(trader, buyUsd, portfolio, newPos);
+      const newPos = judgeNewPosition(portfolio, buyInfo);
+      const decision = evaluateAlertRule(trader, buyInfo, portfolio, newPos);
 
       if (!decision.pass) {
         if (decision.reason === 'not_new_position') {
@@ -868,13 +975,13 @@ async function runSocket({ trader, key, seen }) {
           handle: trader.handle,
           eventId,
           reason: decision.reason,
-          buyUsd,
+          buyInfo,
           pct: decision.pctInfo?.pct ?? null,
           totalValueUsd: decision.pctInfo?.totalValueUsd ?? null,
           newPos,
         });
         log(
-          `SKIP_RULE @${trader.handle} eventId=${eventId} reason=${decision.reason} buyUsd=${buyUsd} pct=${decision.pctInfo?.pct ?? '?'}`,
+          `SKIP_RULE @${trader.handle} eventId=${eventId} reason=${decision.reason} buyInfo=${JSON.stringify(buyInfo)} pct=${decision.pctInfo?.pct ?? '?'}`,
         );
         writeHeartbeat();
         return;
